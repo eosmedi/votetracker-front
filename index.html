@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="ltr">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+  <meta name="description" content="">
+  <meta name="keywords" content=">
+  <meta name="author" content="PIXINVENT">
+  <title>EOS Vote Tracker - EOS Mediterranean</title>
+  <link rel="apple-touch-icon" href="images/logo.png">
+  <link rel="shortcut icon" type="image/x-icon" href="images/logo.png">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700"
+  rel="stylesheet">
+  <link href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome.min.css"
+        rel="stylesheet">
+  <!-- BEGIN VENDOR CSS-->
+  <link rel="stylesheet" type="text/css" href="app-assets/css/vendors.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/datatables.min.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/responsive.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/colReorder.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/buttons.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/datatable/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/fixedHeader.dataTables.min.css">
+  <!-- END VENDOR CSS-->
+  <!-- BEGIN MODERN CSS-->
+  <link rel="stylesheet" type="text/css" href="app-assets/css/app.css">
+  <!-- END MODERN CSS-->
+  <!-- BEGIN Page Level CSS-->
+  <link rel="stylesheet" type="text/css" href="app-assets/css/core/menu/menu-types/vertical-compact-menu.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/css/core/colors/palette-gradient.css">
+  <!-- END Page Level CSS-->
+  <!-- BEGIN Custom CSS-->
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <!-- END Custom CSS-->
+
+
+  <script src="https://cdn.bootcss.com/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.min.js"></script>
+  <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/element-ui@2.4.3/lib/index.js"></script>
+  <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment-with-locales.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/eosjs@15.0.6/lib/eos.min.js"
+          integrity="sha512-IDRAIcOGQTZN3jE/TvTiG3czpjzmWPiYi0+mwWbJVdYwPfbhD2YtzlpD4+rKE+MIuysseAenToyLNoO1whNFUg=="
+          crossorigin="anonymous"></script>
+
+
+  <link rel="stylesheet" type="text/css" href="css/common.css">
+
+</head>
+<body class="vertical-layout vertical-compact-menu 2-columns   menu-expanded fixed-navbar"
+data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
+
+<div id="modalProducerList" class="modal  fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel1">Help Producer Lists Window</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Click on:</h5>
+        <p><strong>Producer name:</strong> To get into Producer profile</p>
+        <p><strong>Vote button:</strong> To vote the producer. You can choose up to 21.</p>
+        <hr>
+        <h5>Vote Us</h5>
+        <p>If you like the website, please vote us</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn grey btn-outline-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div id="app">
+
+
+    <!-- fixed-top-->
+    <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-dark bg-ec-eosmedi navbar-shadow navbar-brand-center">
+      <div class="navbar-wrapper">
+        <div class="navbar-header">
+          <ul class="nav navbar-nav flex-row">
+            <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
+            <li class="nav-item">
+              <a class="navbar-brand" href="index.html">
+                <!--<img class="brand-logo" alt="modern admin logo" src="app-assets/images/logo/logo.png">-->
+                <div class="w_logo"><img class="brand-logo" src="images/logo.png" width="100" /></div>
+                <div class="w_txtlogo">
+                  <div><h3 class="brand-text">EOS Voter Tracker</h3></div>
+                  <div><span class="brand-text-sub">EOS Mediterranean</span></div>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item d-md-none">
+              <a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="la la-ellipsis-v"></i></a>
+            </li>
+          </ul>
+        </div>
+        <div class="navbar-container content">
+          <div class="collapse navbar-collapse" id="navbar-mobile">
+
+            <ul class="nav navbar-nav mr-auto float-left">
+              <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
+              <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i class="ficon ft-maximize"></i></a></li>
+            </ul>
+
+            <ul class="nav navbar-nav float-right">
+              <li class="dropdown dropdown-notification nav-item">
+                Scatter
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+      <div class="main-menu-content">
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+          <li class=" nav-item open"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'ProducersList'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/producers.png" width="25"/></span>Producers <span class="text-center subTmenu">{{ status.producers }}</span></span></router-link> </a>
+
+          </li>
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;margin-bottom:5px;" :to="{ name: 'ProxyList'}"><span class="menu-title" data-i18n="nav.dash.main"> <span class="text-center full-width" style="display:block;"><img   src="images/menu/proxies.png" width="25"/></span>Proxy  <span class="text-center minSubTmenu">{{ (status.proxy_votes / 10000).toFixed(0) | numberWithCommas }} EOS</span><span class="text-center subTmenu" >{{ status.proxy_voters }}</span></span></router-link></a>
+
+          </li>
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'VoterList'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/voters.png" width="45"/></span>Voters <span class="text-center subTmenu">{{ status.voters }}</span></span></router-link> </a>
+
+          </li>
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'History'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/history.png" width="30"/></span>History</span></router-link> </a>
+
+          </li>
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'Referendum'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/referendums.png" width="30"/></span>Referendum</span></router-link> </a>
+
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="app-content content">
+      <div class="content-wrapper">
+
+
+
+        <!-- TITLE & BREAD CRUMB -->
+
+
+
+
+
+        <router-view :chain-state="chainState" :eos-client="eosClient" :identity="identity" v-if="$route.meta.requireEosClient"></router-view>
+
+        <div class="content-body">
+          <section id="constructor">
+            <div class="row">
+              <div class="col-12">
+
+                  <router-view :chain-state="chainState" v-if="!$route.meta.requireEosClient"></router-view>
+
+              </div>
+            </div>
+          </section>
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- TEMPLATES & SCRIPTS EOS -->
+
+
+  <template id="producerList" type="text/div">
+
+
+
+    <div class="table-responsive">
+      <div class="content-header row">
+        <div class="content-header-left col-md-8 col-12 mb-2">
+          <h3 class="content-header-title mb-0">Producers List</h3>
+          <div class="row breadcrumbs-top">
+            <div class="breadcrumb-wrapper col-12">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">Home
+                </li>
+                <li class="breadcrumb-item active"><a href="#">Producers</a>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 text-right" v-if="isStatus()">
+          Staked {{ status.percent_stacked }}
+          <div class="progress" style="width: 100%;">
+            <div class="progress-bar" role="progressbar" :style="'width:'+ status.percent_stacked +'%;'"
+                 aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ status.percent_stacked }}%</div>
+          </div>
+        </div>
+        <div class="col-md-2 text-right">
+          <a href="#"><img src="images/vote-us.jpg" width="221" border="0"/></a>
+        </div>
+      </div>
+
+      <div class="card">
+        <a href="#" data-toggle="modal"
+           data-target="#modalProducerList" class="infoHelp" ><i class="ft-info"></i></a>
+        <div class="card-content collapse show">
+          <div class="card-body card-dashboard" style="padding-top:0;">
+            <table class="table table-striped table-bordered dataex-res-constructor">
+              <thead>
+              <tr>
+
+                <th>#</th>
+                <th width="20%">Producer</th>
+
+                <th>Votes</th>
+                <th>Voters</th>
+                <th>Daily Reward</th>
+                <th>Last 48h</th>
+                <th>Location</th>
+                <th>www</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(producer, index ) in producers" v-if="producer.show">
+
+                <td width="20" align="right">{{ index+1 }}
+                </td>
+                <td class="tdProducer">
+                  <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}"> <span class="imgProducer"><img :src="producer.branding.logo_256 ? producer.branding.logo_256 : producer.branding.logo_1024" v-if="producer.branding && (producer.branding.logo_256 || producer.branding.logo_1024)" height="25"
+                                                                                                           onerror="this.src='https://votetracker.eosmedi.com/image-o.png'"></span> {{ producer.owner }} </router-link>
+                </td>
+                <td align="right">{{ numberWithCommas((producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }} ({{ (parseInt(producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%)</td>
+                <!-- <td>{{ cacluteReawrdcacluteReawrd(index, producer, chainState, t) }} EOS</td> -->
+                <td align="right">
+                  <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}">{{ producer.voters }}</router-link>
+                </td>
+                <td  align="right">{{ producer.rewards }} EOS</td>
+                <td  align="right"> <span v-if="producer.votes_loss && producer.votes_loss.diff">
+                                <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                            </span></td>
+                <td >
+                  <span v-if="producer.org_location"><!--{{producer.org_location}}--><img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"></span>
+                  <span v-if="producer.location">{{ countryCode[producer.location]}}</span>
+                </td>
+                <td align="center" width="25"><a href="{{ producer.url }}" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td>
+                <td align="center" width="25"><button type="button" class="btn mr-1 mb-1 btn-secondary btn-sm">Vote</button></td>
+              </tr>
+
+              </tbody>
+            </table>
+
+            <page :current="currentPage" :allpage="totalPage" ref="page" v-if="!filterProducers"></page>
+
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+
+
+  </template>
+
+
+  <template id="ProxyList" type="text/div">
+
+    <div>
+
+      <!-- <el-alert
+      title="you can submit your proxy info to https://docs.google.com/forms/d/1S-7enRUlmWm18GqBORdv6GJuzCN6Tk0bNUe8r5vH_6Q"
+      show-icon
+      type="info"></el-alert> -->
+
+      <div role="alert" class="el-alert el-alert--info"><i class="el-alert__icon el-icon-info"></i><div class="el-alert__content"><span class="el-alert__title">Below is the list of active vote proxy accounts on the EOS mainnet.  to register more info about yourself see the <a href="https://github.com/AlohaEOS/eos-proxyinfo" target="_blank">instructions here</a>.</span><!----></div></div>
+      <el-row style="margin-top:10px">
+        <router-link :to="{ name: 'SubmitProxyInfo'}"> <el-button type="button" class="btn mr-1 mb-1 btn-primary btn-sm">Submit Proxy Info</el-button></router-link>
+      </el-row>
+
+      <div class="table-responsive">
+
+        <div class="content-header row">
+          <div class="content-header-left col-md-8 col-12 mb-2">
+            <h3 class="content-header-title mb-0">Proxies List</h3>
+            <div class="row breadcrumbs-top">
+              <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active"><a href="#/proxies">Proxies</a>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 text-right" v-if="isStatus()">
+            Staked {{ status.percent_stacked }}
+            <div class="progress" style="width: 100%;">
+              <div class="progress-bar" role="progressbar" :style="'width:'+ status.percent_stacked +'%;'"
+                   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ status.percent_stacked }}%</div>
+            </div>
+          </div>
+          <div class="col-md-2 text-right">
+            <a href="#"><img src="images/vote-us.jpg" width="221" border="0"/></a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="heading-elements">
+              <ul class="list-inline mb-0">
+                <li><a ><i class="ft-info"></i></a></li>
+                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-content collapse show">
+            <div class="card-body card-dashboard" style="padding-top:0;">
+              <table class="table table-striped table-bordered dataex-res-constructor">
+                <thead>
+                <tr>
+
+                  <th width="25">#</th>
+                  <th width="20%">Proxy Account</th>
+
+                  <th width="15%">Staked</th>
+                  <th>Voted Producers</th>
+                  <th>Proxy Voters</th>
+                  <th>Full Name</th>
+                  <th>Slogan</th>
+                  <th>Location</th>
+                  <th>www</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(proxy, index ) in voters">
+
+                  <td width="20" align="right">{{ index+1 }}
+                  </td>
+                  <td class="tdProxy">
+                  <span class="proxy-logo-block imgProxy">
+                                            <img :src="proxy.info.logo" v-if="proxy.info && proxy.info.logo" height="25"
+                                                 onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                                            <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!proxy.info" height="25">
+                                        </span>
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: proxy.account_name }}">
+                      {{ proxy.account_name }}
+                      <span v-if="proxy.candidate_name">{{ proxy.account_name }}</span> <span v-if="!proxy.candidate_name">{{ proxy.owner }}</span>
+                    </router-link>
+                  </td>
+                  <td align="right">{{ numberWithCommas((proxy.voter_info.staked / 10000 ).toFixed(0)) }} EOS</td>
+                  <td align="right"><router-link :to="{ name: 'VoterDetail', params: { voter: proxy.account_name }}">{{ proxy.voter_info.producers.length }}</router-link></td>
+                  <td  align="right"><router-link :to="{ name: 'VoterDetail', params: { voter: proxy.account_name }}">{{ proxy.proxy_voters.length }}</router-link></td>
+                  <td  align="right"><span v-if="proxy.info"> {{ proxy.info.fullName }}</span></td>
+                  <td ><span v-if="proxy.info"> {{ proxy.info.slogan }}</span></td>
+                  <td align="center" width="25"><span v-if="proxy.info"> {{ proxy.info.location }}</span></td>
+                  <td align="center" width="25"> <span v-if="proxy.info"> <a :href="proxy.info.url" target="_blank"><img src="images/www.png"  width="20" border="0"/></a></span></td>
+                </tr>
+
+                </tbody>
+              </table>
+
+              <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+  </template>
+
+
+  <template id="VoterList" type="text/div">
+    <div>
+
+      <div class="table-responsive">
+
+        <div class="content-header row">
+          <div class="content-header-left col-md-8 col-12 mb-2">
+            <h3 class="content-header-title mb-0">Voter List</h3>
+            <div class="row breadcrumbs-top">
+              <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active"><a href="#/voters">Voters</a>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 text-right" v-if="isStatus()">
+            Staked {{ status.percent_stacked }}
+            <div class="progress" style="width: 100%;">
+              <div class="progress-bar" role="progressbar" :style="'width:'+ status.percent_stacked +'%;'"
+                   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ status.percent_stacked }}%</div>
+            </div>
+          </div>
+          <div class="col-md-2 text-right">
+            <a href="#"><img src="images/vote-us.jpg" width="221" border="0"/></a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="heading-elements">
+              <ul class="list-inline mb-0">
+                <li><a ><i class="ft-info"></i></a></li>
+                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-content collapse show">
+            <div class="card-body card-dashboard" style="padding-top:0;">
+              <table class="table table-striped table-bordered dataex-res-constructor">
+                <thead>
+                <tr>
+
+                  <th width="25">#</th>
+                  <th>Voter Account</th>
+
+                  <th>Staked</th>
+                  <th width="100">Voted Producers</th>
+                  <th width="100">Tags</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(voter, index ) in voters">
+
+                  <td width="20" align="right">{{ index+1 }}</td>
+                  <td><router-link :to="{ name: 'VoterDetail', params: { voter: voter.account_name }}">{{ voter.account_name }}</router-link></td>
+                  <td align="right">{{ numberWithCommas((voter.voter_info.staked / 10000 ).toFixed(0)) }} EOS</td>
+                  <td align="right"><router-link :to="{ name: 'VoterDetail', params: { voter: voter.account_name }}">{{ voter.voter_info.producers.length }}</router-link></td>
+                  <td  align="right"><span v-if="voter.voter_info && voter.voter_info.is_proxy">Proxy</span></td>
+                 </tr>
+
+                </tbody>
+              </table>
+
+              <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+  </template>
+
+
+  <template id="producerDetail" type="text/div">
+    <div>
+      <div v-if="loading">
+        Loading data...
+      </div>
+
+
+
+      <div class="table-responsive">
+
+        <div class="content-header row">
+          <div class="content-header-left col-md-8 col-12 mb-2">
+            <h3 class="content-header-title mb-0">Producers Details</h3>
+            <div class="row breadcrumbs-top">
+              <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+
+                  <li class="breadcrumb-item">Home
+                  </li>
+                  <li class="breadcrumb-item active"><a href="#">Producers Detail</a>
+                  </li>
+                  <li class="breadcrumb-item active" v-if="isLogFilter()"><a :href="'#/producer/'+ logFilters.producer" >{{ logFilters.producer }}</a>
+                  </li>
+
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="row">
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title" v-if="producer.bpinfo"><span v-if="producer.bpinfo && producer.bpinfo.org && producer.bpinfo.org.candidate_name">{{ producer.bpinfo.org.candidate_name }}</span> <span style="font-size:12px;font-weight: bold">({{ producer.producer.owner }})</span></h4>
+
+              </div>
+
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard" style="padding-top:0;">
+                  <div class="row">
+
+
+                    <div class="col-xl-3 col-md-6 col-sm-12" v-if="producer.bpinfo">
+                      <div class="card">
+                        <div class="card-content">
+
+
+                          <img class="card-img-top img-fluid mt-1 " :src="producer.bpinfo.org.branding.logo_256 ? producer.bpinfo.org.branding.logo_256 : producer.bpinfo.org.branding.logo_1024"
+                               v-if="producer.bpinfo.org && producer.bpinfo.org.branding && (producer.bpinfo.org.branding.logo_256 || producer.bpinfo.org.branding.logo_1024)" height="120"
+                               onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                          <img class="card-img-top img-fluid mt-1 " src="https://votetracker.eosmedi.com/image-o.png" v-if="!producer.bpinfo.org" height="120">
+
+
+                          <div class="card-body">
+
+                            <p class="detail-links" v-if="producer.bpinfo && producer.bpinfo.org">
+
+                                <span class="" v-if="producer.bpinfo.org && producer.bpinfo.org.social && producer.bpinfo.org.social.telegram"><a :href="'https://t.me/'+producer.bpinfo.org.social.telegram" target="_blank"><i class="fab fa-telegram"></i> Telegram</a> </span>
+                                <span><i class="fas fa-location-arrow"></i> {{ producer.bpinfo.org.location.name }}  </span>
+
+                                <span role="alert" id="producerInfo">
+                                  <p style="margin-bottom:0.5rem;"><strong>Producer:</strong>  <span class="item-value">{{ producer.producer.owner }}</span></p>
+                                  <p style="margin-bottom:0.5rem;"><strong>URL:</strong>  <span class="item-value">{{ producer.producer.url }}</span>
+                                  </p>
+                                  <p style="margin-bottom:0.5rem;"><strong>E-mail :</strong> <span class="item-value">{{ producer.bpinfo.org.email }}</span></p>
+                                  <p style="margin-bottom:0.5rem;"><strong>Total Votes %:</strong>  <span class="item-value">{{ (parseInt(producer.producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%</span></p>
+                                  <p style="margin-bottom:0.5rem;"><strong>Votes:</strong>  <span class="item-value">{{ numberWithCommas((producer.producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}</span></p>
+                                  <p style="margin-bottom:0.5rem;"><strong>Voters:</strong>  <span class="item-value">{{ producer.producer.voters }}</span></p>
+                                  <p style="margin-bottom:0.5rem;"><strong>Votes Change(48h):</strong>  <span class="item-value">
+                                                            <span :style="producer.total.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.total.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                                                    </span>
+                                  </p>
+                                </span>
+
+                             </p>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                        <div class="col-xl-9">
+
+                          <ul class="nav nav-tabs nav-underline no-hover-bg">
+                            <li class="nav-item">
+                              <a class="nav-link active" id="base-tab31" data-toggle="tab" aria-controls="tab31"
+                                 href="#tab31" aria-expanded="true">Node List</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
+                                 aria-expanded="false">Voters actions</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="base-tab33" data-toggle="tab" aria-controls="tab33" href="#tab33"
+                                 aria-expanded="false">Vote Tables</a>
+                            </li>
+                          </ul>
+                          <div class="tab-content px-1 pt-1">
+                            <div role="tabpanel" class="tab-pane active" id="tab31" aria-expanded="true" aria-labelledby="base-tab31" >
+                              <div class="detail-info-desc mt-2" v-if="producer.producer">
+                                <h4><strong>Details</strong></h4>
+                                <div class="detail-info-desc-content">
+                                  <ul v-for="node in producer.bpinfo.nodes">
+                                    <li>node_type: {{ node.node_type }}</li>
+                                    <li>location: {{ node.location.name }}, {{ node.location.country }}</li>
+                                    <li>api_endpoint: {{ node.api_endpoint }} </li>
+                                    <li>ssl_endpoint: {{ node.ssl_endpoint }}  </li>
+                                    <li>p2p_endpoint: {{ node.p2p_endpoint }} </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane" id="tab32" aria-labelledby="base-tab32" v-if="producer.producer">
+                              <div class="row">
+                                <div class="col-md-6">
+                                  <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
+                                </div>
+                                <div class="col-md-6">
+                                  <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
+                                </div>
+                              </div>
+                              <p>aggregate by latest(48h) remove / add vote logs</p>
+                            </div>
+
+                            <div class="tab-pane" id="tab33" aria-labelledby="base-tab33" >
+
+                              <div class="table-responsive">
+                                  <table class="table table-striped table-bordered dataex-res-constructor">
+                                    <thead>
+                                    <tr>
+                                      <th width="45%">Voter Account</th>
+                                      <th width="45%">Staked</th>
+                                      <th width="5%">Voted Producers</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(voters, index ) in producer.voters">
+                                      <td align="left"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.account_name }}</router-link> <span style="font-size:10px;color:#0F5039;font-weight: bold;" v-if="voters.voter_info && voters.voter_info.is_proxy">( Proxy )</span></td>
+                                      <td align="right"> {{ numberWithCommas((voters.voter_info.staked / 10000 ).toFixed(0)) }} EOS </td>
+                                      <td align="right"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.voter_info.producers.length }}</router-link> </td>
+                                     </tr>
+
+                                    </tbody>
+                                  </table>
+
+                                  <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+                              </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-3">
+            <div class="card">
+
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard" style="padding-top:0;">
+
+                  <div id="LogFilterDiv" class="col-md-12" v-if="isLogFilter()">
+                    <div id="right-meta">
+
+                      <div id="vote-logs">
+                        <h3>Vote Logs <span v-if="logFilters.producer">for producer: </span>
+                        </h3>
+                        <h4 style="color:#999" v-if="logFilters.producer"><strong>{{ logFilters.producer }}</strong> <span v-if="logFilters.voter">of : {{ logFilters.voter }}</span> (realtime)</h4>
+
+
+                        <div style="max-height:400px;overflow-y:auto;" id="basic-accordion-drag">
+                          <div v-for="voteLog in voteLogs" class="vote-log" v-if="filterLog(voteLog)">
+
+                              <div :id="'accordionWrap'+voteLog.block_num" role="tablist" aria-multiselectable="true" >
+                                <div class="card collapse-icon accordion-icon-rotate mb-1">
+                                  <div :id="'heading'+voteLog.block_num" class="card-header">
+                                    <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteLog.block_num" aria-expanded="false"
+                                       aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteLog.block_num }} <span class="SubHeadVoteLog">{{ voteLog.timeFormatted }}</span></a>
+                                  </div>
+                                  <div :id="'accordion'+voteLog.block_num" role="tabpanel" aria-labelledby="heading51" class="card-collapse collapse"
+                                       aria-expanded="true">
+                                    <div class="card-content">
+                                      <div class="card-body" >
+
+
+                                        < <router-link :to="{ name: 'VoterDetail', params: { voter: voteLog.voter }}">{{ voteLog.voter }}</router-link> >
+                                        <span v-if="voteLog.voterData">Staked {{ (voteLog.voterData.voter_info.staked / 10000).toFixed(0) }} EOS</span> Vote for<br>
+                                        <router-link :to="{ name: 'ProducerDetail', params: { producer: producer }}" v-for="producer in voteLog.producers" class="producer-link">
+                                                  <span :class="'btn  btn-primary btn-sm w_voter' + [producer == logFilters.producer ? 'active' : '']">{{ producer }}
+                                                  </span>
+                                        </router-link>
+
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+      </div>
+
+    </div>
+  </template>
+
+
+  <template id="VoterDetail" type="text/div">
+    <div v-loading.fullscreen.lock="loading">
+
+      <div class="table-responsive">
+        <div class="content-header row">
+          <div class="content-header-left col-md-8 col-12 mb-2">
+            <h3 class="content-header-title mb-0">Proxy Details</h3>
+            <div class="row breadcrumbs-top">
+              <div class="breadcrumb-wrapper col-12">
+                <ol class="breadcrumb">
+
+                  <li class="breadcrumb-item">Home
+                  </li>
+                  <li class="breadcrumb-item active"><a href="#">Proxy Detail</a>
+                  </li>
+                  <li class="breadcrumb-item active" v-if="voter.info && voter.info.fullName"><a :href="'#/voter/'+voter.account_name" ></a>
+                  </li>
+
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <section class="row">
+        <div class="col-md-9">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title"><span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }}</span> <span style="font-size:12px;font-weight: bold">({{ voter.account_name }})</span></h4>
+            </div>
+
+            <div class="card-content collapse show">
+              <div class="card-body card-dashboard" style="padding-top:0;">
+                <div class="row">
+
+
+                  <div class="col-xl-3 col-md-6 col-sm-12">
+                    <div class="card">
+                      <div class="card-content">
+
+                        <img class="card-img-top img-fluid mt-1 " :src="voter.info.logo" v-if="voter.info && voter.info.logo" height="120"
+                             onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                        <img class="card-img-top img-fluid mt-1 " src="https://votetracker.eosmedi.com/image-o.png" v-if="!voter.info" height="120">
+
+
+                        <div class="card-body">
+
+                          <p class="detail-links" v-if="voter.info" >
+
+                            <span class="" v-if="voter.info"><a :href="'https://t.me/'+voter.info.telegram" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></span>
+                            <span role="alert" id="producerInfo">
+                                <p style="margin-bottom:0.5rem;" v-if="voter.info"><strong>Slogan:</strong>  <span class="item-value">{{ voter.info.slogan }}</span></p>
+                                <p style="margin-bottom:0.5rem;" v-if="voter.info"><strong>URL:</strong>  <span class="item-value"><a :href="voter.info.url" target="_blank"><i class="fas fa-link"></i> Link</a></span>
+                                </p>
+                                <p style="margin-bottom:0.5rem;" v-if="voter.info"><strong>Location :</strong> <span v-if="voter.info.location"><i class="fas fa-location-arrow"></i> {{ voter.info.location }}  </span></p>
+                          </p>
+
+                            </span>
+
+                          </p>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-xl-9">
+
+                  <ul class="nav nav-tabs nav-underline no-hover-bg">
+
+                    <li class="nav-item">
+                      <a class="nav-link active" id="base-tab41" data-toggle="tab" aria-controls="tab41"
+                         href="#tab41" aria-expanded="true">Description</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42"
+                         aria-expanded="false">Account Data</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
+                         aria-expanded="false">Vote Tables</a>
+                    </li>
+
+                    <li class="nav-item">
+                      <a class="nav-link" id="base-tab44" data-toggle="tab" aria-controls="tab44" href="#tab44"
+                         aria-expanded="false">Chat</a>
+                    </li>
+
+                  </ul>
+                  <div class="tab-content px-1 pt-1">
+                      <div role="tabpanel" class="tab-pane active" id="tab41" aria-expanded="true" aria-labelledby="base-tab41" >
+                        <div class="col-md-12" v-if="voter.info">
+
+                          <h5 class="text-bold-500" style="margin-bottom: 15px;">Philosophy</h5>
+                        <p>{{ voter.info.philosophy }}</p>
+                          <h5 class="text-bold-500" style="margin-bottom: 15px;">Background</h5>
+                        <p>{{ voter.info.background }}</p>
+
+                      </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab42" aria-labelledby="base-tab42">
+                      <div class="row">
+                        <div class="col-md-12" v-if="voter.info">
+
+                          <div role="alert" id="producerInfo">
+
+                            <div class="row">
+                              <div class="col-md-12 proxyLineDetails">
+                                <span class="mr-1"><strong>Account Name: </strong> <span class="item-value">{{ voter.account_name }}</span></span>
+                                <span class="mr-1" v-if="voter.blance.length"><strong>Balance:</strong>  <span v-for="blanceItem in voter.blance" class="item-value">{{ blanceItem }}</span></span>
+                                <span class="mr-1"><strong>Staked EOS:</strong>  <span class="item-value">{{ numberWithCommas((voter.voter_info.staked / 10000).toFixed(0)) }} EOS</span></span>
+                                <span class="mr-1" v-if="voter.eth"><strong>ETH Address:</strong>
+                                  <span class="item-value"><a :href="'https://etherscan.io/address/' + voter.eth" target="_blank">{{ voter.eth }}</a></span>
+                                </span>
+                              </div>
+                            </div>
+
+                            <div class="mt-2" v-if="voter.proxy_voters">
+                              <h5 >Proxy Votes from: (<strong>{{voter.all_proxy_voters.length}}</strong>)</h5> <br>
+
+                                  <el-tag class="btn btn-sm w_voter" v-for="proxy_voter in voter.all_proxy_voters" type="info" v-if="voter.all_proxy_voters">
+                                      <router-link :to="{ name: 'VoterDetail', params: { voter: proxy_voter.voter }}" target="_blank">
+                                          {{ proxy_voter.voter }} {{ (proxy_voter.staked / 10000).toFixed(0) }} EOS
+                                      </router-link>
+                                  </el-tag>
+
+                            </div>
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab43" aria-labelledby="base-tab43" >
+
+
+
+                    </div>
+
+                    <div class="tab-pane" id="tab44" aria-labelledby="base-tab44" >
+
+
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+          <div class="col-md-3">
+            <div class="card">
+
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard" style="padding-top:0;">
+
+                  <div id="LogFilterDiv" class="col-md-12">
+                    <div id="right-meta">
+
+
+
+
+                        <div style="max-height:400px;overflow-y:auto;">
+                          <div v-for="(voteAction, index) in voter.actions" class="vote-log" >
+
+                            <div :id="'accordionVWrap'+voteAction.block_num" role="tablist" aria-multiselectable="true" >
+                              <div class="card collapse-icon accordion-icon-rotate mb-1">
+                                <div :id="'heading'+voteAction.block_num" class="card-header">
+                                  <div class="w_thumbs">
+
+                                    <div class="detal-action"><i class="la la-thumbs-o-up"></i>(+{{voteAction.detal.length}})</div>
+                                    <div class="cancel-action"><i class="la la-thumbs-o-down"></i>(-{{voteAction.canceled.length}})</div>
+
+                                  </div>
+                                  <div class="w_infoAction">
+                                    <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="false"
+                                       aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
+
+                                  </div>
+                                </div>
+                                <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse"
+                                     aria-expanded="true">
+                                  <div class="card-content">
+                                    <div class="card-body" >
+
+
+
+                                      <div v-if="voteAction.detal.length" class="detal-action mb-1">Add Producers(+{{voteAction.detal.length}}):<br/>
+                                        <el-tag
+                                                type="info"
+                                                v-for="detalProducer in voteAction.detal"
+                                                disable-transitions>
+                                          <router-link  :to="{ name: 'ProducerDetail', params: { producer: detalProducer }}" class="btn btn-sm w_voter">  {{ detalProducer }} </router-link>
+                                        </el-tag>
+                                      </div>
+
+                                      <div v-if="voteAction.canceled.length"  class="cancel-action mt-2 mb-1">Remove Producers(-{{voteAction.canceled.length}}):<br/>
+                                        <el-tag
+                                                type="info"
+                                                v-for="canceldProducer in voteAction.canceled"
+                                                disable-transitions>
+                                          <router-link :to="{ name: 'ProducerDetail', params: { producer: canceldProducer }}" class="btn btn-sm w_voter">  {{ canceldProducer }} </router-link>
+                                        </el-tag>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+
+                          </div>
+
+
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <producers-list :chain-state="chainState" :filter-producers="voter.voter_info.producers"></producers-list>
+            </div>
+
+
+          </div>
+
+
+      </section>
+
+
+
+    </div>
+  </template>
+
+
+  <template id="History" type="text/div">
+
+    <h1>HISTORY</h1>
+
+  </template>
+
+  <template id="Referendum" type="text/div">
+
+    <h1>REFERENDUM</h1>
+
+  </template>
+
+
+
+  <script type="text/x-template" id="SubmitProxyInfo">
+
+
+
+    <div  class="col-md-12" style="padding:0px !important;">
+
+
+      <router-link :to="{ name: 'ProxyList'}"> <el-button type="button" class="btn mr-1 mb-1 btn-primary btn-sm"><< Back to proxies list</el-button></router-link>
+      <div class="card">
+
+        <div class="card-content collpase show">
+          <div class="card-body">
+
+
+            <el-form ref="form" :model="form" label-width="80px" class="form form-horizontal striped-rows form-bordered">
+
+
+              <div class="form-body">
+                <h4 class="form-section"><i class="ft-user"></i> Personal Info</h4>
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="projectinput1">Full Name</label>
+                  <div class="col-md-9">
+                    <input type="text" id="projectinput1" class="form-control" placeholder="Full Name"
+                           name="fname">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="projectinput2">Slogan</label>
+                  <div class="col-md-9">
+                    <input type="text" id="projectinput2" class="form-control" placeholder="Slogan"
+                           name="slogan">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="Philosophy">Philosophy</label>
+                  <div class="col-md-9">
+                    <textarea id="Philosophy"  rows="5" class="form-control" placeholder="Philosophy" name="email"></textarea>
+                  </div>
+                </div>
+                <div class="form-group row last">
+                  <label class="col-md-3 label-control" for="Background">Background</label>
+                  <div class="col-md-9">
+                    <textarea id="Background"  rows="5" class="form-control" name="Background"></textarea>
+                  </div>
+                </div>
+                <h4 class="form-section"><i class="la la-clipboard"></i> Online Details</h4>
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="website">Website</label>
+                  <div class="col-md-9">
+                    <input type="text" id="website" class="form-control" placeholder="Website"
+                           name="website">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="website">Website</label>
+                  <div class="col-md-9">
+                    <input type="text" id="website" class="form-control" placeholder="Website"
+                           name="website">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="website">logo</label>
+                  <div class="col-md-9">
+                    <input type="text" id="logo" class="form-control" placeholder="logo"
+                           name="website">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="steemit">Steemit</label>
+                  <div class="col-md-9">
+                    <input type="text" id="steemit" class="form-control" placeholder="Steemit"
+                           name="steemit">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="twitter">Twitter</label>
+                  <div class="col-md-9">
+                    <input type="text" id="twitter" class="form-control" placeholder="Twitter"
+                           name="twitter">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 label-control" for="wechat">Wechat</label>
+                  <div class="col-md-9">
+                    <input type="text" id="wechat" class="form-control" placeholder="Wechat"
+                           name="wechat">
+                  </div>
+                </div>
+
+
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-warning mr-1">
+                  <i class="ft-x"></i> Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="la la-check-square-o"></i> Save
+                </button>
+              </div>
+
+            </el-form>
+          </div>
+        </div>
+      </div>
+
+
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="Full Name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="Slogan">
+          <el-input v-model="form.slogan"></el-input>
+        </el-form-item>
+        <el-form-item label="Philosophy">
+          <el-input type="textarea" v-model="form.philosophy"></el-input>
+        </el-form-item>
+        <el-form-item label="Background">
+          <el-input type="textarea" v-model="form.background"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Website">
+          <el-input v-model="form.website"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Logo">
+          <el-input v-model="form.logo_256"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Telegram">
+          <el-input v-model="form.telegram"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Steemit">
+          <el-input v-model="form.steemit"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Twitter">
+          <el-input v-model="form.twitter"></el-input>
+        </el-form-item>
+
+        <el-form-item label="Wechat">
+          <el-input v-model="form.wechat"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit">Submit</el-button>
+        </el-form-item>
+      </el-form>
+
+      <el-dialog
+              :title="dialogTitle"
+              :visible.sync="centerDialogVisible"
+              width="30%"
+              center>
+        <div v-html="dialogMessage">{{ dialogMessage }}</div>
+        <span slot="footer" class="dialog-footer">
+                            </span>
+      </el-dialog>
+
+    </div>
+  </script>
+
+
+
+  <script type="text/x-template" id="VoterStruct">
+    <div v-loading.fullscreen.lock="loading">
+      <div class="" style="padding-bottom:50px"></div>
+      <treemap :name="chart.chartName" :data="chart.chartData" v-for="chart in charts"></treemap>
+    </div>
+  </script>
+
+  <script type="text/x-template" id="treemap">
+    <div ref="chart" style="width: auto; height: 500px; position: relative;margin-bottom:60px;">
+    </div>
+  </script>
+
+  <script type="text/x-template" id="pie">
+    <div ref="chart" style=" width:450px;height: 350px; position: relative;">
+    </div>
+  </script>
+
+  <script type="text/x-template" id="page">
+    <ul class="pagination" >
+      <li class="page-item" v-show="current != 1" @click="current-- && goto(current)" ><a href="#" class="page-link">Prev</a></li>
+      <li class="page-item" v-for="index in pages" @click="goto(index)" :class="{'active':current == index}" :key="index">
+        <a href="#" class="page-link">{{index}}</a>
+      </li>
+      <li class="page-item"  v-show="allpage != current && allpage != 0 " @click="current++ && goto(current++)"><a href="#" class="page-link">Next</a></li>
+    </ul>
+  </script>
+
+
+
+  <!-- END TEMPLATES & SCRIPTS EOS -->
+
+
+
+
+
+
+
+
+  <!-- ////////////////////////////////////////////////////////////////////////////-->
+  <footer class="footer footer-static footer-dark navbar-border navbar-shadow">
+    <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
+      <span class="float-md-left d-block d-md-inline-block"><a class="text-bold-800 grey darken-2" href="https://www.eosmedi.com"
+        target="_blank">EOS Mediterranean </a> </span>
+      <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Vote us "eosmedinodes"</span>
+    </p>
+  </footer>
+
+  <!-- VOTE TRACKER -->
+
+  <script src="js/common.js"></script>
+
+  <!-- BEGIN VENDOR JS-->
+  <script src="app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
+  <!-- BEGIN VENDOR JS-->
+  <!-- BEGIN PAGE VENDOR JS-->
+  <script src="app-assets/vendors/js/tables/datatable/datatables.min.js" type="text/javascript"></script>
+  <script src="app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"
+          type="text/javascript"></script>
+  <!--<script src="app-assets/vendors/js/tables/buttons.colVis.min.js" type="text/javascript"></script>
+  <script src="app-assets/vendors/js/tables/datatable/dataTables.colReorder.min.js"
+          type="text/javascript"></script>
+  <script src="app-assets/vendors/js/tables/datatable/dataTables.buttons.min.js"
+          type="text/javascript"></script>
+  <script src="app-assets/vendors/js/tables/datatable/buttons.bootstrap4.min.js"
+          type="text/javascript"></script>-->
+
+  <!-- END PAGE VENDOR JS-->
+  <!-- BEGIN MODERN JS-->
+  <script src="app-assets/js/core/app-menu.js" type="text/javascript"></script>
+  <script src="app-assets/js/core/app.js" type="text/javascript"></script>
+  <script src="app-assets/js/scripts/customizer.js" type="text/javascript"></script>
+  <!-- END MODERN JS-->
+  <!-- BEGIN PAGE LEVEL JS-->
+  <script src="app-assets/js/scripts/tables/datatables-extensions/datatable-responsive.js"
+          type="text/javascript"></script>
+  <!-- END PAGE LEVEL JS-->
+
+  <script src="app-assets/js/scripts/modal/components-modal.js" type="text/javascript"></script>
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119761410-1"></script>
+
+
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-119761410-1');
+  </script>
+
+</body>
+</html>

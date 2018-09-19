@@ -1,0 +1,946 @@
+<html>
+<head>
+    <title>EOS Voting Data and Statistics</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Knowing who votes for who, tracking the vote data">
+    <meta name="author" content="fun">
+    <meta property="og:image" content="https://eosmedi.com/wp-content/uploads/2018/05/QQ%E5%9B%BE%E7%89%8720180517220830-e1526574262156.png" />
+    <link rel="shortcut icon" href="https://eosmedi.com/wp-content/uploads/2018/05/QQ%E5%9B%BE%E7%89%8720180517220830-e1526574262156.png"/>
+    <script src="https://cdn.bootcss.com/es6-promise/4.1.1/es6-promise.auto.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.min.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.1/dist/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+          crossorigin="anonymous">
+
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script> -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-ui@2.4.3/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/common.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/element-ui@2.4.3/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.22.1/moment-with-locales.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/eosjs@15.0.6/lib/eos.min.js"
+            integrity="sha512-IDRAIcOGQTZN3jE/TvTiG3czpjzmWPiYi0+mwWbJVdYwPfbhD2YtzlpD4+rKE+MIuysseAenToyLNoO1whNFUg=="
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div id="app">
+
+    <div class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+        <a class="navbar-brand mr-0 mr-md-2" href="#/">
+            <img src="https://eosmedi.com/wp-content/uploads/2018/05/QQ%E5%9B%BE%E7%89%8720180517220830-e1526574262156.png" height="60" alt="EOS Mediterranean">
+        </a>
+        <div class="navbar-nav-scroll">
+            <ul class="navbar-nav bd-navbar-nav flex-row">
+                <li class="nav-item">
+                    <span style="font-size:14px;color:#555;">EOS Mediterranean</span>
+                    <h1 class="d-md-flex" class="tool-name" :style="isMobile ? 'font-size:2rem;' : ''">EOS Voter Tracker</h1>
+                </li>
+            </ul>
+        </div>
+        <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
+            <li class="nav-item">
+                <router-link class="btn p-2" style="text-decoration: none;" :to="{ name: 'History'}">History</router-link>
+            </li>
+            <li class="nav-item">
+                <router-link class="btn p-2" style="text-decoration: none;" :to="{ name: 'Referendum'}">Referendum</router-link>
+            </li>
+            <li class="nav-item">
+                <span class="btn p-2" style="text-decoration: none;">Vote Us: eosmedinodes</span>
+            </li>
+            <li class="nav-item">
+                <a class="p-2 btn btn-link" href="https://t.me/eosmedi" target="_blank" rel="noopener">Join Telegram</a>
+            </li>
+            <li class="nav-item">
+                <a class="p-2 btn btn-link" href="https://github.com/eosmedi/EOS-Voter-Tracker" target="_blank" rel="noopener">Github</a>
+            </li>
+        </ul>
+
+        <div class="navbar-brand mr-0 ml-md-2 mr-md-2 scatter-block">
+            <el-dropdown  >
+
+                <button type="button" class="el-button el-button--default">
+                                                    <span class="el-dropdown-link">
+                                                            <span v-if="scatter && !identity"  @click="connectScatter()">Attach an Account</span>
+                                                            <span v-if="scatter && identity" >{{ identity.name }}</span>
+                                                            <span v-if="!scatter"><a href="https://get-scatter.com/" target="_blank">Please install Scatter</a></span>
+                                                    <img src="https://votetracker.eosmedi.com/scatter.png" height="20" style="margin-left:6px">
+                                                    </span>
+                    <i class="el-icon-arrow-down el-icon--right"></i>
+                </button>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item><span v-if="scatter"  @click="connectScatter()">Connect Account</span></el-dropdown-item>
+                    <el-dropdown-item><span v-if="scatter"  @click="signOut()">Sign Out</span></el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </div>
+
+
+    </div>
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap justify-content-md-center">
+            <div class="col-14 col-md-12 col-xl-10 py-md-3 pl-md-3 center-block bd-content">
+                <div class="row metric-block">
+                    <div class="col-sm">
+                        <a class="metric metric-bordered align-items-center" href="#">
+                            <h2 class="metric-label"> Staked </h2>
+                            <p class="metric-value h3">
+                                <sub>
+                                    <i class="oi oi-people"></i>
+                                </sub>
+                                <span class="value">
+                                                <div class="progress" style="
+                                                width: 100%;
+                                            ">
+                                                        <div class="progress-bar" role="progressbar" :style="'width:'+ status.percent_stacked +'%;'"
+                                                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ status.percent_stacked }}%</div>
+                                                </div>
+                                            </span>
+                            </p>
+                        </a>
+                    </div>
+
+
+                    <div class="col-sm">
+                        <router-link class="metric metric-bordered align-items-center"  :to="{ name: 'ProducersList'}">
+                            <h2 class="metric-label"> Producers </h2>
+                            <p class="metric-value h3">
+                                <sub>
+                                    <i class="oi oi-people"></i>
+                                </sub>
+                                <span class="value">{{ status.producers }}</span>
+                            </p>
+                        </router-link>
+                    </div>
+
+                    <div class="col-sm">
+                        <router-link class="metric metric-bordered align-items-center"  :to="{ name: 'ProxyList'}">
+                                    <span style="
+    position: absolute;
+    top: 5px;
+    left: 12px;
+">new!</span>
+                            <h2 class="metric-label"> Proxies </h2>
+                            <p class="metric-value h3">
+                                <sub>
+                                    <i class="oi oi-people"></i>
+                                </sub>
+                                <span class="value">{{ status.proxy_voters }} <span v-if="status.proxy_votes" style="font-size:13px;"> / {{ (status.proxy_votes / 10000).toFixed(0) | numberWithCommas }} EOS</span></span>
+                            </p>
+                        </router-link>
+                    </div>
+
+                    <div class="col-sm">
+                        <router-link class="metric metric-bordered align-items-center"  :to="{ name: 'VoterList'}">
+
+                            <h2 class="metric-label"> Voters </h2>
+                            <p class="metric-value h3">
+                                <sub>
+                                    <i class="oi oi-people"></i>
+                                </sub>
+                                <span class="value">{{ status.voters }}</span>
+                            </p>
+                        </router-link>
+                    </div>
+                </div>
+
+
+
+                <router-view :chain-state="chainState" :eos-client="eosClient" :identity="identity" v-if="$route.meta.requireEosClient"></router-view>
+                <router-view :chain-state="chainState" v-if="!$route.meta.requireEosClient"></router-view>
+            </div>
+
+            <div class="d-xl-block col-xl-2 py-md-3 pl-md-3 bd-toc" v-if="logFilters.producer">
+                <div id="right-meta">
+                    <div class="alert alert-info meta-info" role="alert">
+                        Chain id = aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906
+                    </div>
+                    <div id="vote-logs">
+                        <h3>Vote Logs <span v-if="logFilters.producer">for producer: {{ logFilters.producer }}</span>
+                            <span v-if="logFilters.voter">of : {{ logFilters.voter }}</span> (realtime)
+                        </h3>
+                        <p v-for="voteLog in voteLogs" class="vote-log" v-if="filterLog(voteLog)">
+                            <a>#{{ voteLog.block_num }}</a>
+                            {{ voteLog.timeFormatted }}
+                            < <router-link :to="{ name: 'VoterDetail', params: { voter: voteLog.voter }}">{{ voteLog.voter }}</router-link> >
+                            <span v-if="voteLog.voterData">Staked {{ (voteLog.voterData.voter_info.staked / 10000).toFixed(0) }} EOS</span> Vote for<br>
+                            <router-link :to="{ name: 'ProducerDetail', params: { producer: producer }}" v-for="producer in voteLog.producers" class="producer-link">
+                                            <span v-bind:class="[producer == logFilters.producer ? 'active' : '']">{{ producer }}
+                                            </span>
+                            </router-link>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<template id="producerList" type="text/div">
+    <div class="table-responsive">
+        <el-row >
+            <el-button type="primary" plain @click="visuliazeProducers">Visualize Producer Voters</el-button>
+        </el-row>
+        <el-table
+                v-if="!isMobile"
+                v-loading="loading"
+                :data="tableData"
+                empty-text="No data"
+                @selection-change="handleSelectionChange"
+                style="width: 100%">
+            <el-table-column
+                    type="selection"
+                    width="45">
+            </el-table-column>
+            <el-table-column
+                    label="#"
+                    width="55"
+                    prop="index" sortable
+            >
+                <template slot-scope="scope">
+                    <span>{{ scope.row.index }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    width="220"
+                    label="Producer" >
+                <template slot-scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                        <p>Producer: {{ scope.row.owner }}</p>
+                        <p>URL: {{ scope.row.url }}</p>
+                        <div slot="reference" class="name-wrapper">
+                                        <span class="producer-logo-block">
+                                            <img :src="scope.row.branding.logo_256 ? scope.row.branding.logo_256 : scope.row.branding.logo_1024" v-if="scope.row.branding && (scope.row.branding.logo_256 || scope.row.branding.logo_1024)" height="50"
+                                                 onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                                        </span>
+                            <router-link :to="{ name: 'ProducerDetail', params: { producer: scope.row.owner }}" class="producer-list-link">
+                                <span v-if="scope.row.candidate_name">{{ scope.row.candidate_name }}</span> <span v-if="!scope.row.candidate_name">{{ scope.row.owner }}</span>
+                            </router-link>
+                        </div>
+                    </el-popover>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="Votes %" width="100">
+                <template slot-scope="scope">
+                    {{ (parseInt(scope.row.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%
+                </template>
+            </el-table-column>
+            <el-table-column label="Votes" width="120">
+                <template slot-scope="scope">
+                    {{ numberWithCommas((scope.row.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}
+                </template>
+            </el-table-column>
+
+            <el-table-column label="Voters" prop="voters" sortable width="100">
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'ProducerDetail', params: { producer: scope.row.owner }}">{{ scope.row.voters }}</router-link>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="Daily Reward"  show-overflow-tooltip="true"
+                             width="130">
+                <template slot-scope="scope">
+                    {{ scope.row.rewards }} EOS
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    label="Votes Change(48h)"
+                    show-overflow-tooltip="true"
+                    prop="votes_loss.diff" sortable
+                    width="200">
+                <template slot-scope="scope">
+                            <span v-if="scope.row.votes_loss && scope.row.votes_loss.diff">
+                                <span :style="scope.row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (scope.row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                            </span>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    show-overflow-tooltip="true"
+                    label="Location">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.org_location">{{ scope.row.org_location.name }}</span>
+                    <span v-if="!scope.row.org_location && scope.row.location">{{ countryCode[scope.row.location] }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="Tags">
+                <template slot-scope="scope">
+                    <el-tag
+                            :type="tag === 'Exchange' ? 'primary' : tag === 'Mining pools' ? 'success' : 'info'"
+                            disable-transitions v-if="scope.row.tags.length" v-for="tag in scope.row.tags">{{ tag }}</el-tag>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    label="URL">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.url"><a :href="scope.row.url" target="_blank">Website</a></span>
+                </template>
+            </el-table-column>
+        </el-table>
+
+        <div v-if="isMobile" class="producers-list" v-loading.fullscreen.lock="loading">
+            <el-container v-for="(row, index ) in tableData" :class="row.selected ? 'producer-list-item selected' : 'producer-list-item'">
+                <el-aside width="50px">
+                    <el-popover trigger="hover" placement="top">
+                        <p>Producer: {{ row.owner }}</p>
+                        <p>URL: {{ row.url }}</p>
+                        <div slot="reference" class="name-wrapper">
+                                        <span class="producer-logo-block" style="margin-right:0;margin-top:0px">
+
+                                                <img :src="row.branding.logo_256 ? row.branding.logo_256 : row.branding.logo_1024" v-if="row.branding && (row.branding.logo_256 || row.branding.logo_1024)" height="50"
+                                                     onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+
+                                        </span>
+                        </div>
+                    </el-popover>
+                </el-aside>
+                <el-container>
+                    <el-header height="30px">
+                        <el-container>
+                            <el-container>
+                                <el-header height="30px" style="padding-left:0;padding-top:8px;">
+                                    {{ row.index }}.
+                                    <router-link :to="{ name: 'ProducerDetail', params: { producer: row.owner }}" class="producer-list-link">
+                                        <span v-if="row.candidate_name">{{ row.candidate_name }}</span> <span v-if="!row.candidate_name">{{ row.owner }}</span>
+                                    </router-link>
+                                </el-header>
+                            </el-container>
+                            <el-aside width="100px" style="text-align:right;">
+                                        <span style="font-size: 12px;" >
+                                            {{ (parseInt(row.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%<br>
+                                            {{ numberWithCommas((row.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}
+                                        </span>
+                            </el-aside>
+                        </el-container>
+                    </el-header>
+                    <el-main>
+                        <div  @click="clickProducer(row)">
+                            <!-- <p>{{ (parseInt(row.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%</p>
+                            <p>{{ numberWithCommas((row.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}</p> -->
+                            <p>Daily Reward: {{ row.rewards }} EOS</p>
+                            <p>Voters: <router-link :to="{ name: 'ProducerDetail', params: { producer: row.owner }}">{{ row.voters }}</router-link></p>
+                            <p  v-if="row.votes_loss && row.votes_loss.diff">Votes Change(48h): <span>
+                                        <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                                    </span></p>
+                            <p>Location: <span v-if="row.org_location">{{ row.org_location.name }}</span>
+                                <span v-if="!row.org_location && row.location">{{ countryCode[row.location] }}</span></p>
+                            <p><el-tag
+                                    :type="tag === 'Exchange' ? 'primary' : tag === 'Mining pools' ? 'success' : 'info'"
+                                    disable-transitions v-if="row.tags.length" v-for="tag in row.tags">{{ tag }}</el-tag></p>
+                            <span v-if="row.url"><a :href="row.url" target="_blank">Website</a></span>
+                        </div>
+                    </el-main>
+                </el-container>
+            </el-container>
+        </div>
+
+        <page :current="currentPage" :allpage="totalPage" ref="page" v-if="!filterProducers"></page>
+        <table class="table table-hover" v-if="0">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Producer</th>
+                <th scope="col">Votes %</th>
+                <th scope="col">Votes</th>
+                <th scope="col">Voters</th>
+                <th scope="col">Location</th>
+                <th scope="col">URL</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-if="loading">
+                <td cols="7">Loading data....</td>
+            </tr>
+            <tr v-for="(producer, index ) in producers" v-if="producer.show">
+                <th scope="row">{{ index+1 }}</th>
+                <td>
+                    <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}">{{ producer.owner }} </router-link>
+                </td>
+                <td>{{ (parseInt(producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%</td>
+                <td>{{ numberWithCommas((producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}</td>
+                <!-- <td>{{ cacluteReawrdcacluteReawrd(index, producer, chainState, t) }} EOS</td> -->
+                <td>
+                    <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}">{{ producer.voters }}</router-link>
+                </td>
+                <td>
+                    <span v-if="producer.location">{{ countryCode[producer.location] }}</span>
+                </td>
+                <td>{{ producer.url }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+
+<template id="ProxyList" type="text/div">
+    <div>
+        <!-- <el-alert
+        title="you can submit your proxy info to https://docs.google.com/forms/d/1S-7enRUlmWm18GqBORdv6GJuzCN6Tk0bNUe8r5vH_6Q"
+        show-icon
+        type="info"></el-alert> -->
+
+        <div role="alert" class="el-alert el-alert--info"><i class="el-alert__icon el-icon-info"></i><div class="el-alert__content"><span class="el-alert__title">Below is the list of active vote proxy accounts on the EOS mainnet.  to register more info about yourself see the <a href="https://github.com/AlohaEOS/eos-proxyinfo" target="_blank">instructions here</a>.</span><!----></div></div>
+        <el-row style="margin-top:10px">
+            <router-link :to="{ name: 'SubmitProxyInfo'}"> <el-button type="info">Submit Proxy Info</el-button></router-link>
+        </el-row>
+
+        <div v-if="isMobile" class="producers-list" v-loading.fullscreen.lock="loading">
+            <el-container v-for="(row, index ) in voters" :class="row.selected ? 'producer-list-item selected' : 'producer-list-item'">
+                <el-aside width="50px">
+                    <el-popover trigger="hover" placement="top">
+                        <p v-if="row.info">Producer: {{ row.info.fullName }}</p>
+                        <div slot="reference" class="name-wrapper">
+                                        <span class="producer-logo-block" style="margin-right:0;margin-top:0px">
+                                            <img :src="row.info.logo" v-if="row.info && row.info.logo" height="50"
+                                                 onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                                            <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!row.info" height="50">
+                                        </span>
+                        </div>
+                    </el-popover>
+                </el-aside>
+                <el-container>
+                    <el-header height="22px">
+                        <el-container>
+                            <el-container>
+                                <el-header height="22px" style="padding-left:0;">
+                                    {{ index+1 }}.
+                                    <router-link :to="{ name: 'VoterDetail', params: { voter: row.account_name }}">
+                                        {{ row.account_name }}
+                                        <span v-if="row.candidate_name">{{ row.account_name }}</span>
+                                        <span v-if="!row.candidate_name">{{ row.owner }}</span>
+                                    </router-link>
+                                </el-header>
+                            </el-container>
+                            <el-aside width="100px" style="text-align:right;">
+                                        <span >
+                                            {{ numberWithCommas((row.voter_info.staked / 10000 ).toFixed(0)) }}
+                                        </span>
+                            </el-aside>
+                        </el-container>
+                    </el-header>
+                    <el-main>
+                        <div  @click="clickProducer(row)">
+                            <p v-if="row.info">
+                                Full Name: <br><span class="p-value"> {{ row.info.fullName }}</span>
+                            </p>
+                            <p v-if="row.info">
+                                Slogan: <br><span class="p-value"> {{ row.info.slogan }}</span>
+                            </p>
+                            <p> Proxy Voters:
+                                <router-link :to="{ name: 'VoterDetail', params: { voter: row.account_name }}">
+                                    {{ row.proxy_voters.length }}
+                                </router-link>
+                            </p>
+                            <p v-if="row.info && row.info.location">
+                                Location: <span class="p-value">{{ row.info.location }}</span>
+                            </p>
+                            <p v-if="row.info">
+                                <span v-if="row.info" class="p-value"><a :href="row.info.url" target="_blank">Website</a></span>
+                            </p>
+                        </div>
+                    </el-main>
+                </el-container>
+            </el-container>
+        </div>
+
+
+        <el-table
+                v-if="!isMobile"
+                class="proxy-list"
+                v-loading="loading"
+                v-loading="loading"
+                :data="voters"
+                empty-text="No data"
+                style="width: 100%">
+
+            <el-table-column
+                    type="index">
+            </el-table-column>
+
+            <el-table-column
+                    width="220"
+                    label="Proxy Account" >
+                <template slot-scope="scope">
+                            <span class="producer-logo-block">
+                                            <img :src="scope.row.info.logo" v-if="scope.row.info && scope.row.info.logo" height="50"
+                                                 onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                                            <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!scope.row.info" height="50">
+                                        </span>
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">
+                        {{ scope.row.account_name }}
+                        <span v-if="scope.row.candidate_name">{{ scope.row.account_name }}</span> <span v-if="!scope.row.candidate_name">{{ scope.row.owner }}</span>
+                    </router-link>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    width="150"
+                    label="Staked">
+                <template slot-scope="scope">
+                    {{ numberWithCommas((scope.row.voter_info.staked / 10000 ).toFixed(0)) }} EOS
+                </template>
+            </el-table-column>
+            <el-table-column
+                    width="150"
+                    label="Voted Producers">
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">{{ scope.row.voter_info.producers.length }}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    width="150"
+                    label="Proxy Voters">
+                <template slot-scope="scope">
+                    <!-- <el-tag v-for="proxy_voter in scope.row.proxy_voters" type="info">
+                        <router-link :to="{ name: 'VoterDetail', params: { voter: proxy_voter }}">
+                            {{ proxy_voter }}
+                        </router-link>
+                    </el-tag> -->
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">{{ scope.row.proxy_voters.length }}</router-link>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    show-overflow-tooltip="true"
+                    width="160"
+                    label="Full Name" >
+                <template slot-scope="scope">
+                    <span v-if="scope.row.info"> {{ scope.row.info.fullName }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    show-overflow-tooltip="true"
+                    label="Slogan" >
+                <template slot-scope="scope" >
+                    <span v-if="scope.row.info"> {{ scope.row.info.slogan }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    show-overflow-tooltip="true"
+                    label="Location" >
+                <template slot-scope="scope">
+                    <span v-if="scope.row.info"> {{ scope.row.info.location }}</span>
+                </template>
+            </el-table-column>
+
+            <el-table-column
+                    show-overflow-tooltip="true"
+                    label="URL">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.info"> <a :href="scope.row.info.url" target="_blank">WebSite</a></span>
+                </template>
+            </el-table-column>
+
+        </el-table>
+        <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+    </div>
+</template>
+
+
+<template id="VoterList" type="text/div">
+    <div>
+
+        <el-table
+                v-loading="loading"
+                v-loading="loading"
+                :data="voters"
+                empty-text="No data"
+                style="width: 100%">
+
+            <el-table-column
+                    type="index">
+            </el-table-column>
+
+            <el-table-column
+                    label="Voter Account" >
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">{{ scope.row.account_name }}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column label="Staked">
+                <template slot-scope="scope">
+                    {{ numberWithCommas((scope.row.voter_info.staked / 10000 ).toFixed(0)) }} EOS
+                </template>
+            </el-table-column>
+            <el-table-column label="Voted Producers">
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">{{ scope.row.voter_info.producers.length }}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column label="Tags">
+                <template slot-scope="scope">
+                    <el-tag v-if="scope.row.voter_info && scope.row.voter_info.is_proxy">Proxy</el-tag>
+                </template>
+            </el-table-column>
+        </el-table>
+        <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+    </div>
+</template>
+
+
+<template id="producerDetail" type="text/div">
+    <div>
+        <div v-if="loading">
+            Loading data...
+        </div>
+        <el-container class="detail-info-block" v-if="producer.bpinfo">
+            <el-aside width="135px">
+                <div class="detail-logo-block" >
+                    <img :src="producer.bpinfo.org.branding.logo_256 ? producer.bpinfo.org.branding.logo_256 : producer.bpinfo.org.branding.logo_1024"
+                         v-if="producer.bpinfo.org && producer.bpinfo.org.branding && (producer.bpinfo.org.branding.logo_256 || producer.bpinfo.org.branding.logo_1024)" height="120"
+                         onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                    <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!producer.bpinfo.org" height="120">
+                </div>
+            </el-aside>
+            <el-main>
+                <h4><span v-if="producer.bpinfo && producer.bpinfo.org && producer.bpinfo.org.candidate_name">{{ producer.bpinfo.org.candidate_name }} - </span>{{ producer.producer.owner }}</h4>
+                <p class="detail-links" v-if="producer.bpinfo.org">
+                    <span class="" v-if="producer.bpinfo.org && producer.bpinfo.org.social && producer.bpinfo.org.social.telegram"><a :href="'https://t.me/'+producer.bpinfo.org.social.telegram" target="_blank"><i class="fab fa-telegram"></i> Telegram</a> </span>
+                    <span><i class="fas fa-location-arrow"></i> {{ producer.bpinfo.org.location.name }}  </span>
+                </p>
+                <p class="detail-links" v-if="producer.bpinfo && producer.bpinfo.org">
+                    <span>{{ producer.bpinfo.org.website }}</span>
+                    <span>{{ producer.bpinfo.org.email }}</span>
+                </p>
+            </el-main>
+        </el-container>
+
+
+        <div class="col-14 col-md-9 col-xl-12 py-md-4 pb-md-1 pl-md-3 bd-content" v-if="producer.producer">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="detail-info-desc">
+                        <h5>Detail</h5>
+                        <div class="detail-info-desc-content">
+                            <strong>Node List</strong>
+                            <ul v-for="node in producer.bpinfo.nodes">
+                                <li>node_type: {{ node.node_type }}</li>
+                                <li>location: {{ node.location.name }}, {{ node.location.country }}</li>
+                                <li>api_endpoint: {{ node.api_endpoint }} </li>
+                                <li>ssl_endpoint: {{ node.ssl_endpoint }}  </li>
+                                <li>p2p_endpoint: {{ node.p2p_endpoint }} </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <h5 style="margin-bottom: 32px;">Producer Data</h5>
+                    <div role="alert" id="producerInfo">
+                        <p>Producer:  <span class="item-value">{{ producer.producer.owner }}</span></p>
+                        <p>URL:  <span class="item-value">{{ producer.producer.url }}</span>
+                        </p>
+                        <p>Total Votes %:  <span class="item-value">{{ (parseInt(producer.producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%</span></p>
+                        <p>Votes:  <span class="item-value">{{ numberWithCommas((producer.producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}</span></p>
+                        <p>Voters:  <span class="item-value">{{ producer.producer.voters }}</span></p>
+                        <p>Votes Change(48h):  <span class="item-value">
+                                            <span :style="producer.total.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.total.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                                    </span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-14 col-md-9 col-xl-12 py-md-4 pb-md-5 pl-md-3 bd-content" v-if="producer.producer">
+            <div class="row">
+                <div class="col-sm">
+                    <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
+                </div>
+                <div class="col-sm">
+                    <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
+                </div>
+            </div>
+            <p>aggregate by latest(48h) remove / add vote logs</p>
+        </div>
+
+        <el-table
+                :data="producer.voters"
+                empty-text="No data"
+                v-loading="loading"
+                style="width: 100%">
+
+            <el-table-column
+                    type="index">
+            </el-table-column>
+
+            <el-table-column
+                    label="Voter Account" >
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">{{ scope.row.account_name }}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column label="Staked">
+                <template slot-scope="scope">
+                    {{ numberWithCommas((scope.row.voter_info.staked / 10000 ).toFixed(0)) }} EOS
+                </template>
+            </el-table-column>
+            <el-table-column label="Voted Producers">
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'VoterDetail', params: { voter: scope.row.account_name }}">{{ scope.row.voter_info.producers.length }}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column label="Tags">
+                <template slot-scope="scope">
+                    <el-tag v-if="scope.row.voter_info && scope.row.voter_info.is_proxy">Proxy</el-tag>
+                </template>
+            </el-table-column>
+        </el-table>
+        <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+    </div>
+</template>
+
+
+<template id="VoterDetail" type="text/div">
+    <div v-loading.fullscreen.lock="loading">
+        <el-container class="detail-info-block">
+            <el-aside width="135px">
+                <div class="detail-logo-block">
+                    <img :src="voter.info.logo" v-if="voter.info && voter.info.logo" height="120"
+                         onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                    <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!voter.info" height="120">
+                </div>
+            </el-aside>
+            <el-main>
+                <h4><span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }} - </span>{{ voter.account_name }}</h4>
+                <p v-if="voter.info" class="detail-slogan">{{ voter.info.slogan }}</p>
+                <p v-if="!voter.info" class="detail-slogan">unknow</p>
+                <p v-if="voter.info" class="detail-links">
+                    <span class=""><a :href="'https://t.me/'+voter.info.telegram" target="_blank"><i class="fab fa-telegram"></i> Telegram</a> </span>
+                    <span v-if="voter.info.url"><a :href="voter.info.url" target="_blank"><i class="fas fa-link"></i> Link</a> </span>
+                    <span v-if="voter.info.location"><i class="fas fa-location-arrow"></i> {{ voter.info.location }}  </span>
+                </p>
+            </el-main>
+        </el-container>
+
+        <div class="col-14 col-md-9 col-xl-12 py-md-4 pb-md-5 pl-md-3 bd-content">
+            <div class="row">
+                <div class="col-sm" v-if="voter.info">
+                    <div class="detail-info-desc">
+                        <h5>Description</h5>
+                        <div class="detail-info-desc-content">
+                            <strong>Philosophy</strong>
+                            <p>{{ voter.info.philosophy }}</p>
+                            <strong>Background</strong>
+                            <p>{{ voter.info.background }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm">
+                    <h5 style="margin-bottom: 32px;">Account Data</h5>
+                    <div role="alert" id="producerInfo">
+                        <p>Account Name:  <span class="item-value">{{ voter.account_name }}</span></p>
+                        <p v-if="voter.blance.length">Balance:  <span v-for="blanceItem in voter.blance" class="item-value">{{ blanceItem }}</span>
+                        </p>
+                        <p>Staked EOS:  <span class="item-value">{{ numberWithCommas((voter.voter_info.staked / 10000).toFixed(0)) }} EOS</span></p>
+                        <p v-if="voter.eth">ETH Address:
+                            <span class="item-value"><a :href="'https://etherscan.io/address/' + voter.eth" target="_blank">{{ voter.eth }}</a></span>
+                        </p>
+
+                        <p v-if="voter.proxy_voters">
+                            Proxy Votes From: <br>
+                            <span class="item-value">
+                                            <el-tag v-for="proxy_voter in voter.all_proxy_voters" type="info" v-if="voter.all_proxy_voters">
+                                                <router-link :to="{ name: 'VoterDetail', params: { voter: proxy_voter.voter }}" target="_blank">
+                                                    {{ proxy_voter.voter }} {{ (proxy_voter.staked / 10000).toFixed(0) }} EOS
+                                                </router-link>
+                                            </el-tag>
+                                        </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="voter.actions" class="voter-actions">
+            <h5>Vote Actions</h5>
+            <ul>
+                <li v-for="(voteAction, index) in voter.actions">
+                    <a @click="viewBlock(voteAction.block_num, voteAction, index)">#{{ voteAction.block_num }}</a> <span v-if="voteAction.timestamp">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span>
+
+                    <ul>
+                        <li v-if="voteAction.canceled.length"  class="cancel-action">Remove Producers(-{{voteAction.canceled.length}}):
+                            <el-tag
+                                    type="info"
+                                    v-for="canceldProducer in voteAction.canceled"
+                                    disable-transitions>
+                                <router-link :to="{ name: 'ProducerDetail', params: { producer: canceldProducer }}" class="producer-list-link">  {{ canceldProducer }} </router-link>
+                            </el-tag>
+                        </li>
+
+                        <li v-if="voteAction.detal.length" class="detal-action">Add Producers(+{{voteAction.detal.length}}):
+                            <el-tag
+                                    type="info"
+                                    v-for="detalProducer in voteAction.detal"
+                                    disable-transitions>
+                                <router-link :to="{ name: 'ProducerDetail', params: { producer: detalProducer }}" class="producer-list-link">  {{ detalProducer }} </router-link>
+                            </el-tag>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- <treemap :name="chart.chartName" :data="chart.chartData" v-for="chart in charts"></treemap> -->
+        <producers-list :chain-state="chainState" :filter-producers="voter.voter_info.producers"></producers-list>
+    </div>
+</template>
+
+
+<template id="History" type="text/div">
+
+    <h1>HISTORY</h1>
+
+</template>
+
+<template id="Referendum" type="text/div">
+
+    <h1>REFERENDUM</h1>
+
+</template>
+
+
+
+<script type="text/x-template" id="SubmitProxyInfo">
+    <div  class="ol-14 col-md-12 col-xl-10 py-md-5 pl-md-5 pr-md-5 center-block" style="padding-top:15px; border: 1px solid #eee">
+        <el-form ref="form" :model="form" label-width="80px">
+            <el-form-item label="Full Name">
+                <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="Slogan">
+                <el-input v-model="form.slogan"></el-input>
+            </el-form-item>
+            <el-form-item label="Philosophy">
+                <el-input type="textarea" v-model="form.philosophy"></el-input>
+            </el-form-item>
+            <el-form-item label="Background">
+                <el-input type="textarea" v-model="form.background"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Website">
+                <el-input v-model="form.website"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Logo">
+                <el-input v-model="form.logo_256"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Telegram">
+                <el-input v-model="form.telegram"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Steemit">
+                <el-input v-model="form.steemit"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Twitter">
+                <el-input v-model="form.twitter"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Wechat">
+                <el-input v-model="form.wechat"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">Submit</el-button>
+            </el-form-item>
+        </el-form>
+
+        <el-dialog
+                :title="dialogTitle"
+                :visible.sync="centerDialogVisible"
+                width="30%"
+                center>
+            <div v-html="dialogMessage">{{ dialogMessage }}</div>
+            <span slot="footer" class="dialog-footer">
+                            </span>
+        </el-dialog>
+
+    </div>
+</script>
+
+
+
+<script type="text/x-template" id="VoterStruct">
+    <div v-loading.fullscreen.lock="loading">
+        <div class="" style="padding-bottom:50px"></div>
+        <treemap :name="chart.chartName" :data="chart.chartData" v-for="chart in charts"></treemap>
+    </div>
+</script>
+
+<script type="text/x-template" id="treemap">
+    <div ref="chart" style="width: auto; height: 500px; position: relative;margin-bottom:60px;">
+    </div>
+</script>
+
+<script type="text/x-template" id="pie">
+    <div ref="chart" style=" width:450px;height: 350px; position: relative;">
+    </div>
+</script>
+
+<script type="text/x-template" id="page">
+    <ul class="pagination" >
+        <li class="page-item" v-show="current != 1" @click="current-- && goto(current)" ><a href="#" class="page-link">Prev</a></li>
+        <li class="page-item" v-for="index in pages" @click="goto(index)" :class="{'active':current == index}" :key="index">
+            <a href="#" class="page-link">{{index}}</a>
+        </li>
+        <li class="page-item"  v-show="allpage != current && allpage != 0 " @click="current++ && goto(current++)"><a href="#" class="page-link">Next</a></li>
+    </ul>
+</script>
+
+
+
+
+<footer class="bd-footer text-muted">
+    <div class="container-fluid p-3 p-md-5 py-md-3">
+        <ul class="bd-footer-links">
+            <li><a href="https://t.me/eosmedi">Telegram</a></li>
+            <li><a href="https://github.com/eosmedi/EOS-Voter-Tracker">Github</a></li>
+            <li>| <span style="padding-left:10px"> Other tools</span></li>
+            <li><a href="http://eosflare.io/" target="_blank">eosflare</a></li>
+            <li><a href="http://eosnetworkmonitor.io/" target="_blank">EOS Network Monitor</a></li>
+            <li><a href="https://validate.eosnation.io/producers/" target="_blank">EOS Validator</a></li>
+            <li><a href="https://www.myeoskit.com/" target="_blank">MyEOSKit</a></li>
+
+
+
+        </ul>
+        <p>© 2018 EOS Mediterranean</p>
+    </div>
+</footer>
+
+<script src="js/common.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119761410-1"></script>
+
+
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-119761410-1');
+</script>
+
+</body>
+</html>
+
+
