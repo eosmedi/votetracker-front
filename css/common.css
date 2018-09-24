@@ -1,3 +1,69 @@
+.lblbChat {
+    #A01100
+}
+
+.stackedBox {
+    background:#fff;
+    border:2px solid #7B8ABB;
+    border-radius: 5px;
+    font-family: "Quicksand";
+}
+
+@media (max-width: 767.98px) {
+    .stackedBox {
+        margin-bottom: 10px;
+    }
+}
+
+.adver {
+    margin-top:10px;
+    padding:10px;
+    font-family:"Quicksand";
+    min-height:180px;
+    background:url('../images/adver.jpg');
+    background-size: cover;
+}
+
+    .adver .title {
+        font-size:24px;
+        color:#7B8ABB;
+        display:block;
+        text-align:center;
+    }
+
+    .adver .newBox {
+        background-color: rgba(160,17,0,1);
+        color:#fff;
+        padding:4px 8px;
+        -webkit-border-radius: 7px;
+        -moz-border-radius: 7px;
+        border-radius: 7px;
+        text-align: center;
+        font-weight: lighter;
+        font-size:17px;
+    }
+
+    .adver .txt {
+        font-size:14px;
+        color:#444;
+        text-align: left;
+        padding:5px;
+        margin-top:10px;
+    }
+
+.adver:first-child {
+    margin-top:0px;
+}
+
+.progress {
+margin-bottom:2px;
+    height:2px;
+}
+
+.lblStaked {
+    font-size:20px;
+}
+
 .bd-footer {
     font-size: 85%;
     background-color: #f7f7f7;
@@ -305,19 +371,13 @@
 }
 
 /* SIDE PANEL PRODUCER DETAILS */
-.card-header {
-    padding: 0.5rem 0.5rem;
-    font-size:10px !important;
-    font-weight: bold;
-    margin-bottom: 0;
-    background-color: #fff;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
 
 .HeadVoteLog{
     font-weight: bold;
     display:block;
     color:#707FA1;
+    font-family: "Open Sans";
+    font-size:14px;
 }
 
 .SubHeadVoteLog{
@@ -326,15 +386,34 @@
     color:#0f0f0f;
 }
 
+.SubHeadVoteLogH{
+    font-size: 10px;
+    color:#0f0f0f;
+    font-weight: bold;
+}
+
 .w_voter{
     padding:3px;
-    background-color:#EAF0F2 !important;
-    border-color:#DDE6E9 !important;
+    background-color:#EAF0F2;
+    border-color:#DDE6E9;
     color:#029BD4;
+    margin-top:4px;
+}
+.cancelvoter{
+    color:#880000;
+    border-color:#ddd;
+}
+
+.addvoter{
+    color:#009900;
 }
 
 .w_vote:hover,.w_vote a:hover{
     color:#000 !important;
+}
+
+.w_voteractive {
+    border:1px solid #ff4d51;
 }
 
 .proxyLineDetails{
@@ -357,4 +436,271 @@
     top:10px;
     z-index:200;
     font-size:18px;
+}
+
+.miniTitle{
+    font-size:10px;
+    margin-bottom:0px;
+
+}
+
+.fixheightcab{
+    position:absolute;
+    right:10px;
+    top:7px;
+
+}
+
+
+
+.minHeightCab{
+    padding: 0.5rem 0.5rem;
+    height:30px;
+}
+
+.card-header-fix {
+    padding: 0.5rem 0.5rem;
+    font-size:10px !important;
+    font-weight: bold;
+    margin-bottom: 0;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.card-header, .card-header-fix{
+    font-family: "Quicksand";
+}
+
+.minThumbs{
+    font-size:11px;
+}
+    .minThumbs .la{
+        font-size:14px;
+        line-height: 2px;
+    }
+.borderdefault{
+    border: 1px solid #ADB9D5;
+}
+
+.borderdefaultHeader{
+    border: 1px solid #ADB9D5;
+}
+
+.borderdefaultHeader:hover{
+    background-color: #EBEDF3 !important;
+}
+
+.colortheme, .colortheme:hover{
+    color: #ADB9D5;
+}
+
+/* RESET */
+.btn-primary{
+    background-color:#7B8ABB !important;
+}
+
+.page-item.active .page-link {
+    color:#fff!important;
+    background-color:#7B8ABB !important;
+    border-color:#7B8ABB !important;
+}
+
+.page-item a, .breadcrumb-item, .breadcrumb-item a{
+    color:#7B8ABB !important;
+}
+
+element.style {
+}
+.nav.nav-tabs.nav-underline .nav-item a.nav-link.active {
+    border: none;
+    background-color: transparent;
+}
+.nav.nav-tabs.nav-underline .nav-item a.nav-link {
+    color:#7B8ABB;
+}
+    .nav.nav-tabs.nav-underline .nav-item a.nav-link:before {
+        background: #7B8ABB;
+    }
+
+    .nav.nav-tabs.nav-underline {
+        border-bottom: 1px solid #7B8ABB;
+    }
+
+}
+.main-menu.menu-light .navigation > li.open > a {
+    border-right: 4px solid #7B8ABB;
+}
+
+
+/* REFERENDUM DISCUSSION*/
+
+/* description*/
+
+#descReferendum p, ul{
+    font-size: 13px;
+    line-height: 20px;
+    color:#adadad;
+}
+
+/* discussion */
+.w_msnDisc p{
+    font-size: 13px;
+    line-height: 20px;
+    color:#adadad;
+}
+
+.userRefdisc{
+    font-weight: bold;
+    display:inline-block;
+    font-size:15px;
+}
+
+.dateRefdisc{
+    font-size:11px;
+    color:#000;
+    display:inline-block;
+}
+
+.replyDisc{
+    font-size:11px;
+    color:#7B8ABB;
+
+}
+
+hr.center{
+    width:90%;
+    left:5%;
+}
+
+
+        /** OFFSET DISCUSSIONS **/
+
+            .doffset-1{
+                margin-left:3%;
+            }
+
+.doffset-2{
+    margin-left:3%;
+}
+
+.doffset-3{
+    margin-left:6%;
+}
+
+.doffset-4{
+    margin-left:9%;
+}
+
+.doffset-5{
+    margin-left:12%;
+}
+
+.doffset-6{
+    margin-left:16%;
+}
+
+.doffset-7{
+    margin-left:19%;
+}
+
+.doffset-8{
+    margin-left:21%;
+}
+
+.doffset-9{
+    margin-left:24%;
+}
+
+.doffset-10{
+    margin-left:27%;
+}
+
+.doffset-11{
+    margin-left:30%;
+}
+/**/
+
+/* END RESET */
+
+.foundStyle{
+    font-size:12px;
+    color:#bbb;
+
+}
+
+.HeadRef{
+    font-size:18px;
+    display:block;
+    font-weight: lighter;
+}
+
+.byRef{
+    color:#7B8ABB;
+    font-weight: bold;
+}
+
+.dateRef{
+    font-size:12px;
+    font-weight: bold;
+    color:#7B8ABB;
+    display:block;
+}
+
+.monthlyRef{
+    font-size:12px;
+    font-weight: bold;
+    color:#7B8ABB;
+}
+
+.resMRef{
+    color:#000;
+}
+
+
+/* VOTE US */
+
+.voteUs{
+    position:relative;
+    background-image: url("../images/vote-us.jpg");
+    background-position: center middle;
+    -webkit-background-size: cover;
+    background-size: cover;
+    font-family: Quicksand;
+}
+
+@media (max-width: 767.98px) {
+    .voteUs {
+        margin-bottom: 10px;
+    }
+}
+
+    .vote1line{
+        color:#000;
+        width:100%;
+        display:block;
+        text-align: center;
+        font-size:14px;
+        font-weight: bold;
+        padding-top:5px;
+    }
+
+    .vote2line{
+        color:#fff;
+        width:100%;
+        display:block;
+        text-align: center;
+        font-size:24px;
+        font-weight: bold;
+        margin-top:-5px;
+        padding-bottom:5px;
+    }
+
+
+
+@media (max-width: 767.98px) and (orientation: landscape) {
+
+    imgProfile{
+        width:33% !important;
+    }
+
 }
