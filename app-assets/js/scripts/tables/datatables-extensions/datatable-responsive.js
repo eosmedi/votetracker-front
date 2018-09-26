@@ -15,6 +15,8 @@ $(document).ready(function() {
 
 function reloadTables(){
 
+    return;
+
     /***********************************
      *       Configuration option       *
      ***********************************/

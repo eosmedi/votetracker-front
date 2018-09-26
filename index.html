@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
   <meta name="description" content="">
-  <meta name="keywords" content=">
+  <meta name="keywords" content="">
   <meta name="author" content="PIXINVENT">
   <title>EOS Vote Tracker - EOS Mediterranean</title>
   <link rel="apple-touch-icon" href="images/logo.png">
@@ -830,7 +830,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                          aria-expanded="false">Vote Tables</a>
                     </li>
 
-                    <li class="nav-item">
+                    <li class="nav-item" v-if="voter.all_proxy_voters">
                       <a class="nav-link" id="base-tab44" data-toggle="tab" aria-controls="tab44" href="#tab44"
                          aria-expanded="false">Chat</a>
                     </li>
@@ -913,104 +913,22 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           <div class="badge badge-default mb-1">Chat History</div>
                           <div class="chats">
                             <div class="chats">
-                              <div class="chat">
+
+
+                              <div class="chat chat-left" v-for="chat in chatsList">
                                 <div class="chat-avatar">
                                   <a class="avatar" data-toggle="tooltip" href="#" data-placement="right" title=""
                                      data-original-title="">
-                                    <img class="card-img-top img-fluid mt-1 " :src="voter.info.logo" v-if="voter.info && voter.info.logo"
-                                         onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
-                                    <img class="card-img-top img-fluid mt-1 " src="https://votetracker.eosmedi.com/image-o.png" v-if="!voter.info">
+                                     {{ chat.chat_data.from }}
                                   </a>
                                 </div>
                                 <div class="chat-body">
                                   <div class="chat-content">
-                                    <p>How can we help? We're here for you!</p>
+                                    <p>{{ chat.chat_data.content }}</p>
                                   </div>
                                 </div>
                               </div>
-                              <div class="chat chat-left">
-                                <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="">
-                                    <img class="avatar-chat" src="images/avatar.jpg" alt="avatar" />
-                                  </a>
-                                </div>
-                                <div class="chat-body">
-                                  <div class="chat-content">
-                                    <p>How would you like to show the information.</p>
-                                    <p>This is another text</p>
-                                  </div>
-                                  <div class="chat-content">
-                                    <p>It should be enought.</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="chat">
-                                <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" href="#" data-placement="right" title=""
-                                     data-original-title="">
-                                    <img class="card-img-top img-fluid mt-1 " :src="voter.info.logo" v-if="voter.info && voter.info.logo"
-                                         onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
-                                    <img class="card-img-top img-fluid mt-1 " src="https://votetracker.eosmedi.com/image-o.png" v-if="!voter.info">
-                                  </a>
-                                </div>
-                                <div class="chat-body">
-                                  <div class="chat-content">
-                                    <p>Absolutely!</p>
-                                  </div>
-                                  <div class="chat-content">
-                                    <p>Another text line to see how it works.</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <p class="time">1 hours ago</p>
-                              <div class="chat chat-left">
-                                <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="">
-                                    <img class="avatar-chat" src="images/avatar.jpg" alt="avatar" />
-                                  </a>
-                                </div>
-                                <div class="chat-body">
-                                  <div class="chat-content">
-                                    <p>that is nice how it works.</p>
-                                  </div>
-                                  <div class="chat-content">
-                                    <p>It's perfect.</p>
-                                  </div>
-                                  <div class="chat-content">
-                                    <p>Staked EOS is so simple.</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="chat">
-                                <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" href="#" data-placement="right" title=""
-                                     data-original-title="">
-                                    <img class="avatar-chat" src="images/avatar.jpg" alt="avatar" />
-                                  </a>
-                                </div>
-                                <div class="chat-body">
-                                  <div class="chat-content">
-                                    <p>Thanks, from ThemeForest.</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="chat chat-left">
-                                <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" href="#" data-placement="left" title="" data-original-title="">
-                                    <img class="card-img-top img-fluid mt-1 " :src="voter.info.logo" v-if="voter.info && voter.info.logo"
-                                         onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
-                                    <img class="card-img-top img-fluid mt-1 " src="https://votetracker.eosmedi.com/image-o.png" v-if="!voter.info">
-                                  </a>
-                                </div>
-                                <div class="chat-body">
-                                  <div class="chat-content">
-                                    <p>Thank you so much.</p>
-                                  </div>
-                                  <div class="chat-content">
-                                    <p>Thanks.</p>
-                                  </div>
-                                </div>
-                              </div>
+                              
 
                             </div>
                           </div>

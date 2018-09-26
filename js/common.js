@@ -258,6 +258,13 @@ Vue.prototype.API = axiosInstance;
 axiosInstance.defaults.params = {};
 axiosInstance.defaults.baseURL = "https://api.voter.eosmedi.com/"
 
+
+
+var eosVenusAxiosInstance = axios.create();
+Vue.prototype.VENUS = eosVenusAxiosInstance;
+eosVenusAxiosInstance.defaults.params = {};
+eosVenusAxiosInstance.defaults.baseURL = "https://api.eosvenus.com"
+
 Vue.prototype.$echarts = echarts;
 
 function isMobileResolution(){
@@ -744,6 +751,7 @@ var VoterDetail = {
             voter: {},
             eosClient: null,
             charts: [],
+            chatsList: [],
             status:null,
             querying: {
 
@@ -816,8 +824,32 @@ var VoterDetail = {
                     chartData: chartData
                 });
 
+                if(self.voter.voter_info.is_proxy){
+                    self.loadChat();
+                }
+
                 console.log(res.data);
             })
+        },
+
+        loadChat(){
+            console.log('loadChat');
+            var params = this.$route.params;
+            var self = this;
+
+            this.VENUS.get('/aggregate?from=0&content_type=transcation&lastDay=7&size=10&source=eos&filters='+JSON.stringify([{"field":"dapp","type":"EQ","value":["eosmediddddd"]},{"field":"action","type":"EQ","value":["chat"]},{"field":"eosmediddddd_chat_to","type":"EQ","value":[ params.voter]}])).then(function (res) {
+
+                console.log(res.data)
+
+                res.data.forEach((data) => {
+
+                    self.chatsList.push(data);
+
+                })
+                
+            })
+
+
         },
 
         numberWithCommas: function(x) {
