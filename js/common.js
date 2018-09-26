@@ -739,7 +739,7 @@ var VoterList = {
 
 var VoterDetail = {
     template: "#VoterDetail",
-    props: ['chainState'],
+    props: ['chainState', 'eosClient', 'identity'],
     components: {
         'producers-list'  : ProducersList
     },
@@ -749,6 +749,7 @@ var VoterDetail = {
             chainState: chainState,
             loading: true,
             voter: {},
+            chatText: '',
             eosClient: null,
             charts: [],
             chatsList: [],
@@ -768,10 +769,10 @@ var VoterDetail = {
     },
 
     mounted: function () {
-        this.eosClient = Eos({
-            chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-            httpEndpoint: 'https://api.eosmedi.com',
-        });
+        // this.eosClient = Eos({
+        //     chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        //     httpEndpoint: 'https://api.eosmedi.com',
+        // });
 
         /* EC */
         if (typeof reloadTables === 'function'){
@@ -829,6 +830,51 @@ var VoterDetail = {
                 }
 
                 console.log(res.data);
+            })
+        },
+
+        sendChat(){
+
+            console.log('sendChat')
+
+            if(!this.chatText) return;
+
+            var firstAccount = this.identity.accounts[0];
+            if(firstAccount){
+
+            }
+
+            var params = this.$route.params;
+
+
+            var defData = {
+                "from": firstAccount.name,
+                "to": params.voter,
+                "content": this.chatText,
+            };
+
+            this.eosClient.transaction({
+                actions: [
+                    {
+                        account: 'eosmediddddd',
+                        name: 'chat',
+                        authorization: [{
+                            actor: firstAccount.name,
+                            permission: firstAccount.authority
+                        }],
+                        data: defData
+                    }
+                ]
+            }).then(function(data){
+                console.log(data.transaction_id);
+                self.dialogMessage = "proxy info submit sucessed.<br>  TX:"+data.transaction_id;
+            }, function(error){
+                self.dialogMessage = "proxy info submit failed.<br> <span style='color:red'> "+error.message+"</span>";
+                console.log("error", error)
+            }).catch(function(error){
+                error = JSON.parse(error);
+                self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
+                console.log("submmit error", error);
             })
         },
 
@@ -1088,7 +1134,8 @@ var routes = [
     },
     {
         name: "VoterDetail",
-        path: '/voter/:voter', component: VoterDetail
+        path: '/voter/:voter', component: VoterDetail,
+        meta: { requireEosClient: true }
     },
     {
         name: "VoterStruct",
@@ -1124,7 +1171,7 @@ router.afterEach(function(from, to){
 
 var network = {
     blockchain: 'eos',
-    host: 'mainnet.genereos.io', // ( or null if endorsed chainId )
+    host: 'mars.fn.eosbixin.com', // ( or null if endorsed chainId )
     port: 443, // ( or null if defaulting to 80 )
     chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906", // Or null to fetch automatically ( takes longer )
 }

@@ -120,7 +120,18 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
             <ul class="nav navbar-nav float-right">
               <li class="dropdown dropdown-notification nav-item">
-                Scatter
+                  <button type="button" class="btn el-button--default" style="
+                  line-height: 0px;
+              ">
+                      <span class="el-dropdown-link">
+                              <span v-if="scatter && !identity"  @click="connectScatter()">Attach an Account</span>
+                              <span v-if="scatter && identity" >{{ identity.name }}</span>
+                              <span v-if="!scatter"><a href="https://get-scatter.com/" target="_blank">Please install Scatter</a></span>
+                      <img src="https://votetracker.eosmedi.com/scatter.png" height="20" style="margin-left:6px">
+                      </span>
+                      <i class="el-icon-arrow-down el-icon--right"></i>
+                  </button>
+                  <button type="button" class="btn el-button--default" v-if="scatter"   ><span @click="signOut()">Sign Out</span> </button>
               </li>
             </ul>
 
@@ -897,13 +908,13 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                               <div class="form-control-position">
                                 <i class="icon-emoticon-smile"></i>
                               </div>
-                              <input type="text" class="form-control" placeholder="Type your message">
+                              <input type="text" class="form-control" placeholder="Type your message" v-model="chatText">
                               <div class="form-control-position control-position-right">
                               </div>
                             </fieldset>
                             <fieldset class="form-group position-relative has-icon-left col-3 col-md-2 m-0">
                               <button type="button" class="btn btn-info"><i class="la la-paper-plane-o d-lg-none"></i>
-                                <span class="d-none d-lg-block">Send</span>
+                                <span class="d-none d-lg-block"  @click="sendChat">Send</span>
                               </button>
                             </fieldset>
                           </form>
