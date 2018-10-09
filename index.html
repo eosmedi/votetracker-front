@@ -1101,13 +1101,20 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           <div class="badge badge-default mb-1">Chat History</div>
                           <div class="chats">
                             <div class="chats">
-
-
-                              <div class="chat chat-left" v-for="chat in chatsList">
+                              <div class="chat " :class="{ 'chat-left' : chat.chat_data.from != voter.account_name }" v-for="chat in chatsList">
                                 <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" target="_blank" :href="'https://eosflare.io/account/'+chat.chat_data.from" data-placement="right" :title="chat.chat_data.from"
+
+                                  <a v-if="chat.chat_data.from != voter.account_name" class="avatar letter-icon" data-toggle="tooltip" target="_blank" :href="'https://eosflare.io/account/'+chat.chat_data.from" data-placement="right" :title="chat.chat_data.from"
                                      data-original-title="">
                                     <span class="letter-icon"> {{ chat.chat_data.from.substr(0, 1).toUpperCase() }}</span>
+                                  </a>
+
+                                  <a v-if="chat.chat_data.from == voter.account_name" class="avatar" data-toggle="tooltip" target="_blank" :href="'https://eosflare.io/account/'+chat.chat_data.from" data-placement="right" :title="chat.chat_data.from"
+                                     data-original-title="">
+                                     <img class="card-img-top img-fluid  " :src="voter.info.logo" v-if="voter.info && voter.info.logo" 
+                                     onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
+                                  <img class="card-img-top img-fluid  " src="https://votetracker.eosmedi.com/image-o.png" v-if="!voter.info" >
+                           
                                   </a>
                                 </div>
                                 <div class="chat-body">
