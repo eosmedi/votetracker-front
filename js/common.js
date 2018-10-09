@@ -606,7 +606,8 @@ var ProducerDetail = {
 
         vote: function(){
             var params = this.$route.params;
-            this.$parent.voteProducer(params.producer);
+            var app = this.$parent.$parent ? this.$parent.$parent : this.$parent;
+            app.voteProducer(params.producer);
         },
 
         getProducers: function () {
