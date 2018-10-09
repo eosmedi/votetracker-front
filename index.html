@@ -853,7 +853,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
       <section class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">
@@ -927,7 +927,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                     <li class="nav-item" v-if="voter.all_proxy_voters">
                       <a class="nav-link" id="base-tab44" data-toggle="tab" aria-controls="tab44" href="#tab44"
-                         aria-expanded="false">Chat to me</a>
+                         aria-expanded="false">Vote Actions</a>
                     </li>
 
                   </ul>
@@ -985,10 +985,103 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                     <div class="tab-pane" id="tab44" aria-labelledby="base-tab44" >
 
-                      <div class="chat-application">
+
+                        <div id="LogFilterDiv">
+                            <div id="right-meta">
+        
+                                <div :style="'max-height:'+(leftHeight+23)+'px;overflow-y:auto;'">
+                                  <div v-for="(voteAction, index) in voter.actions" class="vote-log" >
+        
+                                    <div :id="'accordionVWrap'+voteAction.block_num" role="tablist" aria-multiselectable="true" >
+                                      <div class="card collapse-icon accordion-icon-rotate mb-1">
+                                        <div :id="'heading'+voteAction.block_num" class="card-header card-header-fix" >
+                                          <div class="w_thumbs">
+        
+                                            <div class="detal-action"><i class="la la-thumbs-o-up"></i>(+{{voteAction.detal.length}})</div>
+                                            <div class="cancel-action"><i class="la la-thumbs-o-down"></i>(-{{voteAction.canceled.length}})</div>
+        
+                                          </div>
+                                          <div class="w_infoAction">
+                                            <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="false"
+                                               aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
+        
+                                          </div>
+                                        </div>
+                                        <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse"
+                                             aria-expanded="true">
+                                          <div class="card-content">
+                                            <div class="card-body" >
+        
+        
+        
+                                              <div v-if="voteAction.detal.length" class="detal-action mb-1">Add Producers(+{{voteAction.detal.length}}):<br/>
+                                                <el-tag
+                                                        type="info"
+                                                        v-for="detalProducer in voteAction.detal"
+                                                        disable-transitions>
+                                                  <router-link  :to="{ name: 'ProducerDetail', params: { producer: detalProducer }}" class="btn btn-sm w_voter addvoter">  {{ detalProducer }} </router-link>
+                                                </el-tag>
+                                              </div>
+        
+                                              <div v-if="voteAction.canceled.length"  class="cancel-action mt-2 mb-1">Remove Producers(-{{voteAction.canceled.length}}):<br/>
+                                                <el-tag
+                                                        type="info"
+                                                        v-for="canceldProducer in voteAction.canceled"
+                                                        disable-transitions>
+                                                  <router-link :to="{ name: 'ProducerDetail', params: { producer: canceldProducer }}" class="btn btn-sm w_voter cancelvoter">  {{ canceldProducer }} </router-link>
+                                                </el-tag>
+                                              </div>
+        
+                                            </div>
+                                          </div>
+                                        </div>
+        
+                                      </div>
+                                    </div>
+        
+                                  </div>
+        
+        
+        
+                                </div>
+        
+                              </div>
+                            </div>
+
+                  
+
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+
+          <div class=" col-md-4 ">
+              <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title" v-if="voter.voter_info.is_proxy">
+                      Chat to me
+                    </h4>
+
+                    <h4 class="card-title" v-if="!voter.voter_info.is_proxy">
+                      Vote Actions
+                    </h4>
+                </div>
+              <div class="card-content collapse show">
+                <div class="card-body card-dashboard" style="padding-top:0;">
+
+                    <div class="chat-application" v-if="voter.voter_info && voter.voter_info.is_proxy">
                         <section class="chat-app-form">
                           <form class="chat-app-input d-flex">
-                            <fieldset class="form-group position-relative col-9 col-md-10 m-0">
+                            <fieldset class="form-group position-relative col-9 col-md-10 m-0 p-0">
                               <div class="form-control-position">
                                 <i class="icon-emoticon-smile"></i>
                               </div>
@@ -997,9 +1090,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                               </div>
                             </fieldset>
                             <fieldset class="form-group position-relative has-icon-left col-3 col-md-2 m-0">
-                              <button type="button" class="btn btn-info"><i class="la la-paper-plane-o d-lg-none"></i>
-                                <span class="d-none d-lg-block"  @click="sendChat">Send</span>
-                              </button>
+                                <button type="button" class="btn btn-info" @click="sendChat">
+                                  <i class="la la-paper-plane-o" style="font-size:1.2rem"></i>
+                                </button>
                             </fieldset>
                           </form>
                         </section>
@@ -1032,89 +1125,70 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </div>
 
 
-                    </div>
-
-                  </div>
-
-
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-        </div>
-
-          <div class="col-md-3">
-            <div class="card">
-
-              <div class="card-content collapse show">
-                <div class="card-body card-dashboard" style="padding-top:0;">
-
-                  <div id="LogFilterDiv" class="col-md-12">
-                    <div id="right-meta">
-
-
-
-
-                        <div :style="'max-height:'+(leftHeight+23)+'px;overflow-y:auto;'">
-                          <div v-for="(voteAction, index) in voter.actions" class="vote-log" >
-
-                            <div :id="'accordionVWrap'+voteAction.block_num" role="tablist" aria-multiselectable="true" >
-                              <div class="card collapse-icon accordion-icon-rotate mb-1">
-                                <div :id="'heading'+voteAction.block_num" class="card-header card-header-fix" >
-                                  <div class="w_thumbs">
-
-                                    <div class="detal-action"><i class="la la-thumbs-o-up"></i>(+{{voteAction.detal.length}})</div>
-                                    <div class="cancel-action"><i class="la la-thumbs-o-down"></i>(-{{voteAction.canceled.length}})</div>
-
-                                  </div>
-                                  <div class="w_infoAction">
-                                    <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="false"
-                                       aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
-
-                                  </div>
-                                </div>
-                                <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse"
-                                     aria-expanded="true">
-                                  <div class="card-content">
-                                    <div class="card-body" >
-
-
-
-                                      <div v-if="voteAction.detal.length" class="detal-action mb-1">Add Producers(+{{voteAction.detal.length}}):<br/>
-                                        <el-tag
-                                                type="info"
-                                                v-for="detalProducer in voteAction.detal"
-                                                disable-transitions>
-                                          <router-link  :to="{ name: 'ProducerDetail', params: { producer: detalProducer }}" class="btn btn-sm w_voter addvoter">  {{ detalProducer }} </router-link>
-                                        </el-tag>
+                      <div id="LogFilterDiv" v-if="!voter.voter_info.is_proxy">
+                          <div id="right-meta">
+      
+                              <div :style="'max-height:'+(leftHeight+23)+'px;overflow-y:auto;'">
+                                <div v-for="(voteAction, index) in voter.actions" class="vote-log" >
+      
+                                  <div :id="'accordionVWrap'+voteAction.block_num" role="tablist" aria-multiselectable="true" >
+                                    <div class="card collapse-icon accordion-icon-rotate mb-1">
+                                      <div :id="'heading'+voteAction.block_num" class="card-header card-header-fix" >
+                                        <div class="w_thumbs">
+      
+                                          <div class="detal-action"><i class="la la-thumbs-o-up"></i>(+{{voteAction.detal.length}})</div>
+                                          <div class="cancel-action"><i class="la la-thumbs-o-down"></i>(-{{voteAction.canceled.length}})</div>
+      
+                                        </div>
+                                        <div class="w_infoAction">
+                                          <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="false"
+                                             aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
+      
+                                        </div>
                                       </div>
-
-                                      <div v-if="voteAction.canceled.length"  class="cancel-action mt-2 mb-1">Remove Producers(-{{voteAction.canceled.length}}):<br/>
-                                        <el-tag
-                                                type="info"
-                                                v-for="canceldProducer in voteAction.canceled"
-                                                disable-transitions>
-                                          <router-link :to="{ name: 'ProducerDetail', params: { producer: canceldProducer }}" class="btn btn-sm w_voter cancelvoter">  {{ canceldProducer }} </router-link>
-                                        </el-tag>
+                                      <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse"
+                                           aria-expanded="true">
+                                        <div class="card-content">
+                                          <div class="card-body" >
+      
+      
+      
+                                            <div v-if="voteAction.detal.length" class="detal-action mb-1">Add Producers(+{{voteAction.detal.length}}):<br/>
+                                              <el-tag
+                                                      type="info"
+                                                      v-for="detalProducer in voteAction.detal"
+                                                      disable-transitions>
+                                                <router-link  :to="{ name: 'ProducerDetail', params: { producer: detalProducer }}" class="btn btn-sm w_voter addvoter">  {{ detalProducer }} </router-link>
+                                              </el-tag>
+                                            </div>
+      
+                                            <div v-if="voteAction.canceled.length"  class="cancel-action mt-2 mb-1">Remove Producers(-{{voteAction.canceled.length}}):<br/>
+                                              <el-tag
+                                                      type="info"
+                                                      v-for="canceldProducer in voteAction.canceled"
+                                                      disable-transitions>
+                                                <router-link :to="{ name: 'ProducerDetail', params: { producer: canceldProducer }}" class="btn btn-sm w_voter cancelvoter">  {{ canceldProducer }} </router-link>
+                                              </el-tag>
+                                            </div>
+      
+                                          </div>
+                                        </div>
                                       </div>
-
+      
                                     </div>
                                   </div>
+      
                                 </div>
-
+      
+      
+      
                               </div>
+      
                             </div>
-
                           </div>
 
 
 
-                        </div>
-
-                      </div>
-                    </div>
                   </div>
 
 

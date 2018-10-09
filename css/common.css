@@ -130,7 +130,7 @@ margin-bottom:2px;
 }
 
 #right-meta {
-    margin-top: 25px;
+    /* margin-top: 25px; */
     /* padding-top: 1rem; */
 }
 
@@ -703,4 +703,10 @@ hr.center{
         width:33% !important;
     }
 
+}
+
+
+
+.chat-application .chat-app-window .badge{
+    color: #6B6F82
 }
