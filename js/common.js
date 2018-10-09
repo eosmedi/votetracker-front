@@ -776,6 +776,7 @@ var VoterDetail = {
             charts: [],
             chatsList: [],
             status:null,
+            leftHeight: 400,
             querying: {
 
             }
@@ -801,6 +802,8 @@ var VoterDetail = {
         if (typeof reloadTables === 'function'){
             reloadTables();
         }
+
+        
 
     },
 
@@ -860,7 +863,17 @@ var VoterDetail = {
                     self.loadChat();
                 }
 
-                console.log(res.data);
+                setTimeout(function(){
+                    console.log(res.data, 'self.leftHeight', self.$refs, self.$refs.leftblock, self.$refs.leftblock.offsetHeight
+                );
+                    self.leftHeight = self.$refs.leftblock.offsetHeight;
+
+
+                }, 900);
+
+                
+             
+
             })
         },
 

@@ -866,10 +866,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </h4>
             </div>
 
-            <div class="card-content collapse show">
+            <div class="card-content collapse show" ref="leftblock">
               <div class="card-body card-dashboard" style="padding-top:0;">
                 <div class="row">
-
 
                   <div class="col-xl-3 col-md-6 col-sm-12">
                     <div class="card">
@@ -1061,7 +1060,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
 
-                        <div style="max-height:400px;overflow-y:auto;">
+                        <div :style="'max-height:'+(leftHeight+23)+'px;overflow-y:auto;'">
                           <div v-for="(voteAction, index) in voter.actions" class="vote-log" >
 
                             <div :id="'accordionVWrap'+voteAction.block_num" role="tablist" aria-multiselectable="true" >
