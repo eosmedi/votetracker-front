@@ -1,3 +1,21 @@
 @import url("bootstrap-extended.css");
 @import url("colors.css");
 @import url("components.css");
+
+
+.chat-application .chats .chat-avatar .avatar {
+    width: 40px !important;
+    margin-top: -4px !important;
+    border-radius: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #ADB9D5;
+    border-color: #ADB9D5;
+    color: #fff;
+  }
+
+
+  .brand-text-sub:hover {
+      text-decoration: underline;
+      color: #000
+  }

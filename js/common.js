@@ -6,6 +6,9 @@ function getImgUrl(pet) {
     return 'images/flags/' + pet + ".png";
 }
 
+
+var OUR_PRODUCER = 'eosmedinodes';
+
 Vue.component("page", {
     template: "#page",
     props: ["current", "allpage"],
@@ -256,7 +259,7 @@ Vue.component("pie", {
 var axiosInstance = axios.create();
 Vue.prototype.API = axiosInstance;
 axiosInstance.defaults.params = {};
-axiosInstance.defaults.baseURL = "https://api.voter.eosmedi.com/"
+axiosInstance.defaults.baseURL = "https://api.tallymeter.io/"
 
 
 
@@ -369,6 +372,13 @@ var ProducersList = {
             }
             this.handleSelectionChange(val);
             console.log('clickProducer', row, val);
+        },
+        voteUs: function(){
+            this.$parent.voteProducer(OUR_PRODUCER);
+        },
+        voteProducer: function(producer){
+            console.log('producer', producer);
+            this.$parent.voteProducer(producer.owner);
         },
         getProducers: function (isTimer) {
             console.log('ENTRO EN PRODUCERS');
@@ -490,6 +500,10 @@ var ProxyList = {
         }
     },
     methods: {
+
+        voteUs: function(){
+            this.$parent.voteProducer(OUR_PRODUCER);
+        },
         isStatus: function(){
             this.status = this.$parent.status;
             if(this.status != null){
@@ -589,6 +603,11 @@ var ProducerDetail = {
             return true;
         },
         /* END EC */
+
+        vote: function(){
+            var params = this.$route.params;
+            this.$parent.voteProducer(params.producer);
+        },
 
         getProducers: function () {
             var self = this;
@@ -716,6 +735,9 @@ var VoterList = {
                 return true;
             }
         },
+        voteUs: function(){
+            this.$parent.voteProducer(OUR_PRODUCER);
+        },
         getProducers: function () {
             var self = this;
             var params = this.$route.params;
@@ -813,17 +835,21 @@ var VoterDetail = {
                 self.voter.actions = self.voter.actions || [];
                 self.voter.actions = self.voter.actions.reverse();
                 self.loading = false;
-                var chartData =  self.voter.all_proxy_voters.map(function(v){
-                    return {
-                        name: v.voter,
-                        value: v.staked/10000
-                    }
-                });
 
-                self.charts.push({
-                    chartName: self.voter.account_name + " Graph",
-                    chartData: chartData
-                });
+                if(self.voter.voter_info.is_proxy){
+
+                    var chartData =  self.voter.all_proxy_voters.map(function(v){
+                        return {
+                            name: v.voter,
+                            value: v.staked/10000
+                        }
+                    });
+
+                    self.charts.push({
+                        chartName: self.voter.account_name + " Graph",
+                        chartData: chartData
+                    });
+                }
 
                 if(self.voter.voter_info.is_proxy){
                     self.loadChat();
@@ -833,18 +859,67 @@ var VoterDetail = {
             })
         },
 
+        proxyMyVotes: function (){
+
+            var params = this.$route.params;
+            
+            if(!this.eosClient){
+                alert('Please attach an account');
+                return;
+            }
+
+            var firstAccount = this.identity.accounts[0];
+            if(firstAccount){
+            }
+
+            this.eosClient.transaction({
+                actions: [
+                    {
+                        account: 'eosio',
+                        name: 'voteproducer',
+                        authorization: [{
+                            actor: firstAccount.name,
+                            permission: firstAccount.authority
+                        }],
+                        data: {
+                            "voter": firstAccount.name,
+                            "proxy": params.voter,
+                            "producers":[]
+                        }
+                    }
+                ]
+            }).then(function(data){
+                console.log(data.transaction_id);
+                alert('sucess');
+            }, function(error){
+                console.log("error", error)
+            }).catch(function(error){
+                console.log("submmit error", error);
+            })
+
+        },
+
         sendChat(){
+            console.log('sendChat');
 
-            console.log('sendChat')
+            if(!this.eosClient){
+                alert('Please attach an account');
+                return;
+            }
 
-            if(!this.chatText) return;
+            if(!this.chatText) {
+                alert('message is empty');
+                return;
+            }
 
+            console.log('a');
             var firstAccount = this.identity.accounts[0];
             if(firstAccount){
 
             }
 
             var params = this.$route.params;
+            var self = this;
 
 
             var defData = {
@@ -867,15 +942,18 @@ var VoterDetail = {
                 ]
             }).then(function(data){
                 console.log(data.transaction_id);
-                self.dialogMessage = "proxy info submit sucessed.<br>  TX:"+data.transaction_id;
+                self.chatText = '';
+                var action = data.processed.action_traces[0].act;
+                action.chat_data = action.data;
+                self.chatsList = [action].concat( self.chatsList);
+                console.log(self.chatsList);
             }, function(error){
-                self.dialogMessage = "proxy info submit failed.<br> <span style='color:red'> "+error.message+"</span>";
                 console.log("error", error)
             }).catch(function(error){
-                error = JSON.parse(error);
-                self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
                 console.log("submmit error", error);
             })
+
+
         },
 
         loadChat(){
@@ -883,7 +961,7 @@ var VoterDetail = {
             var params = this.$route.params;
             var self = this;
 
-            this.VENUS.get('/aggregate?from=0&content_type=transcation&lastDay=7&size=10&source=eos&filters='+JSON.stringify([{"field":"dapp","type":"EQ","value":["eosmediddddd"]},{"field":"action","type":"EQ","value":["chat"]},{"field":"eosmediddddd_chat_to","type":"EQ","value":[ params.voter]}])).then(function (res) {
+            this.VENUS.get('/aggregate?from=0&content_type=transcation&lastDay=60&size=10&source=eos&filters='+JSON.stringify([{"field":"dapp","type":"EQ","value":["eosmediddddd"]},{"field":"action","type":"EQ","value":["chat"]},{"field":"eosmediddddd_chat_to","type":"EQ","value":[ params.voter]}])).then(function (res) {
 
                 console.log(res.data)
 
@@ -1004,10 +1082,7 @@ var SubmitProxyInfo = {
             var self = this;
 
             if(!this.eosClient){
-                this.$message({
-                    message: 'Please attach an account',
-                    type: 'warning'
-                });
+                alert('Please attach an account');
                 return;
             }
 
@@ -1020,7 +1095,6 @@ var SubmitProxyInfo = {
             if(firstAccount){
 
             }
-
 
             this.dialogMessage = "Scatter will pop up a window let u accept Signature request...";
 
@@ -1206,7 +1280,12 @@ var app = new Vue({
             voteLogs: [],
             scatter: null,
             identity: null,
-            eosClient: null
+            eosClient: null,
+            votedProducers: [],
+            aleardyVoted: false,
+            accountLoading: false,
+            popupShow: false,
+			newProducers: ['eosmedinodes'],
         }
     },
     mounted: function () {
@@ -1259,6 +1338,83 @@ var app = new Vue({
     },
 
     methods: {
+
+        popupVote(){
+
+                var identity = this.identity;
+                console.log(identity);
+                var firstAccount = identity.accounts[0];
+                if(firstAccount){
+
+                }
+                var defData = {
+                    producers: this.newProducers.concat(this.votedProducers).sort(),
+                    proxy: '',
+                    voter: firstAccount.name
+                }
+
+                this.eosClient.transaction({
+                        actions: [
+                                {
+                                        account: 'eosio',
+                                        name: 'voteproducer',
+                                        authorization: [{
+                                                actor: firstAccount.name,
+                                                permission: firstAccount.authority
+                                        }],
+                                        data: defData
+                                }
+                        ]
+                }).then(function(data){
+                        console.log(data.transaction_id);
+                        alert('vote success');
+                }, function(error){
+                        alert('vote failed')
+                }).catch(function(error){
+                        error = JSON.parse(error);
+                        self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
+                        console.log("submmit error", error);
+                })
+
+            console.log('popupSave')
+        },
+
+        voteProducer(producer){
+
+			if(!this.identity){
+				alert('please attach an account');
+				return;
+			}
+
+			this.newProducers = [producer];
+
+			this.popupShow = true;
+			var firstAccount =  this.identity.accounts[0];
+
+            var queryAccount = 'bitfinexvp33';
+            
+			queryAccount = firstAccount.name;
+
+			this.accountLoading = true;
+			this.eosClient.getAccount({
+				account_name: queryAccount
+			}).then((result) => {
+				if(result.voter_info){
+					this.votedProducers = result.voter_info.producers;
+				}
+                this.accountLoading = false;
+                this.aleardyVoted = false;
+				this.votedProducers.forEach((producer) => {
+					if(producer == this.newProducers[0]){
+						this.aleardyVoted = true;
+					}
+				})
+				console.log(result)
+			})
+
+			console.log('voteProducer', this.eosClient);
+			
+        },
 
         connectScatter: function(){
             var self = this;

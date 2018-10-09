@@ -86,8 +86,66 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
   </div>
 </div>
 
-  <div id="app">
 
+<div id="app">
+
+ <!-- Iconified modal -->
+ <div id="modal_iconified" class="modal fade" :class="{ show : popupShow }"   :style="'display: ' + (popupShow ? 'block': 'none')">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><i class="icon-menu7"></i> &nbsp;Vote producer</h4>
+          <button type="button" class="close" @click="popupShow=false">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="alert alert-info alert-styled-left text-blue-800 content-group" v-if="aleardyVoted || !votedProducers.length || votedProducers.length == 30">
+                      <span v-if="votedProducers.length == 30">
+              you need delete one from you voted producers, click one to remove
+            </span>
+              <span v-if="!votedProducers.length">
+                you never voted
+              </span>
+
+              <span v-if="aleardyVoted">
+                thanks, you aleardy voted
+              </span>
+
+                </div>
+
+          <h6 class="text-semibold">
+            <i class="icon-law position-left"></i> 
+            Voted Producers
+          </h6>
+          <p class="display-block">
+            <span v-if="accountLoading">loading data...</span>
+          <span v-for="votedProducer in votedProducers">	
+            <code @click="removeProducer(votedProducer, index)" title="click to remove">
+              {{ votedProducer }}  
+            </code>,
+          </span>
+          </p>
+
+          
+          <hr>
+          <h6 class="text-semibold">
+            <i class="icon-law position-left"></i> 
+            New Producers
+          </h6>
+          <p>
+              <code v-for="producer in newProducers">{{ producer }}</code>
+          </p>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn grey btn-outline-secondary"  @click="popupShow=false"><i class="icon-cross"></i> Close</button>
+          <button class="btn btn-primary" @click="popupVote()"><i class="icon-check"></i> Vote</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /iconified modal -->
+  <div class="modal-backdrop fade show" v-if="popupShow"></div>
 
     <!-- fixed-top-->
     <nav class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-dark bg-ec-eosmedi navbar-shadow navbar-brand-center">
@@ -96,14 +154,13 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           <ul class="nav navbar-nav flex-row">
             <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
             <li class="nav-item">
-              <a class="navbar-brand" href="index.html">
+              
                 <!--<img class="brand-logo" alt="modern admin logo" src="app-assets/images/logo/logo.png">-->
                 <div class="w_logo"><img class="brand-logo" src="images/logo.png" width="100" /></div>
                 <div class="w_txtlogo">
-                  <div><h3 class="brand-text">EOS Voter Tracker</h3></div>
-                  <div><span class="brand-text-sub">EOS Mediterranean</span></div>
+                  <div><a class="navbar-brand pb0" style="padding-bottom:0" href="/"><h3 class="brand-text">EOS Voter Tracker</h3></a></div>
+                  <div><a href="https://eosmedi.com" target="_blank" class="brand-text-sub">EOS Mediterranean</a></div>
                 </div>
-              </a>
             </li>
             <li class="nav-item d-md-none">
               <a class="nav-link open-navbar-container" data-toggle="collapse" data-target="#navbar-mobile"><i class="la la-ellipsis-v"></i></a>
@@ -123,15 +180,15 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <button type="button" class="btn el-button--default" style="
                   line-height: 0px;
               ">
-                      <span class="el-dropdown-link">
-                              <span v-if="scatter && !identity"  @click="connectScatter()">Attach an Account</span>
+                      <span class="el-dropdown-link" @click="connectScatter()">
+                              <span v-if="scatter && !identity">Attach an Account</span>
                               <span v-if="scatter && identity" >{{ identity.name }}</span>
                               <span v-if="!scatter"><a href="https://get-scatter.com/" target="_blank">Please install Scatter</a></span>
-                      <img src="https://votetracker.eosmedi.com/scatter.png" height="20" style="margin-left:6px">
+                            <img src="https://votetracker.eosmedi.com/scatter.png" height="20" style="margin-left:6px">
                       </span>
                       <i class="el-icon-arrow-down el-icon--right"></i>
                   </button>
-                  <button type="button" class="btn el-button--default" v-if="scatter"   ><span @click="signOut()">Sign Out</span> </button>
+                  <button type="button" class="btn el-button--default" v-if="identity"><span @click="signOut()">Sign Out</span> </button>
               </li>
             </ul>
 
@@ -143,7 +200,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
       <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-          <li class=" nav-item open"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'ProducersList'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/producers.png" width="25"/></span>Producers <span class="text-center subTmenu">{{ status.producers }}</span></span></router-link> </a>
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'ProducersList'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/producers.png" width="25"/></span>Producers <span class="text-center subTmenu">{{ status.producers }}</span></span></router-link> </a>
 
           </li>
           <li class=" nav-item"><router-link class="btn" style="text-decoration: none;margin-bottom:5px;" :to="{ name: 'ProxyList'}"><span class="menu-title" data-i18n="nav.dash.main"> <span class="text-center full-width" style="display:block;"><div class="lblChat">Chat</div><img   src="images/menu/proxies.png" width="25"/></span>Proxy  <span class="text-center minSubTmenu">{{ (status.proxy_votes / 10000).toFixed(0) | numberWithCommas }} EOS</span><span class="text-center subTmenu" >{{ status.proxy_voters }}</span></span></router-link></a>
@@ -152,7 +209,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'VoterList'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/voters.png" width="45"/></span>Voters <span class="text-center subTmenu">{{ status.voters }}</span></span></router-link> </a>
 
           </li>
-          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'History'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/history.png" width="30"/></span>History</span></router-link> </a>
+
+          <!-- <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'History'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/history.png" width="30"/></span>History</span></router-link> </a> -->
 
           </li>
           <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'Referendum'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/referendums.png" width="30"/></span>Referendum</span></router-link> </a>
@@ -206,7 +264,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
     <div class="table-responsive">
-      <div class="content-header row">
+      <div class="content-header row" v-if="!filterProducers || !filterProducers.length">
         <div class="content-header-left col-md-8 col-12 mb-2">
           <h3 class="content-header-title mb-0">Producers List</h3>
           <div class="row breadcrumbs-top">
@@ -221,9 +279,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           </div>
         </div>
         <div class="col-md-2 text-center">
-
             <div class="stackedBox" v-if="isStatus()">
-
               {{ status.percent_stacked }}%
               <div class="progress" style="width: 90%;margin-left:5%;">
                 <div class="progress-bar" role="progressbar" :style="'width:'+ status.percent_stacked +'%;'"
@@ -233,9 +289,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
 
-            <div class="col-md-2"><a  href="#" class="mb-2"><div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div></a></div>
+            <div class="col-md-2 text-right">
+              <a  href="#" class="mb-2" @click="voteUs">
+                <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
+                <img src="images/vote-us.jpg"/>
+              </a>
+            
+            </div>
 
         </div>
+
 <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -249,7 +312,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                 <th>#</th>
                 <th width="20%">Producer</th>
-
                 <th>Votes</th>
                 <th>Voters</th>
                 <th>Daily Reward</th>
@@ -260,9 +322,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </tr>
               </thead>
               <tbody>
+                <tr v-if="loading" ><td colspan="4">load data...</td></tr>
               <tr v-for="(producer, index ) in producers" v-if="producer.show">
-
-                <td width="20" align="right">{{ index+1 }}
+                <td width="20" align="right">{{ producer.index }}
                 </td>
                 <td class="tdProducer">
                   <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}"> <span class="imgProducer"><img :src="producer.branding.logo_256 ? producer.branding.logo_256 : producer.branding.logo_1024" v-if="producer.branding && (producer.branding.logo_256 || producer.branding.logo_1024)" height="25"
@@ -281,8 +343,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <span v-if="producer.org_location"><!--{{producer.org_location}}--><img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"></span>
                   <span v-if="producer.location">{{ countryCode[producer.location]}}</span>
                 </td>
-                <td align="center" width="25"><a href="{{ producer.url }}" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td>
-                <td align="center" width="25"><button type="button" class="btn mr-1 mb-1 btn-secondary btn-sm">Vote</button></td>
+                <td align="center" width="25"><a :href="producer.url" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td>
+                <td align="center" width="25"><button type="button" class="btn mr-1 mb-1 btn-secondary btn-sm" @click="voteProducer(producer)">Vote</button></td>
               </tr>
 
               </tbody>
@@ -352,7 +414,14 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-2"><a  href="#" class="mb-2"><div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div></a></div>
+          <div class="col-md-2 text-right">
+            
+            <a  href="#" class="mb-2" @click="voteUs">
+              <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
+              <img src="images/vote-us.jpg"/>
+            </a>
+          
+          </div>
 
         </div>
 
@@ -367,7 +436,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </ul>
             </div>
           </div>
-          <div class="card-content collapse show">
+          <div class="card-content collapse show" v-loading.fullscreen.lock="loading">
             <div class="card-body card-dashboard" style="padding-top:0;">
               <table class="table table-striped table-bordered dataex-res-constructor">
                 <thead>
@@ -375,7 +444,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                   <th width="25">#</th>
                   <th width="20%">Proxy Account</th>
-
                   <th width="15%">Staked</th>
                   <th>Voted Producers</th>
                   <th>Proxy Voters</th>
@@ -386,6 +454,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </tr>
                 </thead>
                 <tbody>
+
+                    <tr v-if="loading" ><td colspan="4">load data...</td></tr>
                 <tr v-for="(proxy, index ) in voters">
 
                   <td width="20" align="right">{{ index+1 }}
@@ -459,7 +529,14 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-2"><a  href="#" class="mb-2"><div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div></a></div>
+          <div class="col-md-2 text-right">
+            <a  href="#" class="mb-2" @click="voteUs">
+              <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div>
+               -->
+               <img src="images/vote-us.jpg"/>
+            </a>
+            
+            </div>
 
         </div>
         </div>
@@ -488,6 +565,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </tr>
                 </thead>
                 <tbody>
+
+                    <tr v-if="loading" ><td colspan="4">load data...</td></tr>
                 <tr v-for="(voter, index ) in voters">
 
                   <td width="20" align="right">{{ index+1 }}</td>
@@ -546,18 +625,21 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           <div class="col-md-9">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title" v-if="producer.bpinfo"><span v-if="producer.bpinfo && producer.bpinfo.org && producer.bpinfo.org.candidate_name">{{ producer.bpinfo.org.candidate_name }}</span> <span style="font-size:12px;font-weight: bold">({{ producer.producer.owner }})</span></h4>
+                <h4 class="card-title" v-if="producer.bpinfo">
+                  <span v-if="producer.bpinfo && producer.bpinfo.org && producer.bpinfo.org.candidate_name">{{ producer.bpinfo.org.candidate_name }}</span> 
+                  <span style="font-size:12px;font-weight: bold">({{ producer.producer.owner }})</span>
+                 
+                  <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="vote">Vote</button>
+                </h4>
 
               </div>
 
               <div class="card-content collapse show">
                 <div class="card-body card-dashboard" style="padding-top:0;">
                   <div class="row">
-
-
-                    <div class="col-xl-3 col-md-6 col-sm-12" v-if="producer.bpinfo">
+                    <div class="col-xl-3 col-md-6 col-sm-12" >
                       <div class="card">
-                        <div class="card-content">
+                        <div class="card-content" v-if="producer.bpinfo">
 
                           <div class="row">
                             <div class="col-3 col-md-12">
@@ -747,20 +829,22 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
   <template id="VoterDetail" type="text/div">
     <div v-loading.fullscreen.lock="loading">
-
       <div class="table-responsive">
         <div class="content-header row">
           <div class="content-header-left col-md-8 col-12 mb-2">
-            <h3 class="content-header-title mb-0">Proxy Details</h3>
+            <h3 class="content-header-title mb-0"  v-if="voter.info">Proxy Details</h3>
+            <h3 class="content-header-title mb-0"  v-if="!voter.info">Voter Details</h3>
             <div class="row breadcrumbs-top">
               <div class="breadcrumb-wrapper col-12">
                 <ol class="breadcrumb">
 
                   <li class="breadcrumb-item">Home
                   </li>
-                  <li class="breadcrumb-item active"><a href="#">Proxy Detail</a>
+                  <li class="breadcrumb-item active">
+                    <a  v-if="voter.info">Proxy Detail</a>
+                    <a  v-if="!voter.info">Voter Detail</a>
                   </li>
-                  <li class="breadcrumb-item active" v-if="voter.info && voter.info.fullName"><a :href="'#/voter/'+voter.account_name" ></a>
+                  <li class="breadcrumb-item active" v-if="voter.info && voter.info.fullName"><a :href="'#/voter/'+voter.account_name" >{{ voter.account_name }}</a>
                   </li>
 
                 </ol>
@@ -775,7 +859,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
         <div class="col-md-9">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title"><span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }}</span> <span style="font-size:12px;font-weight: bold">({{ voter.account_name }})</span></h4>
+              <h4 class="card-title">
+                <span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }}</span> 
+                <span style="font-size:12px;font-weight: bold">({{ voter.account_name }})</span>
+                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes">Proxy My Votes</button>
+              </h4>
             </div>
 
             <div class="card-content collapse show">
@@ -803,9 +891,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                 <span class="" v-if="voter.info"><a :href="'https://t.me/'+voter.info.telegram" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></span>
                                 <span role="alert" id="producerInfo">
                               <p style="margin-bottom:0.5rem;" v-if="voter.info"><strong>Slogan:</strong>  <span class="item-value">{{ voter.info.slogan }}</span></p>
-                              <p style="margin-bottom:0.5rem;" v-if="voter.info"><strong>URL:</strong>  <span class="item-value"><a :href="voter.info.url" target="_blank"><i class="fas fa-link"></i> Link</a></span>
+                              <p style="margin-bottom:0.5rem;" v-if="voter.info && voter.info.url"><strong>URL:</strong>  <span class="item-value"><a :href="voter.info.url" target="_blank"><i class="fas fa-link"></i> {{ voter.info.url }}</a></span>
                               </p>
-                              <p style="margin-bottom:0.5rem;" v-if="voter.info"><strong>Location :</strong> <span v-if="voter.info.location"><i class="fas fa-location-arrow"></i> {{ voter.info.location }}  </span></p>
+                              <p style="margin-bottom:0.5rem;" v-if="voter.info && voter.info.location"><strong>Location :</strong> <span v-if="voter.info.location"><i class="fas fa-location-arrow"></i> {{ voter.info.location }}  </span></p>
                               </p>
 
                               </span>
@@ -828,18 +916,18 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                   <ul class="nav nav-tabs nav-underline no-hover-bg">
 
-                    <li class="nav-item">
+                    <li class="nav-item"  v-if="voter.info">
                       <a class="nav-link active" id="base-tab41" data-toggle="tab" aria-controls="tab41"
                          href="#tab41" aria-expanded="true">Description</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42"
-                         aria-expanded="false">Account Data</a>
+                         aria-expanded="false" :class="{ active : !voter.info}">Account Data</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                       <a class="nav-link" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
                          aria-expanded="false">Vote Tables</a>
-                    </li>
+                    </li> -->
 
                     <li class="nav-item" v-if="voter.all_proxy_voters">
                       <a class="nav-link" id="base-tab44" data-toggle="tab" aria-controls="tab44" href="#tab44"
@@ -859,9 +947,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </div>
                     </div>
 
-                    <div class="tab-pane  px-1 pt-1" id="tab42" aria-labelledby="base-tab42">
+                    <div class="tab-pane  px-1 pt-1" id="tab42" aria-labelledby="base-tab42" :class="{ active : !voter.info}">
                       <div class="row">
-                        <div class="col-md-12" v-if="voter.info">
+                        <div class="col-md-12">
 
                           <div role="alert" id="producerInfo">
 
@@ -928,14 +1016,15 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                               <div class="chat chat-left" v-for="chat in chatsList">
                                 <div class="chat-avatar">
-                                  <a class="avatar" data-toggle="tooltip" href="#" data-placement="right" title=""
+                                  <a class="avatar" data-toggle="tooltip" target="_blank" :href="'https://eosflare.io/account/'+chat.chat_data.from" data-placement="right" :title="chat.chat_data.from"
                                      data-original-title="">
-                                     {{ chat.chat_data.from }}
+                                    <span class="letter-icon"> {{ chat.chat_data.from.substr(0, 1).toUpperCase() }}</span>
                                   </a>
                                 </div>
                                 <div class="chat-body">
                                   <div class="chat-content">
                                     <p>{{ chat.chat_data.content }}</p>
+                                    <!-- {{ chat.timestamp | date }} -->
                                   </div>
                                 </div>
                               </div>
@@ -1309,7 +1398,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
       <div class="row">
         <div class="col-md-12">
-          <div class="card">
+            <div class="card">
+                <div class="card-body">comming soon</div>
+            </div>
+          <div class="card" v-if="0">
             <div class="card-header mb-0 pb-0">
 
                 <div class="col-md-12">
@@ -1527,9 +1619,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
   <script type="text/x-template" id="SubmitProxyInfo">
 
 
-
     <div  class="col-md-12" style="padding:0px !important;">
-
 
       <router-link :to="{ name: 'ProxyList'}"> <el-button type="button" class="btn mr-1 mb-1 btn-primary btn-sm"><< Back to proxies list</el-button></router-link>
       <div class="card">
@@ -1539,34 +1629,32 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
             <el-form ref="form" :model="form" label-width="80px" class="form form-horizontal striped-rows form-bordered">
-
-
               <div class="form-body">
                 <h4 class="form-section"><i class="ft-user"></i> Personal Info</h4>
                 <div class="form-group row">
                   <label class="col-md-3 label-control" for="projectinput1">Full Name</label>
                   <div class="col-md-9">
                     <input type="text" id="projectinput1" class="form-control" placeholder="Full Name"
-                           name="fname">
+                      v-model="form.name">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-md-3 label-control" for="projectinput2">Slogan</label>
                   <div class="col-md-9">
                     <input type="text" id="projectinput2" class="form-control" placeholder="Slogan"
-                           name="slogan">
+                          v-model="form.slogan">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label class="col-md-3 label-control" for="Philosophy">Philosophy</label>
                   <div class="col-md-9">
-                    <textarea id="Philosophy"  rows="5" class="form-control" placeholder="Philosophy" name="email"></textarea>
+                    <textarea id="Philosophy"  rows="5" class="form-control" placeholder="Philosophy" v-model="form.philosophy"></textarea>
                   </div>
                 </div>
                 <div class="form-group row last">
                   <label class="col-md-3 label-control" for="Background">Background</label>
                   <div class="col-md-9">
-                    <textarea id="Background"  rows="5" class="form-control" name="Background"></textarea>
+                    <textarea id="Background"  rows="5" class="form-control" v-model="form.background"></textarea>
                   </div>
                 </div>
                 <h4 class="form-section"><i class="la la-clipboard"></i> Online Details</h4>
@@ -1574,39 +1662,40 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <label class="col-md-3 label-control" for="website">Website</label>
                   <div class="col-md-9">
                     <input type="text" id="website" class="form-control" placeholder="Website"
-                           name="website">
+                           v-model="form.website">
                   </div>
                 </div>
 
                 <div class="form-group row">
-                  <label class="col-md-3 label-control" for="website">Website</label>
-                  <div class="col-md-9">
-                    <input type="text" id="website" class="form-control" placeholder="Website"
-                           name="website">
-                  </div>
-                </div>
-
-                <div class="form-group row">
-                  <label class="col-md-3 label-control" for="website">logo</label>
+                  <label class="col-md-3 label-control" for="website">Logo</label>
                   <div class="col-md-9">
                     <input type="text" id="logo" class="form-control" placeholder="logo"
-                           name="website">
+                          v-model="form.logo_256">
                   </div>
                 </div>
 
                 <div class="form-group row">
-                  <label class="col-md-3 label-control" for="steemit">Steemit</label>
+                  <label class="col-md-3 label-control" for="steemit">Telegram</label>
                   <div class="col-md-9">
-                    <input type="text" id="steemit" class="form-control" placeholder="Steemit"
-                           name="steemit">
+                    <input type="text" id="steemit" class="form-control" placeholder="Telegram"
+                         v-model="form.telegram">
                   </div>
                 </div>
+                
+                <div class="form-group row">
+                    <label class="col-md-3 label-control" for="steemit">Steemit</label>
+                    <div class="col-md-9">
+                      <input type="text" id="steemit" class="form-control" placeholder="Steemit"
+                           v-model="form.steemit">
+                    </div>
+                 </div>
 
+                
                 <div class="form-group row">
                   <label class="col-md-3 label-control" for="twitter">Twitter</label>
                   <div class="col-md-9">
                     <input type="text" id="twitter" class="form-control" placeholder="Twitter"
-                           name="twitter">
+                       v-model="form.twitter">
                   </div>
                 </div>
 
@@ -1614,69 +1703,22 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <label class="col-md-3 label-control" for="wechat">Wechat</label>
                   <div class="col-md-9">
                     <input type="text" id="wechat" class="form-control" placeholder="Wechat"
-                           name="wechat">
+                        v-model="form.wechat">
                   </div>
                 </div>
 
 
               </div>
               <div class="form-actions">
-                <button type="button" class="btn btn-warning mr-1">
-                  <i class="ft-x"></i> Cancel
-                </button>
-                <button type="submit" class="btn btn-primary">
-                  <i class="la la-check-square-o"></i> Save
-                </button>
+                <router-link :to="{ name: 'ProxyList'}"> 
+                  <el-button type="button" class="btn btn-warning mr-1"> <i class="ft-x"></i> Cancellist</el-button>
+                </router-link>
+                <el-button type="primary" @click="onSubmit" class="btn btn-primary" >  <i class="la la-check-square-o"></i> Save</el-button>
               </div>
-
             </el-form>
           </div>
         </div>
       </div>
-
-
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="Full Name">
-          <el-input v-model="form.name"></el-input>
-        </el-form-item>
-        <el-form-item label="Slogan">
-          <el-input v-model="form.slogan"></el-input>
-        </el-form-item>
-        <el-form-item label="Philosophy">
-          <el-input type="textarea" v-model="form.philosophy"></el-input>
-        </el-form-item>
-        <el-form-item label="Background">
-          <el-input type="textarea" v-model="form.background"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Website">
-          <el-input v-model="form.website"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Logo">
-          <el-input v-model="form.logo_256"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Telegram">
-          <el-input v-model="form.telegram"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Steemit">
-          <el-input v-model="form.steemit"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Twitter">
-          <el-input v-model="form.twitter"></el-input>
-        </el-form-item>
-
-        <el-form-item label="Wechat">
-          <el-input v-model="form.wechat"></el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">Submit</el-button>
-        </el-form-item>
-      </el-form>
 
       <el-dialog
               :title="dialogTitle"

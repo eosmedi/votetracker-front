@@ -212,6 +212,8 @@ footer.footer-dark {
           .main-menu.menu-light .navigation > li > a i {
             position: relative;
             top: 3px; }
+
+            .main-menu.menu-light .navigation > li > a.router-link-exact-active,
         .main-menu.menu-light .navigation > li.open > a {
           color: #545766;
           background: whitesmoke;
@@ -3666,3 +3668,8 @@ tr.shown td.details-control {
 
 .pagination.pagination-flat.pagination-sm li.active a {
   padding: 0.5rem 0.7rem; }
+
+
+
+
+
