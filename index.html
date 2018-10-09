@@ -862,7 +862,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               <h4 class="card-title">
                 <span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }}</span> 
                 <span style="font-size:12px;font-weight: bold">({{ voter.account_name }})</span>
-                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes">Proxy My Votes</button>
+                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes" v-if="voter.info">Proxy My Votes</button>
               </h4>
             </div>
 
