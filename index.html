@@ -1023,10 +1023,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       <a class="nav-link" id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42"
                          aria-expanded="false" :class="{ active : !voter.info}">Account Data</a>
                     </li>
-                    <!-- <li class="nav-item">
+                    <li class="nav-item"  v-if="voter.voter_info.is_proxy">
                       <a class="nav-link" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
-                         aria-expanded="false">Vote Tables</a>
-                    </li> -->
+                         aria-expanded="false">Voter Actions</a>
+                    </li>
 
                     <li class="nav-item" v-if="voter.all_proxy_voters">
                       <a class="nav-link" id="base-tab44" data-toggle="tab" aria-controls="tab44" href="#tab44"
@@ -1080,8 +1080,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </div>
                     </div>
 
-                    <div class="tab-pane  px-1 pt-1" id="tab43" aria-labelledby="base-tab43" >
-
+                    <div class="tab-pane  px-1 pt-1" id="tab43" aria-labelledby="base-tab43" v-if="addChart || removeChart " >
+                      <div class="row">
+                        <div class="col-md-6">
+                          <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
+                        </div>
+                        <div class="col-md-6">
+                          <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
+                        </div>
+                      </div>
+                      <p>aggregate by latest(48h) remove / add vote logs</p>
 
 
                     </div>
@@ -1893,7 +1901,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
   </script>
 
   <script type="text/x-template" id="pie">
-    <div ref="chart" style=" width:450px;height: 350px; position: relative;">
+    <div ref="chart" style=" width:400px;height: 300px; position: relative;">
     </div>
   </script>
 
