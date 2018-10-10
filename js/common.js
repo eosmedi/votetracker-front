@@ -1168,11 +1168,17 @@ var History = {
     template:"#History",
     data: function () {
         return {
+            form: {},
+            search_type: 'vote*',
+            keyword: '',
+            start_time: '',
+            end_time: '',
             currentPage: 1,
             totalPage: 10,
             pageSize: 70,
             loading: true,
-            voters: []
+            results: [],
+            total: 0
         }
     },
     mounted: function () {
@@ -1182,6 +1188,38 @@ var History = {
 
     },
     methods: {
+        search: function(){
+            console.log(this.keyword, this.start_time, this.end_time);
+
+            if(!this.keyword) return;
+
+            this.keyword = this.keyword.trim();
+
+            var self = this;
+            var query = "keyword="+this.keyword;
+
+            if(this.start_time){
+                query += "&start_time="+this.start_time;
+            }
+
+            if(this.end_time){
+                query += "&end_time="+this.end_time;
+            }
+
+            if(this.search_type){
+                query += "&search_type="+this.search_type;
+            }
+
+            this.API.get("search?"+query).then(function (res) {
+                var results = [];
+                res.data.hits.hits.forEach(function(hit){
+                    results.push(hit._source);
+                })
+                self.total = res.data.hits.total;
+                self.results = results;
+            })
+
+        }
 
     }
 };

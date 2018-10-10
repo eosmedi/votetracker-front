@@ -218,7 +218,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
           </li>
 
-          <!-- <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'History'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/history.png" width="30"/></span>History</span></router-link> </a> -->
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'History'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/history.png" width="30"/></span>History</span></router-link> </a>
 
           </li>
           <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'Referendum'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/referendums.png" width="30"/></span>Referendum</span></router-link> </a>
@@ -233,9 +233,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       <div class="content-wrapper">
 
 
-
         <!-- TITLE & BREAD CRUMB -->
-
 
 
 
@@ -1355,16 +1353,15 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             <div class="card-content collpase show">
               <div class="card-body">
                 <div class="card-text">
-                  <p>Search filter with different configurations. You cuould search for a range of blocks, dates, profiles, etc...</p>
+                  <p>Search filter with different configurations. You cuould search for a range of blocks, dates, account, etc...</p>
                 </div>
-                <form class="form form-horizontal">
+                <el-form class="form form-horizontal" :modle="form">
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-3">
-                        <label class="label-control miniTitle" for="timesheetinput3">profile</label>
+                        <label class="label-control miniTitle" for="timesheetinput3">account</label>
                         <div class="position-relative has-icon-left">
-                          <input type="text" id="timesheetinput1" class="form-control" placeholder="profile nick"
-                                 name="employeename">
+                          <input type="text" id="timesheetinput1" class="form-control" placeholder="account" v-model="keyword">
                           <div class="form-control-position">
                             <i class="ft-user"></i>
                           </div>
@@ -1372,16 +1369,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </div>
 
                       <div class="col-md-3">
-                        <label class="label-control miniTitle" for="timesheetinput3">Date</label>
+                        <label class="label-control miniTitle" for="timesheetinput3">Start Date</label>
                         <div class="position-relative has-icon-left">
-                          <input type="date" id="timesheetinput3" class="form-control" name="date">
+                          <input type="date" id="timesheetinput3" class="form-control" v-model="start_time">
                           <div class="form-control-position">
                             <i class="ft-message-square"></i>
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-md-3">
+                      <!-- <div class="col-md-3">
                         <label class="label-control miniTitle" for="timesheetinput5">Start time</label>
                         <div class="position-relative has-icon-left">
                           <input type="time" id="timesheetinput5" class="form-control" name="starttime">
@@ -1389,26 +1386,37 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                             <i class="ft-clock"></i>
                           </div>
                         </div>
-                      </div>
-
+                      </div> -->
                       <div class="col-md-3">
-                        <label class="label-control miniTitle" for="timesheetinput3">End Time</label>
+                        <label class="label-control miniTitle" for="timesheetinput3">End Date</label>
                         <div class="position-relative has-icon-left">
-                          <input type="time" id="timesheetinput6" class="form-control" name="endtime">
+                          <input type="date" id="timesheetinput6" class="form-control"  v-model="end_time">
                           <div class="form-control-position">
                             <i class="ft-clock"></i>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div class="form-actions p-0 m-0 pt-1">
+
+                   <label class="mr-1"> 
+                      <input type="radio" v-model="search_type" name="search_type" value="vote*"> Vote log
+                  </label>
+
+                   <label>  
+                     <input type="radio" v-model="search_type" name="search_type" value="stake"> Stake log
+                  </label>
+
+                  <div class="pull-right">
+
+                    <el-button  type="primary" class="btn btn-primary btn-sm pl-3 pr-3" @click="search">
+                      <i class="la la-binoculars"></i> Search
+                    </el-button>
+                  </div>
 
                   </div>
-                  <div class="form-actions right p-0 m-0 pt-1">
-                    <button type="submit" class="btn btn-primary btn-sm pl-3 pr-3">
-                      <i class="la la-binoculars"></i> Search
-                    </button>
-                  </div>
-                </form>
+                </el-form>
               </div>
             </div>
           </div>
@@ -1416,25 +1424,24 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
         <div class="col-md-12">
           <div class="card">
-            <div class="card-content collpase show">
+            <div class="card-content collpase ">
               <div class="card-body">
 
                 <section id="accordion">
                   <div class="row">
                     <div class="col-12 mb-1 mt-1">
-                      <span class="font-weight-bold foundStyle">2 matches has been found</span>
-                      <span class="SubHeadVoteLog">Fri, 4 September, 2018 7:00 PM</span>
+                      <span class="font-weight-bold foundStyle">{{ total }} matches has been found</span>
+                      <!-- <span class="SubHeadVoteLog">Fri, 4 September, 2018 7:00 PM</span> -->
                     </div>
                   </div>
 
                   <div class="row match-height">
 
-                    <div class="col-lg-12 col-xl-12 mb-1">
+                    <div class="col-lg-12 col-xl-12 mb-1" v-for="result in results">
 
                     <div id="accordionWrap6" role="tablist" aria-multiselectable="true">
 
                       <div class="collapse-icon accordion-icon-rotate">
-
                         <div id="heading1" class="card-header card-header-fix borderdefaultHeader ">
                           <a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion1" aria-expanded="true"
                              aria-controls="accordion1" class="card-title lead default colortheme">
@@ -1442,15 +1449,13 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
                             <div>
+                              <span class="HeadVoteLog">#{{ result.block_num }}</span>
 
-                              <span class="HeadVoteLog">#1555446544</span>
-
-                              <span class="detal-action minThumbs text-bold-500">(+12)</span>
-                              <span class="cancel-action minThumbs text-bold-500">(-15)</span>
-                              <span class="SubHeadVoteLogH">Fri, 4 September, 2018 7:00 PM</span>
+                              <!-- <span class="detal-action minThumbs text-bold-500">(+12)</span>
+                              <span class="cancel-action minThumbs text-bold-500">(-15)</span> -->
+                              <span class="SubHeadVoteLogH">{{ result.timestamp | date }}</span>
 
                             </div>
-
 
                           </a>
                         </div>
@@ -1458,91 +1463,49 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                              aria-expanded="true">
                           <div class="card-content">
                             <div class="card-body">
-                              <span class="el-tag el-tag--info "><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info "><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
 
+                              <div v-if="search_type != 'stake'">
+                                <a :href="'#/voter/'+result.voter"><code>{{ result.voter }}</code></a>  → 
+                                  <span class="el-tag el-tag--info " v-for="producer in result.producers"><a :href="'#/producer/'+producer" class="btn btn-sm w_voter addvoter" :class="{ highlight: producer.indexOf(keyword) > -1 }">  {{ producer }} </a><!----></span>
+                              </div>
+
+                              <div v-if="search_type == 'stake'">
+                               <code :class="{ highlight: result.from.indexOf(keyword) > -1 }"> 
+                                 {{  result.from }}
+                               </code>
+                                → 
+                                <code :class="{ highlight: result.receiver.indexOf(keyword) > -1 }">{{ result.receiver }} </code>
+
+
+                                <span v-if="result.stake_cpu_quantity">stake</span>
+
+                                <span  class="ml-1" v-if="result.unstake_cpu_quantity">unstake</span>
+
+
+                                <span class="text-default text-semibold " v-if="result.stake_cpu_quantity">CPU: {{ result.stake_cpu_quantity
+                                  }}</span>
+
+                                  <span class="text-default text-semibold" v-if="result.stake_net_quantity">NET: {{ result.stake_net_quantity
+                                    }}</span>
+
+                                    <span class="text-default text-semibold ml-1" v-if="result.unstake_cpu_quantity">CPU: {{ result.unstake_cpu_quantity
+                                      }}</span>
+    
+                                      <span class="text-default text-semibold" v-if="result.unstake_net_quantity">NET: {{ result.unstake_net_quantity
+                                        }}</span>
+                              </div>
 
 
                             </div>
                           </div>
                         </div>
-
                       </div>
 
                     </div>
 
                   </div>
 
-                    <div class="col-lg-12 col-xl-12  mb-1">
-
-                      <div id="accordionWrap6" role="tablist" aria-multiselectable="true">
-
-                        <div class="collapse-icon accordion-icon-rotate">
-
-                          <div id="heading2" class="card-header card-header-fix borderdefaultHeader">
-                            <a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion2" aria-expanded="false"
-                               aria-controls="accordion2" class="card-title lead collapsed colortheme">
-                              <div>
-                                <span class="HeadVoteLog">#1885544587</span>
-                                <span class="detal-action minThumbs text-bold-500">(+12)</span>
-                                <span class="cancel-action minThumbs text-bold-500">(-15)</span>
-                                <span class="SubHeadVoteLogH">Fri, 4 September, 2018 7:00 PM</span>
-                              </div>
-                            </a>
-                          </div>
-                          <div id="accordion2" role="tabpanel" aria-labelledby="heading61" class="card-collapse collapse borderdefault bg-white"
-                               aria-expanded="true">
-                            <div class="card-content">
-                              <div class="card-body">
-                                <span class="el-tag el-tag--info "><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter addvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info "><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                                <span class="el-tag el-tag--info"><a href="#/producer/buildteameos" class="btn btn-sm w_voter cancelvoter">  buildteameos </a><!----></span>
-                              </div>
-                            </div>
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                    </div>
+                
 
                   </div>
                 </section>

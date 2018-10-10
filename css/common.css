@@ -711,3 +711,15 @@ hr.center{
 .chat-application .chat-app-window .badge{
     color: #6B6F82
 }
+
+
+#accordionWrap6 code{
+    color: #444
+}
+
+#accordionWrap6 code.highlight,
+.addvoter.highlight{
+    color: red
+}
+
+
