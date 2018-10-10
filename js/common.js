@@ -1389,7 +1389,7 @@ var app = new Vue({
         }, 30 * 1000);
 
         return {
-
+            loaded: false,
             status: {
                 producers: 376,
                 voters: 17515,
@@ -1414,6 +1414,7 @@ var app = new Vue({
     },
     mounted: function () {
         this.initliazeRoute();
+        this.loaded = true;
         var self = this;
         if ('-ms-scroll-limit' in document.documentElement.style && '-ms-ime-align' in document.documentElement.style) { // detect it's IE11
             window.addEventListener("hashchange", function(event) {
