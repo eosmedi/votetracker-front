@@ -9,12 +9,10 @@
 ==========================================================================================*/
 
 $(document).ready(function() {
-
    reloadTables();
 });
 
 function reloadTables(){
-
     return;
 
     /***********************************
@@ -28,9 +26,7 @@ function reloadTables(){
     /********************************
      *       `new` constructor       *
      ********************************/
-
     var tableConstructor = $('.dataex-res-constructor').DataTable({
-
         "paging": false
     });
 
