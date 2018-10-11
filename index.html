@@ -371,7 +371,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </thead>
               <tbody>
                 <tr v-if="loading" ><td colspan="4">load data...</td></tr>
-              <tr v-for="(producer, index ) in producers" v-if="producer.show">
+              <tr v-for="(producer, index ) in producers" v-if="producer.show" :key="producer.owner">
                 <td width="20" align="right">{{ producer.index }}
                 </td>
                 <td class="tdProducer">
@@ -389,7 +389,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                             </span></td>
                 <td >
                   <span v-if="producer.org_location"><!--{{producer.org_location}}--><img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"></span>
-                  <span v-if="producer.location">{{ countryCode[producer.location]}}</span>
+                  <span v-if="producer.org_location">{{ producer.org_location.name }}</span>
                 </td>
                 <td align="center" width="25"><a :href="producer.url" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td>
                 <td align="center" width="25"><button type="button" class="btn mr-1 mb-1 btn-secondary btn-sm" @click="voteProducer(producer)">Vote</button></td>
