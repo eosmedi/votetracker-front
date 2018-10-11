@@ -723,3 +723,9 @@ hr.center{
 }
 
 
+
+#voteStakeHistory{
+    height: 500px;
+    overflow-y: auto;
+    width: 100%;
+}

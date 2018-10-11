@@ -862,6 +862,8 @@ var VoterDetail = {
                 self.voter = res.data;
                 self.voter.actions = self.voter.actions || [];
                 self.voter.actions = self.voter.actions.reverse();
+                self.voter.stakeLogs = self.voter.stakeLogs.reverse();
+
                 self.loading = false;
 
                 if(self.voter.voter_info.is_proxy){
@@ -880,7 +882,6 @@ var VoterDetail = {
                     console.log(res.data, 'self.leftHeight', self.$refs, self.$refs.leftblock, self.$refs.leftblock.offsetHeight
                 );
                     self.leftHeight = self.$refs.leftblock.offsetHeight;
-
 
                 }, 900);
 

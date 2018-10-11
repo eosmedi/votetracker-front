@@ -1028,6 +1028,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                          aria-expanded="false">Voter Actions</a>
                     </li>
 
+                    <li class="nav-item"  v-if="voter.voter_info.is_proxy">
+                      <a class="nav-link" id="base-tab45" data-toggle="tab" aria-controls="tab45" href="#tab45"
+                         aria-expanded="false">Voter Stake</a>
+                    </li>
+
                     <li class="nav-item" v-if="voter.all_proxy_voters">
                       <a class="nav-link" id="base-tab44" data-toggle="tab" aria-controls="tab44" href="#tab44"
                          aria-expanded="false">Vote Actions</a>
@@ -1092,6 +1097,43 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       <p>aggregate by latest(48h) remove / add vote logs</p>
 
 
+                    </div>
+
+
+                    <div class="tab-pane  px-1 pt-1" id="tab45" aria-labelledby="base-tab45">
+                      <div class="row" >
+
+                        <div id="voteStakeHistory">
+                        <div class="col-lg-12 col-xl-12 mb-1"   v-for="log in voter.stakeLogs"> 
+
+                            <div id="accordionWrap6" 
+                            
+                            role="tablist" aria-multiselectable="true">
+
+                          <div id="heading1" class="card-header card-header-fix borderdefaultHeader "><a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="card-title lead default colortheme"><div><span class="HeadVoteLog">#{{
+                            log.block_num }}</span> 
+                            <span class="SubHeadVoteLogH">{{ log.timestamp | date }}</span></div></a></div>
+
+                          <div id="accordion1" role="tabpanel"
+                          
+                  
+                          aria-labelledby="heading61" aria-expanded="true" class="card-collapse collapse show borderdefault bg-white"><div class="card-content"><div class="card-body"><!----> <div>
+                            <span style="width:100px;">
+                            <code class="highlight" > 
+                              {{ log.voter }}
+                            </code>
+
+                          </span>
+
+                            <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> <span class="text-default text-semibold ml-1"> {{ log.staked }} EOS</span> 
+                          </div></div></div>
+                          </div>
+                        </div>
+                        </div>
+
+                        <p>only provide the latest 10 stake/unstake logs</p>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="tab-pane" id="tab44" aria-labelledby="base-tab44" >
