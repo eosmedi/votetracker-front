@@ -717,6 +717,8 @@ hr.center{
     color: #444
 }
 
+
+#accordionWrap6 .highlight code,
 #accordionWrap6 code.highlight,
 .addvoter.highlight{
     color: red
@@ -727,5 +729,5 @@ hr.center{
 #voteStakeHistory{
     height: 500px;
     overflow-y: auto;
-    width: 100%;
+        width: 100%;
 }

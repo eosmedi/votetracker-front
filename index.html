@@ -477,10 +477,25 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
         <div class="card">
           <div class="card-header">
-            <div class="heading-elements">
+            <div class="heading-elements" style="left: 20px;top:12px">
               <ul class="list-inline mb-0">
-                <li><a ><i class="ft-info"></i></a></li>
-                <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
+
+                <li>
+                  
+                    <i class="ft-filter"></i>
+                  <label  class="ml-1">
+                    <input type="radio" name="type" value="reg" v-model="type">
+                  Registered
+                
+                </label>
+
+                <label class="ml-1">
+                    <input type="radio" name="type" value="all" v-model="type">
+                    All
+                </label>
+              </li>
+                <!-- <li><a ><i class="ft-info"></i></a></li>
+                <li><a data-action="expand"><i class="ft-maximize"></i></a></li> -->
               </ul>
             </div>
           </div>
@@ -552,13 +567,13 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <th>Slogan</th>
                   <th>Location</th>
                   <th>www</th>
+                  <th></th>
                 </tr>
                 </thead>
                 <tbody>
 
                     <tr v-if="loading" ><td colspan="4">load data...</td></tr>
                 <tr v-for="(proxy, index ) in voters">
-
                   <td width="20" align="right">{{ index+1 }}
                   </td>
                   <td class="tdProxy">
@@ -570,6 +585,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                     <router-link :to="{ name: 'VoterDetail', params: { voter: proxy.account_name }}">
                       {{ proxy.account_name }}
                       <span v-if="proxy.candidate_name">{{ proxy.account_name }}</span> <span v-if="!proxy.candidate_name">{{ proxy.owner }}</span>
+
+                     
+
                     </router-link>
                   </td>
                   <td align="right">{{ numberWithCommas((proxy.voter_info.staked / 10000 ).toFixed(0)) }} EOS</td>
@@ -578,7 +596,17 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <td  align="right"><span v-if="proxy.info"> {{ proxy.info.fullName }}</span></td>
                   <td ><span v-if="proxy.info"> {{ proxy.info.slogan }}</span></td>
                   <td align="center" width="25"><span v-if="proxy.info"> {{ proxy.info.location }}</span></td>
-                  <td align="center" width="25"> <span v-if="proxy.info"> <a :href="proxy.info.url" target="_blank"><img src="images/www.png"  width="20" border="0"/></a></span></td>
+                  <td align="center" width="25"> <span v-if="proxy.info"> <a :href="proxy.info.url" target="_blank"><img src="images/www.png"  width="20" border="0"/></a></span>
+                  
+                    
+                  </td>
+
+                  <td>
+
+                      <router-link :to="{ name: 'VoterDetail', params: { voter: proxy.account_name }}">
+                        <button type="button" class="btn btn-info mr-1" style="    padding: 0.2rem 1rem;"><i class="la la-paper-plane-o" style="font-size: 1.2rem;"></i> Chat</button>
+                      </router-link>
+                  </td>
                 </tr>
 
                 </tbody>
@@ -1020,16 +1048,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42"
-                         aria-expanded="false" :class="{ active : !voter.info}">Account Data</a>
+                         aria-expanded="false" :class="{ active : !voter.info}">Meta</a>
                     </li>
                     <li class="nav-item"  v-if="voter.voter_info.is_proxy">
                       <a class="nav-link" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
-                         aria-expanded="false">Voter Actions</a>
+                         aria-expanded="false">Last 48h</a>
                     </li>
 
                     <li class="nav-item"  v-if="voter.voter_info.is_proxy">
                       <a class="nav-link" id="base-tab45" data-toggle="tab" aria-controls="tab45" href="#tab45"
-                         aria-expanded="false">Voter Stake</a>
+                         aria-expanded="false">Stake Log</a>
                     </li>
 
                     <li class="nav-item" v-if="voter.all_proxy_voters">
@@ -1154,12 +1182,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
         
                                           </div>
                                           <div class="w_infoAction">
-                                            <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="false"
+                                            <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="true"
                                                aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
         
                                           </div>
                                         </div>
-                                        <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse"
+                                        <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse show"
                                              aria-expanded="true">
                                           <div class="card-content">
                                             <div class="card-body" >
@@ -1475,6 +1503,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           <div class="card">
             <div class="card-content collpase ">
               <div class="card-body">
+                <p v-if="loading">
+                  load data...
+                </p>
 
                 <section id="accordion">
                   <div class="row">
@@ -1496,7 +1527,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                              aria-controls="accordion1" class="card-title lead default colortheme">
 
 
-
                             <div>
                               <span class="HeadVoteLog">#{{ result.block_num }}</span>
 
@@ -1514,7 +1544,15 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                             <div class="card-body">
 
                               <div v-if="search_type != 'stake'">
-                                <a :href="'#/voter/'+result.voter"><code>{{ result.voter }}</code></a>  → 
+                                <a :href="'#/voter/'+result.voter"
+                                :class="{ highlight:  result.voter.indexOf(keyword) > -1 }"
+                                ><code>{{ result.voter }}</code></a>  <span v-if="result.producers.length"> →  </span>
+
+                                <span v-if="result.proxy" class="">
+                                  set proxy  →  
+                                <code :class="{ highlight:  result.proxy.indexOf(keyword) > -1 }">{{ result.proxy }}</code>
+                                </span>
+                                <!-- {{  result }} -->
                                   <span class="el-tag el-tag--info " v-for="producer in result.producers"><a :href="'#/producer/'+producer" class="btn btn-sm w_voter addvoter" :class="{ highlight: producer.indexOf(keyword) > -1 }">  {{ producer }} </a><!----></span>
                               </div>
 
@@ -1558,11 +1596,23 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                   </div>
                 </section>
+
+                <page :current="currentPage" :allpage="totalPage" ref="page"></page>
+
               </div>
+
+       
             </div>
+
+               
+   
+
           </div>
 
         </div>
+
+
+     
 
       </div>
     </div>
@@ -1950,7 +2000,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
     <ul class="pagination" >
       <li class="page-item" v-show="current != 1" @click="current-- && goto(current)" ><a href="#" class="page-link">Prev</a></li>
       <li class="page-item" v-for="index in pages" @click="goto(index)" :class="{'active':current == index}" :key="index">
-        <a href="#" class="page-link">{{index}}</a>
+        <a href="javacript:void(0);" class="page-link">{{index}}</a>
       </li>
       <li class="page-item"  v-show="allpage != current && allpage != 0 " @click="current++ && goto(current++)"><a href="#" class="page-link">Next</a></li>
     </ul>

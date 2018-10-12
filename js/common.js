@@ -3,6 +3,14 @@ var chainState = {};
 
 /* EC */
 function getImgUrl(pet) {
+    var map   = {
+        'usa' : 'us',
+        'hk': 'cn',
+        'rok': 'kr'
+    }
+    if(map[pet]){
+        pet = map[pet];
+    }
     return 'images/flags/' + pet + ".png";
 }
 
@@ -491,6 +499,7 @@ var ProxyList = {
             totalPage: 10,
             pageSize: 70,
             loading: true,
+            type: 'reg',
             voters: [],
             status: null
         }
@@ -512,6 +521,10 @@ var ProxyList = {
         currentPage: function (newVal, oldVal) {
             this.loading = true;
             this.getProxyVoters();
+        },
+        type: function(){
+            this.loading = true;
+            this.getProxyVoters();
         }
     },
     methods: {
@@ -529,7 +542,7 @@ var ProxyList = {
             var self = this;
             var params = this.$route.params;
             console.log(this.$router);
-            this.API.get("getVoteProxy?p=" + this.currentPage + "&size=" + this.pageSize).then(function (res) {
+            this.API.get("getVoteProxy?p=" + this.currentPage + "&size=" + this.pageSize+"&type="+this.type).then(function (res) {
                 self.voters = res.data.rows;
                 self.loading = false;
                 self.totalPage = Math.ceil(res.data.total / self.pageSize);
@@ -1242,21 +1255,35 @@ var History = {
             start_time: '',
             end_time: '',
             currentPage: 1,
-            totalPage: 10,
-            pageSize: 70,
-            loading: true,
+            totalPage: 0,
+            pageSize: 20,
+            loading: false,
             results: [],
             total: 0
         }
     },
     mounted: function () {
 
+        var self = this;
+
+        if(this.$refs.page){
+            this.$refs.page.$on("pageChange", function (data) {
+                self.currentPage = data;
+                console.log("pageChange", data);
+            })
+        }
+
     },
     watch: {
-
+        currentPage: function (newVal, oldVal) {
+            console.log('ENtRO EN WAtCH');
+            this.search();
+        }
     },
     methods: {
         search: function(){
+
+            this.loading = true;
             console.log(this.keyword, this.start_time, this.end_time);
 
             if(!this.keyword) return;
@@ -1267,23 +1294,32 @@ var History = {
             var query = "keyword="+this.keyword;
 
             if(this.start_time){
-                query += "&start_time="+this.start_time;
+                query += "&start_time="+(new Date(this.start_time).getTime() / 1000);
             }
 
             if(this.end_time){
-                query += "&end_time="+this.end_time;
+                query += "&end_time="+(new Date(this.end_time).getTime() / 1000);
             }
 
             if(this.search_type){
                 query += "&search_type="+this.search_type;
             }
 
+            query += "&size="+this.pageSize;
+            query += "&from="+((this.currentPage -1 ) * this.pageSize);
+
+
             this.API.get("search?"+query).then(function (res) {
                 var results = [];
+                self.loading = false;
                 res.data.hits.hits.forEach(function(hit){
                     results.push(hit._source);
                 })
+
+
+                
                 self.total = res.data.hits.total;
+                self.totalPage = Math.floor(self.total / self.pageSize);
                 self.results = results;
             })
 
