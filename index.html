@@ -428,7 +428,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       show-icon
       type="info"></el-alert> -->
 
-      <div role="alert" class="el-alert el-alert--info"><i class="el-alert__icon el-icon-info"></i><div class="el-alert__content"><span class="el-alert__title">Below is the list of active vote proxy accounts on the EOS mainnet.  to register more info about yourself see the <a href="https://github.com/AlohaEOS/eos-proxyinfo" target="_blank">instructions here</a>.</span><!----></div></div>
+      <div role="alert" class="el-alert el-alert--info" v-if="0"><i class="el-alert__icon el-icon-info"></i><div class="el-alert__content"><span class="el-alert__title">Below is the list of active vote proxy accounts on the EOS mainnet.  to register more info about yourself see the <a href="https://github.com/AlohaEOS/eos-proxyinfo" target="_blank">instructions here</a>.</span><!----></div></div>
       <el-row style="margin-top:10px">
         <router-link :to="{ name: 'SubmitProxyInfo'}"> <el-button type="button" class="btn mr-1 mb-1 btn-primary btn-sm">Submit Proxy Info</el-button></router-link>
       </el-row>
@@ -565,8 +565,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <th>Proxy Voters</th>
                   <th>Full Name</th>
                   <th>Slogan</th>
-                  <th>Location</th>
-                  <th>www</th>
+                  <!-- <th>Location</th>
+                  <th>www</th> -->
                   <th></th>
                 </tr>
                 </thead>
@@ -595,9 +595,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <td  align="right"><router-link :to="{ name: 'VoterDetail', params: { voter: proxy.account_name }}">{{ proxy.proxy_voters.length }}</router-link></td>
                   <td  align="right"><span v-if="proxy.info"> {{ proxy.info.fullName }}</span></td>
                   <td ><span v-if="proxy.info"> {{ proxy.info.slogan }}</span></td>
-                  <td align="center" width="25"><span v-if="proxy.info"> {{ proxy.info.location }}</span></td>
+                  <!-- <td align="center" width="25"><span v-if="proxy.info"> {{ proxy.info.location }}</span></td>
                   <td align="center" width="25"> <span v-if="proxy.info"> <a :href="proxy.info.url" target="_blank"><img src="images/www.png"  width="20" border="0"/></a></span>
-                  
+                   -->
                     
                   </td>
 
@@ -824,7 +824,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                             </li>
                             <li class="nav-item">
                               <a class="nav-link" id="base-tab33" data-toggle="tab" aria-controls="tab33" href="#tab33"
-                                 aria-expanded="false">Vote Tables</a>
+                                 aria-expanded="false">Voters</a>
                             </li>
                           </ul>
                           <div class="tab-content px-1 pt-1">
@@ -852,7 +852,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                   <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
                                 </div>
                               </div>
-                              <p>aggregate by latest(48h) remove / add vote logs</p>
+                              <p>added/removed votes(last 48h)</p>
                             </div>
 
                             <div class="tab-pane" id="tab33" aria-labelledby="base-tab33" >
@@ -989,7 +989,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               <h4 class="card-title">
                 <span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }}</span> 
                 <span style="font-size:12px;font-weight: bold">({{ voter.account_name }})</span>
-                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes" v-if="voter.info">Proxy My Votes</button>
+                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes" v-if="voter.info">Proxy your votes</button>
               </h4>
             </div>
 
@@ -1121,7 +1121,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
                         </div>
                       </div>
-                      <p>aggregate by latest(48h) remove / add vote logs</p>
+                      <p>added/removed votes(last 48h)</p>
 
 
                     </div>
