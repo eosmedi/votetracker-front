@@ -360,10 +360,6 @@ var ProducersList = {
 
         this.getProducers();
 
-        /* EC */
-        if (typeof reloadTables === 'function'){
-            reloadTables();
-        }
     },
     methods: {
         isStatus: function(){
@@ -453,6 +449,13 @@ var ProducersList = {
                 }
 
                 self.tableData = tableData;
+
+                Vue.nextTick(function () {
+                    /* EC */
+                    if (typeof reloadTables === 'function'){
+                        reloadTables();
+                    }
+                })
                 // filterProducers && filterProducers.indexOf(voter.account_name) > -1
                 var r = 0;
                 for (var i in self.producers)
@@ -511,11 +514,6 @@ var ProxyList = {
             console.log("pageChange", data);
         })
         this.getProxyVoters();
-
-        /* EC */
-        if (typeof reloadTables === 'function'){
-            reloadTables();
-        }
     },
     watch: {
         currentPage: function (newVal, oldVal) {
@@ -547,6 +545,12 @@ var ProxyList = {
                 self.loading = false;
                 self.totalPage = Math.ceil(res.data.total / self.pageSize);
                 console.log(res.data, self.totalPage, res.data.total / self.pageSize);
+                Vue.nextTick(function () {
+                    /* EC */
+                    if (typeof reloadTables === 'function'){
+                        reloadTables();
+                    }
+                })
             })
         },
         numberWithCommas: function(x) {
@@ -593,12 +597,6 @@ var ProducerDetail = {
         })
 
         this.getProducers();
-
-        /* EC */
-        if (typeof reloadTables === 'function'){
-            reloadTables();
-        }
-
     },
     watch: {
         currentPage: function (newVal, oldVal) {
@@ -651,6 +649,13 @@ var ProducerDetail = {
                 }catch(e){
 
                 }
+
+                Vue.nextTick(function () {
+                    /* EC */
+                    if (typeof reloadTables === 'function'){
+                        reloadTables();
+                    }
+                })
                 //console.log(res.data);
             })
         },
@@ -745,10 +750,6 @@ var VoterList = {
         })
         this.getProducers();
 
-        /* EC */
-        if (typeof reloadTables === 'function'){
-            reloadTables();
-        }
     },
     watch: {
         currentPage: function (newVal, oldVal) {
@@ -775,6 +776,12 @@ var VoterList = {
                 self.loading = false;
                 self.totalPage = Math.ceil(res.data.total / self.pageSize);
                 console.log(res.data);
+                Vue.nextTick(function () {
+                    /* EC */
+                    if (typeof reloadTables === 'function'){
+                        reloadTables();
+                    }
+                })
             })
         },
         numberWithCommas: function(x) {

@@ -302,7 +302,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
         </div>
-        <div class="col-md-2 text-center">
+        <div class="col-md-2 text-center" v-if="!isMobile"> 
             <div class="stackedBox" v-if="isStatus()">
               {{ status.percent_stacked }}%
               <div class="progress" style="width: 90%;margin-left:5%;">
@@ -313,7 +313,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
 
-            <div class="col-md-3 text-right">
+            <div class="col-md-3 text-right" v-if="!isMobile">
               <a  href="#" class="mb-2" @click="voteUs">
                 <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
                 <img src="images/vote-us.jpg"/>
@@ -326,8 +326,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <a href="#" data-toggle="modal"
-           data-target="#modalProducerList" class="infoHelp" ><i class="ft-info"></i></a>
+        <!-- <a href="#" data-toggle="modal"
+           data-target="#modalProducerList" class="infoHelp" ><i class="ft-info"></i></a> -->
         <div class="card-content collapse show">
           <div class="card-body card-dashboard" style="padding-top:0;">
               <div v-if="isMobile" class="producers-list" v-loading.fullscreen.lock="loading">
@@ -382,7 +382,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 <th>Votes</th>
                 <th>Voters</th>
                 <th>Daily Reward</th>
-                <th>Last 48h</th>
+                <th>Votes Change(48h)</th>
                 <th>Location</th>
                 <th>www</th>
                 <th></th>
@@ -472,7 +472,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
           </div>
-          <div class="col-md-2 text-center">
+          <div class="col-md-2 text-center" v-if="!isMobile">
 
             <div class="stackedBox" v-if="isStatus()">
 
@@ -485,7 +485,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-3 text-right">
+          <div class="col-md-3 text-right" v-if="!isMobile">
             
             <a  href="#" class="mb-2" @click="voteUs">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
@@ -668,7 +668,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
           </div>
-          <div class="col-md-2 text-center">
+          <div class="col-md-2 text-center" v-if="!isMobile">
 
             <div class="stackedBox" v-if="isStatus()">
 
@@ -681,7 +681,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-3 text-right">
+          <div class="col-md-3 text-right" v-if="!isMobile">
             <a  href="#" class="mb-2" @click="voteUs">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div>
                -->

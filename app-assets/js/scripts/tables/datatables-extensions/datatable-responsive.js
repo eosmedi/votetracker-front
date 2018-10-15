@@ -13,23 +13,23 @@ $(document).ready(function() {
 });
 
 function reloadTables(){
-    return;
 
-    /***********************************
-     *       Configuration option       *
-     ***********************************/
-
-    $('.dataex-res-configuration').DataTable({
-        responsive: true
+    $('.dataex-res-constructor').DataTable({
+        "destroy": true,
+        searching: false,
+        responsive: true,
+        paging: false
     });
 
+
+    console.log('reloadTables');
     /********************************
      *       `new` constructor       *
      ********************************/
-    var tableConstructor = $('.dataex-res-constructor').DataTable({
-        "paging": false
-    });
+    // var tableConstructor = $('.dataex-res-constructor').DataTable({
+    //     "paging": false
+    // });
 
-    new $.fn.dataTable.Responsive(tableConstructor);
+    // new $.fn.dataTable.Responsive(tableConstructor);
 
 }
