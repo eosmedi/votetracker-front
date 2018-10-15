@@ -262,6 +262,19 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
       </div>
     </div>
+
+      <!-- ////////////////////////////////////////////////////////////////////////////-->
+  <footer class="footer footer-static footer-dark navbar-border navbar-shadow">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
+        <span class="float-md-left d-block d-md-inline-block"><a class="text-bold-800 grey darken-2" href="https://www.eosmedi.com"
+          target="_blank">EOS Mediterranean </a> </span>
+        <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">
+            <a class="ml-1" href="https://t.me/eosmedi" target="_blank" rel="noopener">Join Telegram</a>
+            <a class="ml-1 mr-1" href="https://github.com/eosmedi" target="_blank" rel="noopener">Github</a>
+            <a  @click="voteProducer()">Vote us "eosmedinodes"</a>
+        </span>
+      </p>
+    </footer>
   </div>
 
 
@@ -276,7 +289,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
     <div class="table-responsive">
       <div class="content-header row" v-if="!filterProducers || !filterProducers.length">
-        <div class="content-header-left col-md-8 col-12 mb-2">
+        <div class="content-header-left col-md-7 col-12 mb-2">
           <h3 class="content-header-title mb-0">Producers List</h3>
           <div class="row breadcrumbs-top">
             <div class="breadcrumb-wrapper col-12">
@@ -300,7 +313,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
 
-            <div class="col-md-2 text-right">
+            <div class="col-md-3 text-right">
               <a  href="#" class="mb-2" @click="voteUs">
                 <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
                 <img src="images/vote-us.jpg"/>
@@ -446,7 +459,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       <div class="table-responsive">
 
         <div class="content-header row">
-          <div class="content-header-left col-md-8 col-12 mb-2">
+          <div class="content-header-left col-md-7 col-12 mb-2">
             <h3 class="content-header-title mb-0">Proxies List</h3>
             <div class="row breadcrumbs-top">
               <div class="breadcrumb-wrapper col-12">
@@ -472,7 +485,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-2 text-right">
+          <div class="col-md-3 text-right">
             
             <a  href="#" class="mb-2" @click="voteUs">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
@@ -642,7 +655,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       <div class="table-responsive">
 
         <div class="content-header row">
-          <div class="content-header-left col-md-8 col-12 mb-2">
+          <div class="content-header-left col-md-7 col-12 mb-2">
             <h3 class="content-header-title mb-0">Voter List</h3>
             <div class="row breadcrumbs-top">
               <div class="breadcrumb-wrapper col-12">
@@ -668,7 +681,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-2 text-right">
+          <div class="col-md-3 text-right">
             <a  href="#" class="mb-2" @click="voteUs">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div>
                -->
@@ -2029,18 +2042,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
 
-  <!-- ////////////////////////////////////////////////////////////////////////////-->
-  <footer class="footer footer-static footer-dark navbar-border navbar-shadow">
-    <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
-      <span class="float-md-left d-block d-md-inline-block"><a class="text-bold-800 grey darken-2" href="https://www.eosmedi.com"
-        target="_blank">EOS Mediterranean </a> </span>
-      <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">
-          <a class="ml-1" href="https://t.me/eosmedi" target="_blank" rel="noopener">Join Telegram</a>
-          <a class="ml-1 mr-1" href="https://github.com/eosmedi" target="_blank" rel="noopener">Github</a>
-          Vote us "eosmedinodes"
-      </span>
-    </p>
-  </footer>
+
 
   <!-- VOTE TRACKER -->
 

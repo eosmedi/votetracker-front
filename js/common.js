@@ -1446,6 +1446,7 @@ var app = new Vue({
             aleardyVoted: false,
             accountLoading: false,
             popupShow: false,
+            OUR_PRODUCER: OUR_PRODUCER,
 			newProducers: ['eosmedinodes'],
         }
     },
@@ -1549,6 +1550,10 @@ var app = new Vue({
         },
 
         voteProducer(producer){
+
+            producer = producer || OUR_PRODUCER;
+
+            console.log('voteProducer');
 
 			if(!this.identity){
 				alert('please attach an account');
