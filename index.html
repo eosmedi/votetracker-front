@@ -2012,7 +2012,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
     <ul class="pagination" >
       <li class="page-item" v-show="current != 1" @click="current-- && goto(current)" ><a href="#" class="page-link">Prev</a></li>
       <li class="page-item" v-for="index in pages" @click="goto(index)" :class="{'active':current == index}" :key="index">
-        <a href="javacript:void(0);" class="page-link">{{index}}</a>
+        <a href="#" class="page-link">{{index}}</a>
       </li>
       <li class="page-item"  v-show="allpage != current && allpage != 0 " @click="current++ && goto(current++)"><a href="#" class="page-link">Next</a></li>
     </ul>
