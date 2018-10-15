@@ -1349,7 +1349,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       <div id="LogFilterDiv" v-if="!voter.voter_info.is_proxy">
                           <div id="right-meta">
       
-                              <div :style="'max-height:'+(leftHeight+23)+'px;overflow-y:auto;'">
+                              <div :style="'max-height:'+(leftHeight+23)+'px;'">
                                 <div v-for="(voteAction, index) in voter.actions" class="vote-log" >
       
                                   <div :id="'accordionVWrap'+voteAction.block_num" role="tablist" aria-multiselectable="true" >
@@ -1362,12 +1362,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       
                                         </div>
                                         <div class="w_infoAction">
-                                          <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="false"
+                                          <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="true"
                                              aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
       
                                         </div>
                                       </div>
-                                      <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse"
+                                      <div :id="'accordion'+voteAction.block_num" role="tabpanel" aria-labelledby="heading" class="card-collapse collapse show"
                                            aria-expanded="true">
                                         <div class="card-content">
                                           <div class="card-body" >
