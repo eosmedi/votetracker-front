@@ -788,9 +788,14 @@
         }
 
         e.stopPropagation();
-        setTimeout(function(){
-          $.app.menu.hide();
-        }, 800);
+
+        var currentBreakpoint = Unison.fetch.now();
+
+        if(currentBreakpoint.name == "xs"){
+          setTimeout(function(){
+            $.app.menu.hide();
+          }, 800);
+        }
       });
 
       
