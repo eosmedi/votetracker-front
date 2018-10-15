@@ -935,10 +935,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                               <div :id="'accordionWrap'+voteLog.block_num" role="tablist" aria-multiselectable="true" >
                                 <div class="card collapse-icon accordion-icon-rotate mb-1">
                                   <div :id="'heading'+voteLog.block_num" class="card-header card-header-fix">
-                                    <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteLog.block_num" aria-expanded="false"
+                                    <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteLog.block_num" aria-expanded="true"
                                        aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteLog.block_num }} <span class="SubHeadVoteLog">{{ voteLog.timeFormatted }}</span></a>
                                   </div>
-                                  <div :id="'accordion'+voteLog.block_num" role="tabpanel" aria-labelledby="heading51" class="card-collapse collapse"
+                                  <div :id="'accordion'+voteLog.block_num" role="tabpanel" aria-labelledby="heading51" class="card-collapse collapse show"
                                        aria-expanded="true">
                                     <div class="card-content">
                                       <div class="card-body" >
