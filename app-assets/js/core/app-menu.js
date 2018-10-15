@@ -762,6 +762,8 @@
         e.stopPropagation();
       }).on('click.app.menu', 'li', function(e) {
         var $listItem = $(this);
+
+        console.log('click')
         if($listItem.is('.disabled')){
           e.preventDefault();
         }
@@ -786,7 +788,12 @@
         }
 
         e.stopPropagation();
+        setTimeout(function(){
+          $.app.menu.hide();
+        }, 800);
       });
+
+      
 
 
       $('.navbar-header, .main-menu').on('mouseenter',modernMenuExpand).on('mouseleave',modernMenuCollapse);
