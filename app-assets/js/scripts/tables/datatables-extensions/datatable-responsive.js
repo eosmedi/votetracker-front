@@ -14,12 +14,25 @@ $(document).ready(function() {
 
 function reloadTables(){
 
-    $('.dataex-res-constructor').DataTable({
-        "destroy": true,
-        searching: false,
-        responsive: true,
-        paging: false
-    });
+    if( $('.dataex-res-constructor').hasClass('dataTable')){
+    //     var dttable = $('.dataex-res-constructor').dataTable();
+    //     if(dttable){
+    //         dttable.fnClearTable(); //清空一下table
+    // 　　    dttable.fnDestroy(); //还原初始化了的datatable
+    //     }
+
+    }else{
+        $('.dataex-res-constructor').DataTable({
+            "destroy": true,
+            searching: false,
+            responsive: true,
+            paging: false
+        });
+    
+    }
+
+
+    
 
 
     console.log('reloadTables');
