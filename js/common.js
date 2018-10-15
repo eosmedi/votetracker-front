@@ -1468,6 +1468,13 @@ var app = new Vue({
             self.identity = window.scatter.identity;
         })
 
+        window.scatter.connect('VoteTracker').then(function(connected){
+            if(connected){
+                self.scatter = window.scatter;
+                self.identity = window.scatter.identity;
+            }
+        });
+
         console.log(this.$route)
     },
 
@@ -1581,21 +1588,25 @@ var app = new Vue({
         connectScatter: function(){
             var self = this;
             console.log("connectScatter");
-            this.scatter.getIdentity({
-                accounts:[
-                    {
-                        chainId: network.chainId,
-                        blockchain: network.blockchain
-                    }
-                ]
-            }).then(function(){
-                console.log('Attach Identity');
-                console.log(self.scatter.identity);
-                self.identity = window.scatter.identity;
-                // this.setState({identity: window.scatter.identity});
-            }).catch(function(error){
-                console.error(error);
-            });
+
+
+            
+                self.scatter.getIdentity({
+                    accounts:[
+                        {
+                            chainId: network.chainId,
+                            blockchain: network.blockchain
+                        }
+                    ]
+                }).then(function(){
+                    console.log('Attach Identity');
+                    console.log(self.scatter.identity);
+                    self.identity = window.scatter.identity;
+                    // this.setState({identity: window.scatter.identity});
+                }).catch(function(error){
+                    console.error(error);
+                });
+            // })
         },
 
         signOut: function(){

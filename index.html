@@ -186,10 +186,13 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
             <ul class="nav navbar-nav float-right">
               <li class="dropdown dropdown-notification nav-item">
-                  <button type="button" class="btn el-button--default" style="
+              
+                  <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link"><span style="color: red;">Telegram Bot</span></a>                
+                  <button type="button" class="btn el-button--default" @click="connectScatter()"
+                  style="
                   line-height: 0px;
               ">
-                      <span class="el-dropdown-link" @click="connectScatter()">
+                      <span class="el-dropdown-link" >
                               <span v-if="scatter && !identity">Attach an Account</span>
                               <span v-if="scatter && identity" >{{ identity.name }}</span>
                               <span v-if="!scatter"><a href="https://get-scatter.com/" target="_blank">Please install Scatter</a></span>
