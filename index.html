@@ -187,7 +187,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             <ul class="nav navbar-nav float-right">
               <li class="dropdown dropdown-notification nav-item">
               
-                  <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link"><span style="color: red;">Telegram Bot</span></a>                
+                  <!-- <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link"><span style="color: red;">Telegram Bot</span></a>                 -->
                   <button type="button" class="btn el-button--default" @click="connectScatter()"
                   style="
                   line-height: 0px;
@@ -302,7 +302,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
         </div>
-        <div class="col-md-2 text-center" v-if="!isMobile"> 
+        <div class="col-md-2 text-center" v-if="0"> 
             <div class="stackedBox" v-if="isStatus()">
               {{ status.percent_stacked }}%
               <div class="progress" style="width: 90%;margin-left:5%;">
@@ -326,6 +326,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 <div class="row">
     <div class="col-md-12">
       <div class="card">
+        <div class="card-header"></div>
         <!-- <a href="#" data-toggle="modal"
            data-target="#modalProducerList" class="infoHelp" ><i class="ft-info"></i></a> -->
         <div class="card-content collapse show">
@@ -379,7 +380,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                 <th>#</th>
                 <th width="20%">Producer</th>
-                <th>Votes</th>
+                <th align="right">Votes %</th>
+                <th align="right">Votes</th>
                 <th>Voters</th>
                 <th>Daily Reward</th>
                 <th>Votes Change(48h)</th>
@@ -394,10 +396,20 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 <td width="20" align="right">{{ producer.index }}
                 </td>
                 <td class="tdProducer">
-                  <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}"> <span class="imgProducer"><img :src="producer.branding.logo_256 ? producer.branding.logo_256 : producer.branding.logo_1024" v-if="producer.branding && (producer.branding.logo_256 || producer.branding.logo_1024)" height="25"
+                  <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}"> 
+                    
+                    <span class="imgProducer">
+                      <img :src="producer.branding.logo_256 ? producer.branding.logo_256 : producer.branding.logo_1024" v-if="producer.branding && (producer.branding.logo_256 || producer.branding.logo_1024)" height="50"
                                                                                                            onerror="this.src='https://votetracker.eosmedi.com/image-o.png'"></span> {{ producer.owner }} </router-link>
                 </td>
-                <td align="right">{{ numberWithCommas((producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }} ({{ (parseInt(producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%)</td>
+
+                <td align="right">
+                  {{ (parseInt(producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%
+                </td>
+
+                <td align="right">
+                  {{ numberWithCommas((producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }} 
+                </td>
                 <!-- <td>{{ cacluteReawrdcacluteReawrd(index, producer, chainState, t) }} EOS</td> -->
                 <td align="right">
                   <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}">{{ producer.voters }}</router-link>
@@ -472,7 +484,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
           </div>
-          <div class="col-md-2 text-center" v-if="!isMobile">
+          <div class="col-md-2 text-center" v-if="0">
 
             <div class="stackedBox" v-if="isStatus()">
 
@@ -601,7 +613,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   </td>
                   <td class="tdProxy">
                   <span class="proxy-logo-block imgProxy">
-                                            <img :src="proxy.info.logo" v-if="proxy.info && proxy.info.logo" height="25"
+                                            <img :src="proxy.info.logo" v-if="proxy.info && proxy.info.logo" height="50"
                                                  onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
                                             <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!proxy.info" height="25">
                                         </span>
@@ -668,7 +680,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               </div>
             </div>
           </div>
-          <div class="col-md-2 text-center" v-if="!isMobile">
+          <div class="col-md-2 text-center" v-if="0">
 
             <div class="stackedBox" v-if="isStatus()">
 
@@ -695,12 +707,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
         <div class="card">
           <div class="card-header">
-            <div class="heading-elements">
+            <!-- <div class="heading-elements">
               <ul class="list-inline mb-0">
                 <li><a ><i class="ft-info"></i></a></li>
                 <li><a data-action="expand"><i class="ft-maximize"></i></a></li>
               </ul>
-            </div>
+            </div> -->
           </div>
           <div class="card-content collapse show">
             <div class="card-body card-dashboard" style="padding-top:0;">
@@ -843,7 +855,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                             </li>
                             <li class="nav-item">
                               <a class="nav-link " id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
-                                 aria-expanded="false">Voters actions</a>
+                                 aria-expanded="false">Votes Change(48h)</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link " id="base-tab31" data-toggle="tab" aria-controls="tab31"

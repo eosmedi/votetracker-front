@@ -352,10 +352,18 @@ margin-bottom:2px;
 }
 
 .imgProducer, .imgProxy{
-    width:25px;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    vertical-align: middle;
+    margin-right: 10px;
+    background: #fefefe;
+    /* width: 50px;
     overflow:hidden;
-    position:absolute;
-    margin-left:-29px !important;
+    margin-right: 10px; */
+    /* position:absolute;
+    margin-left:-29px !important; */
 }
 
 .tdProducer, .tdProxy{
@@ -730,4 +738,8 @@ hr.center{
     height: 500px;
     overflow-y: auto;
         width: 100%;
+}
+
+div.dataTables_wrapper{
+    /* margin-top: 1.5rem */
 }
