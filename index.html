@@ -938,7 +938,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         </h3>
                         <h4 style="color:#999" v-if="logFilters.producer"><strong>{{ logFilters.producer }}</strong> <span v-if="logFilters.voter">of : {{ logFilters.voter }}</span> (realtime)</h4>
 
-                        <div style=" isMobile ? 'max-height:400px;overflow: hidden;' : 'max-height:400px;overflow-y:auto;'" id="basic-accordion-drag">
+                        <div style=" isMobile ? 'max-height:400px;overflow: hidden;' : 'max-height:400px;'" id="basic-accordion-drag">
                           <div v-for="voteLog in voteLogs" class="vote-log" v-if="filterLog(voteLog)">
 
                               <div :id="'accordionWrap'+voteLog.block_num" role="tablist" aria-multiselectable="true" >
