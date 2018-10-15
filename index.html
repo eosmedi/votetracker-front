@@ -837,22 +837,22 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         <div class="col-xl-9">
 
                           <ul class="nav nav-tabs nav-underline no-hover-bg">
-                            
                             <li class="nav-item">
-                              <a class="nav-link active" id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
+                              <a class="nav-link active" id="base-tab33" data-toggle="tab" aria-controls="tab33" href="#tab33"
+                                 aria-expanded="false">Voters</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link " id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
                                  aria-expanded="false">Voters actions</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link " id="base-tab31" data-toggle="tab" aria-controls="tab31"
                                    href="#tab31" aria-expanded="true">Node List</a>
                               </li>
-                            <li class="nav-item">
-                              <a class="nav-link" id="base-tab33" data-toggle="tab" aria-controls="tab33" href="#tab33"
-                                 aria-expanded="false">Voters</a>
-                            </li>
+                         
                           </ul>
                           <div class="tab-content px-1 pt-1">
-                              <div class="tab-pane active" id="tab32" aria-labelledby="base-tab32" v-if="producer.producer">
+                              <div class="tab-pane " id="tab32" aria-labelledby="base-tab32" v-if="producer.producer">
                                   <div class="row">
                                     <div class="col-md-6">
                                       <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
@@ -880,7 +880,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                          
 
-                            <div class="tab-pane" id="tab33" aria-labelledby="base-tab33" >
+                            <div class="tab-pane active" id="tab33" aria-labelledby="base-tab33" >
 
                               <div class="table-responsive">
                                   <table class="table table-striped table-bordered dataex-res-constructor">
@@ -897,10 +897,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <td align="right"> {{ numberWithCommas((voters.voter_info.staked / 10000 ).toFixed(0)) }} EOS </td>
                                       <td align="right"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.voter_info.producers.length }}</router-link> </td>
                                      </tr>
-
                                     </tbody>
                                   </table>
-
                                   <page :current="currentPage" :allpage="totalPage" ref="page"></page>
                               </div>
 
@@ -921,7 +919,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
               <div class="card-content collapse show">
                 <div class="card-body card-dashboard" style="padding-top:0;">
-
                   <div id="LogFilterDiv" class="col-md-12" v-if="isLogFilter()">
                     <div id="right-meta" style="    margin-top: 25px;">
                       <div id="vote-logs">
@@ -929,7 +926,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         </h3>
                         <h4 style="color:#999" v-if="logFilters.producer"><strong>{{ logFilters.producer }}</strong> <span v-if="logFilters.voter">of : {{ logFilters.voter }}</span> (realtime)</h4>
 
-                        <div style="max-height:400px;overflow-y:auto;" id="basic-accordion-drag">
+                        <div style=" isMobile ? 'max-height:400px;overflow: hidden;' : 'max-height:400px;overflow-y:auto;'" id="basic-accordion-drag">
                           <div v-for="voteLog in voteLogs" class="vote-log" v-if="filterLog(voteLog)">
 
                               <div :id="'accordionWrap'+voteLog.block_num" role="tablist" aria-multiselectable="true" >
@@ -2017,7 +2014,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
   </script>
 
   <script type="text/x-template" id="pie">
-    <div ref="chart" style=" width:400px;height: 300px; position: relative;">
+    <div ref="chart" :style="'width:'+(isMobile ? '100%': '400px' )+';height: 300px; position: relative;'">
     </div>
   </script>
 

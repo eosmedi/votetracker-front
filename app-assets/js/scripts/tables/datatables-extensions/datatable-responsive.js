@@ -9,7 +9,7 @@
 ==========================================================================================*/
 
 $(document).ready(function() {
-   reloadTables();
+//    reloadTables();
 });
 
 function reloadTables(){

@@ -646,9 +646,7 @@ var ProducerDetail = {
                 self.loading = false;
                 try{
                     self.calcutePieData();
-                }catch(e){
-
-                }
+                }catch(e){}
 
                 Vue.nextTick(function () {
                     /* EC */
