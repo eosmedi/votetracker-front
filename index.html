@@ -359,9 +359,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                       </span></p>
                                       <p>Location: 
-                                        <img :src="getImgUrl(row.org_location.country.toLowerCase())" width="25" v-if="row.org_location && row.org_location.country">
+                                          <span v-if="row.org_location" :class="'flag normal flag-'+row.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
                                         <span v-if="row.org_location">{{ row.org_location.name }}</span>
-                                      <span v-if="!row.org_location && row.location">{{ countryCode[row.location] }}</span></p>
+                                      <span v-if="!row.org_location && row.location">{{ countryCodeISO[row.org_location.country] }}</span></p>
                                       <!-- <p><el-tag
                                           :type="tag === 'Exchange' ? 'primary' : tag === 'Mining pools' ? 'success' : 'info'"
                                           disable-transitions v-if="row.tags.length" v-for="tag in row.tags">{{ tag }}</el-tag></p>  -->
@@ -419,10 +419,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                 <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                             </span></td>
                 <td >
-                  <div style="">
+                  <div style=" white-space: nowrap;">
                     <!-- <img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"> -->
                     <span v-if="producer.org_location" :class="'flag normal flag-'+producer.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
-                    <span v-if="producer.org_location">{{ producer.org_location.name }}</span>
+                    <span v-if="producer.org_location">{{ countryCodeISO[producer.org_location.country] }}</span>
                
                   </div>    
                 </td>
