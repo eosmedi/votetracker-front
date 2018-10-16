@@ -166,7 +166,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <!--<img class="brand-logo" alt="modern admin logo" src="app-assets/images/logo/logo.png">-->
                   <div class="w_logo"><img class="brand-logo" src="images/logo.png" width="100" /></div>
                   <div class="w_txtlogo">
-                    <div><h3 class="brand-text">EOS Voter Tracker</h3></div>
+                    <div><h3 class="brand-text">EOS Vote Tracker</h3></div>
                     <div><span class="brand-text-sub">EOS Mediterranean</span></div>
                   </div>
                 </a>
@@ -828,7 +828,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                     <p style="margin-bottom:0.5rem;"><strong>Producer:</strong>  <span class="item-value">{{ producer.producer.owner }}</span></p>
                                     <p style="margin-bottom:0.5rem;"><strong>URL:</strong>  <span class="item-value">{{ producer.producer.url }}</span>
                                     </p>
-                                    <p style="margin-bottom:0.5rem;"><strong>E-mail :</strong> <span class="item-value">{{ producer.bpinfo.org.email }}</span></p>
+                                    <p style="margin-bottom:0.5rem;" v-if="producer.bpinfo && producer.bpinfo.org"><strong>E-mail :</strong> <span class="item-value">{{ producer.bpinfo.org.email }}</span></p>
                                     <p style="margin-bottom:0.5rem;"><strong>Total Votes %:</strong>  <span class="item-value">{{ (parseInt(producer.producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%</span></p>
                                     <p style="margin-bottom:0.5rem;"><strong>Votes:</strong>  <span class="item-value">{{ numberWithCommas((producer.producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}</span></p>
                                     <p style="margin-bottom:0.5rem;"><strong>Voters:</strong>  <span class="item-value">{{ producer.producer.voters }}</span></p>
@@ -1219,7 +1219,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           </div>
                                           <div class="w_infoAction">
                                             <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="true"
-                                               aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
+                                               aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span> 
+                                                <span v-if="!voteAction.timestamp">
+                                                  {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
         
                                           </div>
                                         </div>
