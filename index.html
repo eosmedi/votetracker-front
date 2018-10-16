@@ -869,10 +869,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           <div class="tab-content px-1 pt-1">
                               <div class="tab-pane " id="tab32" aria-labelledby="base-tab32" v-if="producer.producer">
                                   <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-sm">
                                       <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-sm">
                                       <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
                                     </div>
                                   </div>
@@ -1151,10 +1151,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                     <div class="tab-pane  px-1 pt-1" id="tab43" aria-labelledby="base-tab43" v-if="addChart || removeChart " >
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-sm">
                           <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-sm">
                           <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
                         </div>
                       </div>
