@@ -361,7 +361,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <p>Location: 
                                           <span v-if="row.org_location" :class="'flag normal flag-'+row.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
                                         <span v-if="row.org_location">{{ row.org_location.name }}</span>
-                                      <span v-if="!row.org_location && row.location">{{ countryCodeISO[row.org_location.country] }}</span></p>
+                                      <span v-if="row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
+                                    
+                                    </p>
                                       <!-- <p><el-tag
                                           :type="tag === 'Exchange' ? 'primary' : tag === 'Mining pools' ? 'success' : 'info'"
                                           disable-transitions v-if="row.tags.length" v-for="tag in row.tags">{{ tag }}</el-tag></p>  -->
