@@ -24,15 +24,13 @@ function reloadTables(){
     }else{
         $('.dataex-res-constructor').DataTable({
             "destroy": true,
+            ordering: false,
             searching: false,
             responsive: true,
             paging: false
         });
     
     }
-
-
-    
 
 
     console.log('reloadTables');
