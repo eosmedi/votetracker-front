@@ -361,7 +361,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <p>Location: 
                                           <span v-if="row.org_location" :class="'flag normal flag-'+row.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
                                         <span v-if="row.org_location">{{ row.org_location.name }}</span>
-                                      <span v-if="row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
+                                      <span v-if=" row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
                                     
                                     </p>
                                       <!-- <p><el-tag
@@ -2088,21 +2088,15 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
   <script src="app-assets/js/scripts/modal/components-modal.js" type="text/javascript"></script>
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119761410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119761410-1"></script>
-
-
-
-
-
-
-  <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-119761410-1');
-  </script>
+  gtag('config', 'UA-119761410-2');
+</script>
 
 </body>
 </html>
