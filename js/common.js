@@ -613,6 +613,11 @@ var ProducerDetail = {
         }
     },
     methods: {
+
+        openChartTab: function(){
+            console.log('openChartTab');
+        },
+        
         /* EC */
         isLogFilter: function(){
           this.logFilters = this.$parent.logFilters;
@@ -850,6 +855,10 @@ var VoterDetail = {
     },
 
     methods: {
+
+        openChartTab: function(){
+            console.log('openChartTab');
+        },
         isStatus: function(){
             this.status = this.$parent.status;
             if(this.status != null){

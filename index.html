@@ -859,7 +859,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                  aria-expanded="false">Voters</a>
                             </li>
                             <li class="nav-item">
-                              <a class="nav-link " id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
+                              <a class="nav-link "  @click="openChartTab" id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
                                  aria-expanded="false">Votes Change(48h)</a>
                             </li>
                             <li class="nav-item">
@@ -1090,8 +1090,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                          aria-expanded="false" :class="{ active : !voter.info}">Meta</a>
                     </li>
                     <li class="nav-item"  v-if="voter.voter_info.is_proxy">
-                      <a class="nav-link" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
-                         aria-expanded="false">Last 48h</a>
+                      <a class="nav-link" @click="openChartTab" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
+                         aria-expanded="false">Votes Change(48h)</a>
                     </li>
 
                     <li class="nav-item"  v-if="voter.voter_info.is_proxy">
@@ -2033,7 +2033,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
   </script>
 
   <script type="text/x-template" id="pie">
-    <div ref="chart" :style="'width:'+(isMobile ? '100%': '400px' )+';height: 300px; position: relative;'">
+    <div ref="chart" :style="'width:'+(isMobile ? (window.innerWidth - 74)+'px;height: '+ ((window.innerWidth - 74) * 0.77)+'px;': '400px;height: 300px;' )+' position: relative;'">
     </div>
   </script>
 
