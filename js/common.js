@@ -905,8 +905,26 @@ var VoterDetail = {
                     }
                 }
 
+
+                if(self.voter.all_proxy_voters){
+                    self.voter.all_proxy_voters.sort(function(i1,i2){
+                        var value2 = parseInt(i1.staked);
+                        var value1 =  parseInt(i2.staked);
+                        if (value1 < value2) {
+                            return -1;
+                        } else if (value1 > value2) {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    });
+                }
+
                 if(self.voter.voter_info.is_proxy){
                     self.loadChat();
+
+
+                    
                 }
 
                 setTimeout(function(){
