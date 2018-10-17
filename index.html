@@ -1195,7 +1195,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         </div>
                         </div>
 
-                        <p>only provide the latest 10 stake/unstake logs</p>
+                        <p>only provides the latest 10 stake/unstake logs</p>
                         </div>
                       </div>
                     </div>
@@ -1547,94 +1547,94 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </p>
 
                 <section id="accordion">
-                  <div class="row">
-                    <div class="col-12 mb-1 mt-1">
-                      <span class="font-weight-bold foundStyle">{{ total }} matches has been found</span>
-                      <!-- <span class="SubHeadVoteLog">Fri, 4 September, 2018 7:00 PM</span> -->
+                    <div class="row">
+                      <div class="col-12 mb-1 mt-1">
+                        <span class="font-weight-bold foundStyle">{{ total }} matches has been found</span>
+                        <!-- <span class="SubHeadVoteLog">Fri, 4 September, 2018 7:00 PM</span> -->
+                      </div>
                     </div>
-                  </div>
-
-                  <div class="row match-height">
-
-                    <div class="col-lg-12 col-xl-12 mb-1" v-for="result in results">
-
-                    <div id="accordionWrap6" role="tablist" aria-multiselectable="true">
-
-                      <div class="collapse-icon accordion-icon-rotate">
-                        <div id="heading1" class="card-header card-header-fix borderdefaultHeader ">
-                          <a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion1" aria-expanded="true"
-                             aria-controls="accordion1" class="card-title lead default colortheme">
-
-
-                            <div>
-                              <span class="HeadVoteLog">#{{ result.block_num }}</span>
-
-                              <!-- <span class="detal-action minThumbs text-bold-500">(+12)</span>
-                              <span class="cancel-action minThumbs text-bold-500">(-15)</span> -->
-                              <span class="SubHeadVoteLogH">{{ result.timestamp | date }}</span>
-
-                            </div>
-
-                          </a>
-                        </div>
-                        <div id="accordion1" role="tabpanel" aria-labelledby="heading61" class="card-collapse collapse show borderdefault bg-white"
-                             aria-expanded="true">
-                          <div class="card-content">
-                            <div class="card-body">
-
-                              <div v-if="search_type != 'stake'">
-                                <a :href="'#/voter/'+result.voter"
-                                :class="{ highlight:  result.voter.indexOf(keyword) > -1 }"
-                                ><code>{{ result.voter }}</code></a>  <span v-if="result.producers.length"> →  </span>
-
-                                <span v-if="result.proxy" class="">
-                                  set proxy  →  
-                                <code :class="{ highlight:  result.proxy.indexOf(keyword) > -1 }">{{ result.proxy }}</code>
-                                </span>
-                                <!-- {{  result }} -->
-                                  <span class="el-tag el-tag--info " v-for="producer in result.producers"><a :href="'#/producer/'+producer" class="btn btn-sm w_voter addvoter" :class="{ highlight: producer.indexOf(keyword) > -1 }">  {{ producer }} </a><!----></span>
+  
+                    <div class="row match-height">
+  
+                      <div class="col-lg-12 col-xl-12 mb-1" v-for="result in results">
+  
+                      <div id="accordionWrap6" role="tablist" aria-multiselectable="true">
+  
+                        <div class="collapse-icon accordion-icon-rotate">
+                          <div id="heading1" class="card-header card-header-fix borderdefaultHeader ">
+                            <a data-toggle="collapse" data-parent="#accordionWrap1" :href="'#accordion'+result.block_num" aria-expanded="true"
+                               aria-controls="accordion1" class="card-title lead default colortheme">
+  
+  
+                              <div>
+                                <span class="HeadVoteLog">#{{ result.block_num }}</span>
+  
+                                <!-- <span class="detal-action minThumbs text-bold-500">(+12)</span>
+                                <span class="cancel-action minThumbs text-bold-500">(-15)</span> -->
+                                <span class="SubHeadVoteLogH">{{ result.timestamp | date }}</span>
+  
                               </div>
-
-                              <div v-if="search_type == 'stake'">
-                               <code :class="{ highlight: result.from.indexOf(keyword) > -1 }"> 
-                                 {{  result.from }}
-                               </code>
-                                → 
-                                <code :class="{ highlight: result.receiver.indexOf(keyword) > -1 }">{{ result.receiver }} </code>
-
-
-                                <span v-if="result.stake_cpu_quantity">stake</span>
-
-                                <span  class="ml-1" v-if="result.unstake_cpu_quantity">unstake</span>
-
-
-                                <span class="text-default text-semibold " v-if="result.stake_cpu_quantity">CPU: {{ result.stake_cpu_quantity
-                                  }}</span>
-
-                                  <span class="text-default text-semibold" v-if="result.stake_net_quantity">NET: {{ result.stake_net_quantity
+  
+                            </a>
+                          </div>
+                          <div :id="'accordion'+result.block_num" role="tabpanel" aria-labelledby="heading61" class="card-collapse collapse show borderdefault bg-white"
+                               aria-expanded="true">
+                            <div class="card-content">
+                              <div class="card-body">
+  
+                                <div v-if="search_type != 'stake'">
+                                  <a :href="'#/voter/'+result.voter"
+                                  :class="{ highlight:  result.voter.indexOf(keyword) > -1 }"
+                                  ><code>{{ result.voter }}</code></a>  <span v-if="result.producers.length"> →  </span>
+  
+                                  <span v-if="result.proxy" class="">
+                                    set proxy  →  
+                                  <code :class="{ highlight:  result.proxy.indexOf(keyword) > -1 }">{{ result.proxy }}</code>
+                                  </span>
+                                  <!-- {{  result }} -->
+                                    <span class="el-tag el-tag--info " v-for="producer in result.producers"><a :href="'#/producer/'+producer" class="btn btn-sm w_voter addvoter" :class="{ highlight: producer.indexOf(keyword) > -1 }">  {{ producer }} </a><!----></span>
+                                </div>
+  
+                                <div v-if="search_type == 'stake'">
+                                 <code :class="{ highlight: result.from.indexOf(keyword) > -1 }"> 
+                                   {{  result.from }}
+                                 </code>
+                                  → 
+                                  <code :class="{ highlight: result.receiver.indexOf(keyword) > -1 }">{{ result.receiver }} </code>
+  
+  
+                                  <span v-if="result.stake_cpu_quantity">stake</span>
+  
+                                  <span  class="ml-1" v-if="result.unstake_cpu_quantity">unstake</span>
+  
+  
+                                  <span class="text-default text-semibold " v-if="result.stake_cpu_quantity">CPU: {{ result.stake_cpu_quantity
                                     }}</span>
-
-                                    <span class="text-default text-semibold ml-1" v-if="result.unstake_cpu_quantity">CPU: {{ result.unstake_cpu_quantity
+  
+                                    <span class="text-default text-semibold" v-if="result.stake_net_quantity">NET: {{ result.stake_net_quantity
                                       }}</span>
-    
-                                      <span class="text-default text-semibold" v-if="result.unstake_net_quantity">NET: {{ result.unstake_net_quantity
+  
+                                      <span class="text-default text-semibold ml-1" v-if="result.unstake_cpu_quantity">CPU: {{ result.unstake_cpu_quantity
                                         }}</span>
+      
+                                        <span class="text-default text-semibold" v-if="result.unstake_net_quantity">NET: {{ result.unstake_net_quantity
+                                          }}</span>
+                                </div>
+  
+  
                               </div>
-
-
                             </div>
                           </div>
                         </div>
+  
                       </div>
-
+  
                     </div>
-
-                  </div>
-
-                
-
-                  </div>
-                </section>
+  
+                  
+  
+                    </div>
+                  </section>
 
                 <page :current="currentPage" :allpage="totalPage" ref="page"></page>
 
