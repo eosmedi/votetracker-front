@@ -42,7 +42,6 @@
   <!-- END Custom CSS-->
   <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-core.min.js"></script>
   <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-plugin-eosjs.min.js"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4.2.5/dist/es6-promise.auto.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.1/dist/vue-router.min.js"></script>
@@ -202,7 +201,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </span>
                       <i class="el-icon-arrow-down el-icon--right"></i>
                   </button>
-                  <button type="button" class="btn el-button--default" v-if="identity"><span @click="signOut()">Sign Out</span> </button>
+                  <button type="button" class="btn el-button--default" v-if="identity"  @click="signOut()"><span>Sign Out</span> </button>
               </li>
             </ul>
 

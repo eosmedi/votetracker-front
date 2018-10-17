@@ -1499,6 +1499,7 @@ var app = new Vue({
                 }
             }, false)
         }
+        ScatterJS.plugins( new ScatterEOS() );
 
         document.addEventListener('scatterLoaded', function(){
             console.log('scatterLoaded', ScatterJS.scatter.identity)
@@ -1510,6 +1511,7 @@ var app = new Vue({
             if(connected){
                 self.scatter = ScatterJS.scatter;
                 self.identity = ScatterJS.scatter.identity;
+                console.log('connected',  self.identity)
             }
         });
 
@@ -1630,9 +1632,6 @@ var app = new Vue({
         connectScatter: function(){
             var self = this;
             console.log("connectScatter");
-
-
-            
                 self.scatter.getIdentity({
                     accounts:[
                         {
@@ -1648,12 +1647,11 @@ var app = new Vue({
                 }).catch(function(error){
                     console.error(error);
                 });
-            // })
         },
 
         signOut: function(){
             var self = this;
-            console.log("connectScatter");
+            console.log("signOut");
             this.scatter.forgetIdentity().then(function() {
                 console.log('Detach Identity');
                 self.identity = ScatterJS.scatter.identity;
