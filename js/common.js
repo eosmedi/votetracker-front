@@ -1479,10 +1479,10 @@ var app = new Vue({
             self.identity = window.scatter.identity;
         })
 
-        window.scatter.connect('VoteTracker').then(function(connected){
+        ScatterJS.scatter.connect('VoteTracker').then(function(connected){
             if(connected){
-                self.scatter = window.scatter;
-                self.identity = window.scatter.identity;
+                self.scatter = ScatterJS.scatter;
+                self.identity = ScatterJS.scatter.identity;
             }
         });
 
