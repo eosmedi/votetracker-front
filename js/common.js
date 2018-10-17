@@ -331,6 +331,7 @@ var ProducersList = {
             producers: [],
             tableData: [],
             request: true,
+            toSmall: false,
             multipleSelection: [],
             t: 0,
             status: null
@@ -350,6 +351,8 @@ var ProducersList = {
         }, 80 * 1000);
 
         var self = this;
+
+        this.toSmall = window.innerWidth < 1200;
 
         if(this.$refs.page){
             this.$refs.page.$on("pageChange", function (data) {
