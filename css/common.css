@@ -367,7 +367,7 @@ margin-bottom:2px;
 }
 
 .tdProducer, .tdProxy{
-    padding-left:35px !important;
+    /* padding-left:35px !important; */
 }
 
 .content-wrapper table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, .content-wrapper table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
