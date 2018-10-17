@@ -457,7 +457,7 @@ var ProducersList = {
                 Vue.nextTick(function () {
                     /* EC */
                     if (typeof reloadTables === 'function'){
-                        reloadTables();
+                        // reloadTables();
                     }
                 })
                 // filterProducers && filterProducers.indexOf(voter.account_name) > -1
