@@ -1483,9 +1483,9 @@ var app = new Vue({
         }
 
         document.addEventListener('scatterLoaded', function(){
-            console.log('scatterLoaded', window.scatter.identity)
-            self.scatter = window.scatter;
-            self.identity = window.scatter.identity;
+            console.log('scatterLoaded', ScatterJS.scatter.identity)
+            self.scatter = ScatterJS.scatter;
+            self.identity = ScatterJS.scatter.identity;
         })
 
         ScatterJS.scatter.connect('VoteTracker').then(function(connected){
@@ -1513,7 +1513,7 @@ var app = new Vue({
                             self.identity.name = x.name+"@"+x.authority;
                         }
                     })
-                    self.eosClient = window.scatter.eos(network, Eos, {
+                    self.eosClient = ScatterJS.scatter.eos(network, Eos, {
                         broadcast: true,
                         sign: true,
                         chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
@@ -1625,8 +1625,8 @@ var app = new Vue({
                 }).then(function(){
                     console.log('Attach Identity');
                     console.log(self.scatter.identity);
-                    self.identity = window.scatter.identity;
-                    // this.setState({identity: window.scatter.identity});
+                    self.identity = ScatterJS.scatter.identity;
+                    // this.setState({identity: ScatterJS.scatter.identity});
                 }).catch(function(error){
                     console.error(error);
                 });
@@ -1638,7 +1638,7 @@ var app = new Vue({
             console.log("connectScatter");
             this.scatter.forgetIdentity().then(function() {
                 console.log('Detach Identity');
-                self.identity = window.scatter.identity;
+                self.identity = ScatterJS.scatter.identity;
             }).catch(function(error){
                 console.error(error);
             });
