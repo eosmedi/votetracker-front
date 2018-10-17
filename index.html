@@ -384,7 +384,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                 <th>#</th>
                 <th width="20%">Producer</th>
-                <th align="right">Votes %</th>
+                <th align="right" title="Votes %">Votes %</th>
                 <th align="right">Votes</th>
                 <th>Voters</th>
                 <th>Daily Reward</th>
@@ -401,9 +401,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </td>
                 <td class="tdProducer">
                   <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}"> 
-                    
                     <span class="imgProducer">
-                      <img :src="producer.branding.logo_256 ? producer.branding.logo_256 : producer.branding.logo_1024" v-if="producer.branding && (producer.branding.logo_256 || producer.branding.logo_1024)" height="50"
+                      <img :src="producer.branding.logo_256 ? producer.branding.logo_256 : producer.branding.logo_1024" v-if="producer.branding && (producer.branding.logo_256 || producer.branding.logo_1024)" height="35"
                                                                                                            onerror="this.src='https://votetracker.eosmedi.com/image-o.png'"></span> {{ producer.owner }} </router-link>
                 </td>
 
@@ -423,12 +422,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                 <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                             </span></td>
                 <td >
-                  <div style=" white-space: nowrap;">
+     
                     <!-- <img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"> -->
                     <span v-if="producer.org_location" :class="'flag normal flag-'+producer.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
                     <span v-if="producer.org_location">{{ countryCodeISO[producer.org_location.country] }}</span>
-               
-                  </div>    
                 </td>
                 <td align="center" width="25"><a :href="producer.url" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td>
                 <td align="center" width="25"><button type="button" class="btn mr-1 mb-1 btn-secondary btn-sm" @click="voteProducer(producer)">Vote</button></td>
@@ -547,9 +544,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         <div class="media" >
                             <div class="mr-2">
                                 <span class="producer-logo-block" style="margin-right:0;margin-top:0px">
-                                    <img :src="row.info.logo" v-if="row.info && row.info.logo" height="50"
+                                    <img :src="row.info.logo" v-if="row.info && row.info.logo" height="35"
                                     onerror="this.src='https://votetracker.eosmedi.com/image-o.png'">
-                                    <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!row.info" height="50">
+                                    <img src="https://votetracker.eosmedi.com/image-o.png" v-if="!row.info" height="35">
                             
                             </span>
                             </div>

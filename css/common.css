@@ -353,8 +353,8 @@ margin-bottom:2px;
 
 .imgProducer, .imgProxy{
     display: inline-block;
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     overflow: hidden;
     vertical-align: middle;
     margin-right: 10px;
@@ -742,4 +742,12 @@ hr.center{
 
 div.dataTables_wrapper{
     /* margin-top: 1.5rem */
+}
+
+
+td, th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
