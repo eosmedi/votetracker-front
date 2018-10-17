@@ -722,7 +722,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 <tr>
 
                   <th width="25">#</th>
-                  <th>Voter Account</th>
+                  <th>Voter</th>
 
                   <th>Staked</th>
                   <th width="100">Voted Producers</th>
@@ -865,7 +865,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                               </li>
                          
                           </ul>
-                          <div class="tab-content px-1 pt-1">
+                          <div class="tab-content pt-1">
                               <div class="tab-pane " id="tab32" aria-labelledby="base-tab32" v-if="producer.producer">
                                   <div class="row">
                                     <div class="col-sm">
@@ -895,21 +895,22 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                          
 
                             <div class="tab-pane active" id="tab33" aria-labelledby="base-tab33" >
-
                               <div class="table-responsive">
                                   <table class="table table-striped table-bordered dataex-res-constructor">
                                     <thead>
                                     <tr>
-                                      <th width="45%">Voter Account</th>
+                                      <th width="45%">Voter</th>
                                       <th width="45%">Staked</th>
                                       <th width="5%">Voted Producers</th>
+                                      <th width="5%"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="(voters, index ) in producer.voters">
-                                      <td align="left"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.account_name }}</router-link> <span style="font-size:10px;color:#0F5039;font-weight: bold;" v-if="voters.voter_info && voters.voter_info.is_proxy">( Proxy )</span></td>
+                                      <td align="left"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.account_name }}</router-link> </td>
                                       <td align="right"> {{ numberWithCommas((voters.voter_info.staked / 10000 ).toFixed(0)) }} EOS </td>
                                       <td align="right"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.voter_info.producers.length }}</router-link> </td>
+                                      <td><span style="font-size:10px;color:#0F5039;font-weight: bold;" v-if="voters.voter_info && voters.voter_info.is_proxy">( Proxy )</span></td>
                                      </tr>
                                     </tbody>
                                   </table>
