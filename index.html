@@ -362,9 +362,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                       </span></p>
                                       <p>Location: 
-                                          <span v-if="row.org_location" :class="'flag normal flag-'+row.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
-                                        <span v-if="row.org_location">{{ row.org_location.name }}</span>
-                                      <span v-if=" row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
+                                          <span v-if="row.org_location" :class="'flag-icon flag-icon-'+row.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
+                                          <span v-if=" row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
                                     
                                     </p>
                                       <!-- <p><el-tag
@@ -425,7 +424,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 <td >
      
                     <!-- <img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"> -->
-                    <span v-if="producer.org_location" :class="'flag normal flag-'+producer.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
+                    <!-- <span v-if="producer.org_location" :class="'flag normal flag-'+producer.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
+                     -->
+                     <span v-if="producer.org_location" :class="'flag-icon flag-icon-'+producer.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
                     <span v-if="producer.org_location && !toSmall">{{ countryCodeISO[producer.org_location.country] }}</span>
                 </td>
                 <!-- <td align="center" width="25"><a :href="producer.url" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td> -->
@@ -950,7 +951,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                 <div class="card collapse-icon accordion-icon-rotate mb-1">
                                   <div :id="'heading'+voteLog.block_num" class="card-header card-header-fix">
                                     <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteLog.block_num" aria-expanded="true"
-                                       aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteLog.block_num }} <span class="SubHeadVoteLog">{{ voteLog.timeFormatted }}</span></a>
+                                       aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteLog.block_num }} <span class="SubHeadVoteLog" :title="voteLog.timestamp | date">{{ voteLog.timestamp | fromNow }}</span></a>
                                   </div>
                                   <div :id="'accordion'+voteLog.block_num" role="tabpanel" aria-labelledby="heading51" class="card-collapse collapse show"
                                        aria-expanded="true">
@@ -1178,7 +1179,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                           <div id="heading1" class="card-header card-header-fix borderdefaultHeader "><a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="card-title lead default colortheme"><div><span class="HeadVoteLog">#{{
                             log.block_num }}</span> 
-                            <span class="SubHeadVoteLogH">{{ log.timestamp | date }}</span></div></a></div>
+                            <span class="SubHeadVoteLogH" :title="log.timestamp | date">{{ log.timestamp | fromNow }}</span></div></a></div>
 
                           <div id="accordion1" role="tabpanel"
                           
@@ -1222,7 +1223,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           </div>
                                           <div class="w_infoAction">
                                             <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="true"
-                                               aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span> 
+                                               aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog":title="voteAction.timestamp | date">{{ voteAction.timestamp | fromNow }}</span> 
                                                 <span v-if="!voteAction.timestamp">
                                                   {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
         
@@ -1370,7 +1371,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                         </div>
                                         <div class="w_infoAction">
                                           <a data-toggle="collapse" data-parent="#accordionWrap5" class="font-small-3 green card-title lead " :href="'#accordion'+voteAction.block_num" aria-expanded="true"
-                                             aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog">{{ voteAction.timestamp | date }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
+                                             aria-controls="accordion51"><span class="HeadVoteLog">#{{ voteAction.block_num }} <span class="SubHeadVoteLog" :title="voteAction.timestamp | date">{{ voteAction.timestamp | fromNow }}</span>  <span v-if="!voteAction.timestamp">unknow(early logs we didn't store timestamp) {{ viewBlock(voteAction.block_num, voteAction, index) }}</span></a>
       
                                         </div>
                                       </div>
@@ -1573,7 +1574,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
   
                                 <!-- <span class="detal-action minThumbs text-bold-500">(+12)</span>
                                 <span class="cancel-action minThumbs text-bold-500">(-15)</span> -->
-                                <span class="SubHeadVoteLogH">{{ result.timestamp | date }}</span>
+                                <span class="SubHeadVoteLogH" :title="result.timestamp | date">{{ result.timestamp | fromNow }}</span>
   
                               </div>
   
