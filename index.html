@@ -1471,7 +1471,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 <div class="card-text">
                   <p>Search filter with different configurations. You cuould search for a range of blocks, dates, account, etc...</p>
                 </div>
-                <el-form class="form form-horizontal" :modle="form">
+                <form class="form form-horizontal" :modle="form" v-on:submit.prevent="search">
                   <div class="form-body">
                     <div class="form-group row">
                       <div class="col-md-3">
@@ -1517,11 +1517,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <div class="form-actions p-0 m-0 pt-1">
 
                    <label class="mr-1"> 
-                      <input type="radio" v-model="search_type" name="search_type" value="vote*"> Vote log
+                      <input type="radio" v-model="search_type" value="vote*"> Vote log
                   </label>
 
                    <label>  
-                     <input type="radio" v-model="search_type" name="search_type" value="stake"> Stake log
+                     <input type="radio" v-model="search_type" value="stake"> Stake log
                   </label>
 
                   <div class="pull-right">
@@ -1532,7 +1532,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   </div>
 
                   </div>
-                </el-form>
+                </form>
               </div>
             </div>
           </div>
@@ -1909,8 +1909,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
         <div class="card-content collpase show">
           <div class="card-body">
-
-
             <el-form ref="form" :model="form" label-width="80px" class="form form-horizontal striped-rows form-bordered">
               <div class="form-body">
                 <h4 class="form-section"><i class="ft-user"></i> Personal Info</h4>
