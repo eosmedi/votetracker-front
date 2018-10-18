@@ -1551,6 +1551,10 @@ var app = new Vue({
 
     methods: {
 
+        removeProducer(producer, index){
+			this.votedProducers.splice(index, 1)
+        },
+        
         popupVote(){
 
                 var identity = this.identity;

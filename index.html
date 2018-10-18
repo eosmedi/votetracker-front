@@ -100,17 +100,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
         <div class="modal-body">
           <div class="alert alert-info alert-styled-left text-blue-800 content-group" v-if="aleardyVoted || !votedProducers.length || votedProducers.length == 30">
                       <span v-if="votedProducers.length == 30">
-              you need delete one from you voted producers, click one to remove
+              you need delete one from your voted producers, click one to remove
             </span>
               <span v-if="!votedProducers.length">
                 you never voted
               </span>
 
               <span v-if="aleardyVoted">
-                thanks, you aleardy voted
+                thanks, you already voted
               </span>
-
-                </div>
+           </div>
 
           <h6 class="text-semibold">
             <i class="icon-law position-left"></i> 
@@ -118,21 +117,23 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           </h6>
           <p class="display-block">
             <span v-if="accountLoading">loading data...</span>
-          <span v-for="votedProducer in votedProducers">	
+            <div class="btn-group" v-for="(votedProducer, index) in votedProducers">
+                <button type="button" class="btn btn-secondary btn-labeled">{{ votedProducer }}  </button>
+                <button type="button" class="btn btn-danger"  @click="removeProducer(votedProducer, index)">X</button>
+            </div>
+          <span v-for="(votedProducer, index) in votedProducers" v-if="0">	
             <code @click="removeProducer(votedProducer, index)" title="click to remove">
               {{ votedProducer }}  
             </code>,
           </span>
           </p>
-
-          
           <hr>
           <h6 class="text-semibold">
             <i class="icon-law position-left"></i> 
             New Producers
           </h6>
           <p>
-              <code v-for="producer in newProducers">{{ producer }}</code>
+            <button type="button" class="btn btn-secondary btn-labeled" v-for="producer in newProducers">{{ producer }}  </button>
           </p>
         </div>
 
