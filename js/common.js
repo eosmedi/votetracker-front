@@ -260,7 +260,11 @@ Vue.component("pie", {
                 },
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} EOS ({d}%)"
+                    formatter: "{a} <br/>{b} : {c} EOS ({d}%)",
+                    position: function(point, params, dom, rect, size){
+                        // console.log(point, params, dom, rect, size);
+                        return [params[0]-220,'10%'];
+                    }
                 },
                 calculable : true,
                 series : [
@@ -930,9 +934,6 @@ var VoterDetail = {
 
                 if(self.voter.voter_info.is_proxy){
                     self.loadChat();
-
-
-                    
                 }
 
                 setTimeout(function(){

@@ -1090,12 +1090,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       <a class="nav-link" id="base-tab42" data-toggle="tab" aria-controls="tab42" href="#tab42"
                          aria-expanded="false" :class="{ active : !voter.info}">Meta</a>
                     </li>
-                    <li class="nav-item"  v-if="voter.voter_info.is_proxy">
+                    <li class="nav-item"  v-if="voter.voter_info && voter.voter_info.is_proxy" >
                       <a class="nav-link" @click="openChartTab" id="base-tab43" data-toggle="tab" aria-controls="tab43" href="#tab43"
                          aria-expanded="false">Votes Change(48h)</a>
                     </li>
 
-                    <li class="nav-item"  v-if="voter.voter_info.is_proxy">
+                    <li class="nav-item"  v-if="voter.voter_info && voter.voter_info.is_proxy">
                       <a class="nav-link" id="base-tab45" data-toggle="tab" aria-controls="tab45" href="#tab45"
                          aria-expanded="false">Stake Log</a>
                     </li>
@@ -1152,29 +1152,26 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </div>
                     </div>
 
-                    <div class="tab-pane  px-1 pt-1" id="tab43" aria-labelledby="base-tab43" v-if="addChart || removeChart " >
+                    <div class="tab-pane  px-1 pt-1" id="tab43" aria-labelledby="base-tab43">
                       <div class="row">
                         <div class="col-sm">
-                          <pie :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
+                          <pie v-if="removeChart" :data="removeChart.data" :name="removeChart.name" :subname="removeChart.subname"></pie>
                         </div>
                         <div class="col-sm">
-                          <pie :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
+                          <pie v-if="addChart" :data="addChart.data" :name="addChart.name" :subname="addChart.subname"></pie>
                         </div>
+                        
                       </div>
                       <p>added/removed votes(last 48h)</p>
-
-
+                    
                     </div>
 
-
-                    <div class="tab-pane  px-1 pt-1" id="tab45" aria-labelledby="base-tab45">
+                    <div class="tab-pane  px-1 pt-1" id="tab45" v-if="voter.voter_info && voter.voter_info.is_proxy" aria-labelledby="base-tab45">
                       <div class="row" >
 
                         <div id="voteStakeHistory">
                         <div class="col-lg-12 col-xl-12 mb-1"   v-for="log in voter.stakeLogs"> 
-
                             <div id="accordionWrap6" 
-                            
                             role="tablist" aria-multiselectable="true">
 
                           <div id="heading1" class="card-header card-header-fix borderdefaultHeader "><a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="card-title lead default colortheme"><div><span class="HeadVoteLog">#{{
