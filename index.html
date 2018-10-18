@@ -356,6 +356,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <p>Votes:  {{ numberWithCommas((row.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }} ({{ (parseInt(row.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%)</p>
 
                                       <p>Voters: <router-link :to="{ name: 'ProducerDetail', params: { producer: row.owner }}">{{ row.voters }}</router-link></p>
+                                      <p>Daily Reward: {{ row.rewards }} EOS</p>
                                       <p  v-if="row.votes_loss && row.votes_loss.diff">Votes Change(48h): <span>
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                       </span></p>
