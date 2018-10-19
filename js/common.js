@@ -726,8 +726,8 @@ var ProducerDetail = {
                 addMap[row.voter] = 1;
             })
 
-            removeChart.subname = "Total: "+numberWithCommas(removeChart.total.toFixed(0))+" EOS   Date Range: "+removeChart.first.format('YYYY-MM-DD') +" / "+removeChart.last.format('YYYY-MM-DD');
-            addChart.subname = "Total: "+numberWithCommas(addChart.total.toFixed(0))+" EOS   Date Range: "+addChart.first.format('YYYY-MM-DD') +" / "+addChart.last.format('YYYY-MM-DD');
+            if(removeChart.last) removeChart.subname = "Total: "+numberWithCommas(removeChart.total.toFixed(0))+" EOS   Date Range: "+removeChart.first.format('YYYY-MM-DD') +" / "+removeChart.last.format('YYYY-MM-DD');
+            if(addChart.last) addChart.subname = "Total: "+numberWithCommas(addChart.total.toFixed(0))+" EOS   Date Range: "+addChart.first.format('YYYY-MM-DD') +" / "+addChart.last.format('YYYY-MM-DD');
 
             this.removeChart = removeChart;
             this.addChart = addChart;
@@ -908,16 +908,13 @@ var VoterDetail = {
                 self.voter.stakeLogs = self.voter.stakeLogs.reverse();
 
                 self.loading = false;
-
                 if(self.voter.voter_info.is_proxy){
                     try{
                         self.calcutePieData();
                     }catch(e){
-    
+                        console.log('calcutePieData', e)
                     }
                 }
-
-
                 if(self.voter.all_proxy_voters){
                     self.voter.all_proxy_voters.sort(function(i1,i2){
                         var value2 = parseInt(i1.staked);
@@ -1122,11 +1119,13 @@ var VoterDetail = {
                 addMap[row.voter] = 1;
             })
 
-            removeChart.subname = "Total: "+numberWithCommas(removeChart.total.toFixed(0))+" EOS   Date Range: "+removeChart.first.format('YYYY-MM-DD') +" / "+removeChart.last.format('YYYY-MM-DD');
-            addChart.subname = "Total: "+numberWithCommas(addChart.total.toFixed(0))+" EOS   Date Range: "+addChart.first.format('YYYY-MM-DD') +" / "+addChart.last.format('YYYY-MM-DD');
+            if(removeChart.last) removeChart.subname = "Total: "+numberWithCommas(removeChart.total.toFixed(0))+" EOS   Date Range: "+removeChart.first.format('YYYY-MM-DD') +" / "+removeChart.last.format('YYYY-MM-DD');
+            if(addChart.last) addChart.subname = "Total: "+numberWithCommas(addChart.total.toFixed(0))+" EOS   Date Range: "+addChart.first.format('YYYY-MM-DD') +" / "+addChart.last.format('YYYY-MM-DD');
 
             this.removeChart = removeChart;
             this.addChart = addChart;
+
+            console.log( 'addChart', this.addChart );
         }
     }
 }
