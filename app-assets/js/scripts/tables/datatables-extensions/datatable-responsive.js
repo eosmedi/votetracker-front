@@ -26,10 +26,14 @@ function reloadTables(){
             "destroy": true,
             ordering: false,
             searching: false,
+            // responsive: true,
             responsive: true,
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 },
+                { responsivePriority: 2, targets: -1 }
+            ],
             paging: false
         });
-    
     }
 
 
