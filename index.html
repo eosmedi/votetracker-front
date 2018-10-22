@@ -430,6 +430,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </td>
                 <td  align="right">{{ producer.rewards }} EOS</td>
                 <td  align="right">
+                  <span :style="producer.votesDiff > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow" v-if="0">
                     {{ producer.votesDiff }} EOS
                     <span v-if="producer.rankChange != 0">
                         <span :style="producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow">
@@ -437,10 +438,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         </span>
                     </span>
 
-                   
-                    <!-- <span v-if="producer.votes_loss && producer.votes_loss.diff">
+                    </span>
+                    <span v-if="producer.votes_loss && producer.votes_loss.diff" v-if="1">
                       <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
-                  </span> -->
+                  </span>
                 </td>
                 <td>
                     <!-- <img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"> -->
