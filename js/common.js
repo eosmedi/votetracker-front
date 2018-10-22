@@ -462,6 +462,22 @@ var ProducersList = {
                         tableData.push(producer);
                     }
 
+                    // diff
+                    if(producer.history.length){
+                        var historyRank = producer.history;
+                        var lastRank = historyRank.length == 1 ? historyRank[0] : historyRank[historyRank.length-2];
+                        var nowIndex = producer.index;
+                        var lastIndex = lastRank.index;
+                        var diffIndex = lastIndex - nowIndex;
+
+                        var votesEos = (parseInt(lastRank.total_votes) / self.chainState.total_producer_vote_weight * 100).toFixed(3);
+                        var nowEos = (parseInt(producer.total_votes) / self.chainState.total_producer_vote_weight * 100).toFixed(3);
+
+                        producer.lastRank = lastRank;
+                        producer.votesDiff = nowEos - votesEos;
+                        producer.rankChange = diffIndex;
+                    }
+
                 }
 
                 self.tableData = tableData;
@@ -602,7 +618,7 @@ var ProducerDetail = {
             removeChart: {},
             chainState: {},
             logFilters: null,
-            voteLogs: null,
+            voteLogs: [],
         }
     },
     mounted: function () {
@@ -632,11 +648,13 @@ var ProducerDetail = {
 
         /* EC */
         isLogFilter: function(){
-          this.logFilters = this.$parent.logFilters;
-          this.voteLogs = this.$parent.voteLogs;
-          if(this.logFilters.producer && this.voteLogs != null){
-                return true;
-          }
+        //   this.logFilters = this.$parent.logFilters;
+        //   this.voteLogs = this.$parent.voteLogs;
+        //   if(this.logFilters.producer && this.voteLogs != null){
+        //         return true;
+        //   }
+
+        return true;
         },
         filterLog: function(voteLog){
             voteLog.timeFormatted = moment.utc(voteLog.timestamp).utcOffset(moment().utcOffset()).format("llll");
@@ -665,6 +683,20 @@ var ProducerDetail = {
                 self.producer = res.data;
                 self.totalPage = Math.ceil(res.data.producer.voters / self.pageSize);
                 self.loading = false;
+                if(self.producer.stakeLogs) self.producer.stakeLogs = self.producer.stakeLogs.reverse();
+
+                var producer = self.producer.producer;
+                if(producer.history.length){
+                    var historyRank = producer.history;
+                    var lastRank = historyRank.length == 1 ? historyRank[0] : historyRank[historyRank.length-2];
+                    var nowIndex = producer.index;
+                    var lastIndex = lastRank.index;
+                    var diffIndex = lastIndex - nowIndex;
+
+                    producer.lastRank = lastRank;
+                    producer.rankChange = diffIndex;
+                }
+
                 try{
                     self.calcutePieData();
                 }catch(e){}
@@ -695,11 +727,30 @@ var ProducerDetail = {
             var removeMap = {};
             var addMap = {};
 
+            var voteLogs = [];
+
+
+
+
+            
             this.producer.removeLogs.forEach(function(row, index){
                 var value =  row.info.voter_info.staked / 10000;
+                voteLogs.push(Object.assign(row, {
+                    action: 'remove',
+                    staked: (row.staked / 10000).toFixed(0),
+                    unix: moment.utc(row.timestamp)
+                }));
+
+                
+                var lastTime = moment.utc(row.timestamp).utcOffset(moment().utcOffset()).unix();
+                var daysTime = moment().subtract(2, "days").unix();
+
+                if(lastTime < daysTime){
+                    return;
+                }
 
 
-                if(index == 0){
+                if(!removeChart.first){
                     removeChart.first =  moment.utc(row.timestamp).utcOffset(moment().utcOffset());
                 }
 
@@ -711,10 +762,28 @@ var ProducerDetail = {
                 removeMap[row.voter] = 1;
             })
 
+           
 
             this.producer.addLogs.forEach(function(row, index){
+               
                 var value =  row.info.voter_info.staked / 10000;
-                if(index == 0){
+
+                voteLogs.push(Object.assign(row, {
+                    action: 'add',
+                    staked: (row.staked / 10000).toFixed(0),
+                    unix: moment.utc(row.timestamp)
+                }));
+
+
+                var lastTime = moment.utc(row.timestamp).utcOffset(moment().utcOffset()).unix();
+                var daysTime = moment().subtract(2, "days").unix();
+
+                if(lastTime < daysTime){
+                    return;
+                }
+
+
+                if(!addChart.first){
                     addChart.first =  moment.utc(row.timestamp).utcOffset(moment().utcOffset());
                 }
 
@@ -726,8 +795,14 @@ var ProducerDetail = {
                 addMap[row.voter] = 1;
             })
 
+
+            this.voteLogs =  _.sortBy(voteLogs, function(item) {
+                return -item.unix;
+            });
+
             if(removeChart.last) removeChart.subname = "Total: "+numberWithCommas(removeChart.total.toFixed(0))+" EOS   Date Range: "+removeChart.first.format('YYYY-MM-DD') +" / "+removeChart.last.format('YYYY-MM-DD');
             if(addChart.last) addChart.subname = "Total: "+numberWithCommas(addChart.total.toFixed(0))+" EOS   Date Range: "+addChart.first.format('YYYY-MM-DD') +" / "+addChart.last.format('YYYY-MM-DD');
+
 
             this.removeChart = removeChart;
             this.addChart = addChart;

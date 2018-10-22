@@ -40,6 +40,7 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/vue-country-flag@1.0.1/css/flags/flags.min.css">
   
   <!-- END Custom CSS-->
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
   <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-core.min.js"></script>
   <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-plugin-eosjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/es6-promise@4.2.5/dist/es6-promise.auto.min.js"></script>
@@ -358,9 +359,19 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                                       <p>Voters: <router-link :to="{ name: 'ProducerDetail', params: { producer: row.owner }}">{{ row.voters }}</router-link></p>
                                       <p>Daily Reward: {{ row.rewards }} EOS</p>
-                                      <p  v-if="row.votes_loss && row.votes_loss.diff">Votes Change(48h): <span>
+                                      <p  v-if="row.votes_loss && row.votes_loss.diff">Change(48h): 
+                                      
+                                      <!-- <span>
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
-                                      </span></p>
+                                      </span> -->
+
+                                      <span v-if="producer.rankChange != 0">
+                                        <span :style="producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow">
+                                        {{ producer.rankChange }}
+                                      </span>
+                              </span>
+                                      
+                                      </p>
                                       <p>Location: 
                                           <span v-if="row.org_location" :class="'flag-icon flag-icon-'+row.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
                                           <span v-if=" row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
@@ -418,11 +429,20 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <router-link :to="{ name: 'ProducerDetail', params: { producer: producer.owner }}">{{ producer.voters }}</router-link>
                 </td>
                 <td  align="right">{{ producer.rewards }} EOS</td>
-                <td  align="right"> <span v-if="producer.votes_loss && producer.votes_loss.diff">
-                                <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
-                            </span></td>
-                <td >
-     
+                <td  align="right">
+                    {{ producer.votesDiff }} EOS
+                    <span v-if="producer.rankChange != 0">
+                        <span :style="producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow">
+                        ({{ producer.rankChange }})
+                        </span>
+                    </span>
+
+                   
+                    <!-- <span v-if="producer.votes_loss && producer.votes_loss.diff">
+                      <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                  </span> -->
+                </td>
+                <td>
                     <!-- <img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"> -->
                     <!-- <span v-if="producer.org_location" :class="'flag normal flag-'+producer.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
                      -->
@@ -780,7 +800,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   </li>
                   <li class="breadcrumb-item active"><a href="#">Producers Detail</a>
                   </li>
-                  <li class="breadcrumb-item active" v-if="isLogFilter()"><a :href="'#/producer/'+ logFilters.producer" >{{ logFilters.producer }}</a>
+                  <li class="breadcrumb-item active" v-if="producer.producer"><a :href="'#/producer/'+ producer.producer.owner" >{{ producer.producer.owner }}</a>
                   </li>
 
                 </ol>
@@ -833,14 +853,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                     <p style="margin-bottom:0.5rem;"><strong>Total Votes %:</strong>  <span class="item-value">{{ (parseInt(producer.producer.total_votes) / chainState.total_producer_vote_weight * 100).toFixed(3) }}%</span></p>
                                     <p style="margin-bottom:0.5rem;"><strong>Votes:</strong>  <span class="item-value">{{ numberWithCommas((producer.producer.total_votes  / calculateVoteWeight() / 10000).toFixed(0)) }}</span></p>
                                     <p style="margin-bottom:0.5rem;"><strong>Voters:</strong>  <span class="item-value">{{ producer.producer.voters }}</span></p>
-                                    <p style="margin-bottom:0.5rem;"><strong>Votes Change(48h):</strong>  <span class="item-value">
+                                    <p style="margin-bottom:0.5rem;"  v-if="producer.producer.rankChange != 0"><strong>Change(48h):</strong>  
+                                                        <!-- <span class="item-value">
                                                               <span :style="producer.total.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.total.diff).toFixed(0) | numberWithCommas }} EOS</span>
-                                                      </span>
+                                                      </span> -->
+                                          <span v-if="producer.producer.rankChange != 0">
+                                            <span :style="producer.producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.producer.lastRank.time | fromNow">
+                                            {{ producer.producer.rankChange }}
+                                          </span>
                                     </p>
                                   </span>
-
-
-
                                </p>
 
                             </div>
@@ -861,6 +883,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                             <li class="nav-item">
                               <a class="nav-link "  @click="openChartTab" id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
                                  aria-expanded="false">Votes Change(48h)</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="base-tab331" data-toggle="tab" aria-controls="tab331" href="#tab331"
+                                 aria-expanded="false">Stake Log</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link " id="base-tab31" data-toggle="tab" aria-controls="tab31"
@@ -894,6 +920,43 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                 </div>
                               </div>
                             </div>
+
+
+                          <div role="tabpanel" class="tab-pane " id="tab331" aria-expanded="true" aria-labelledby="base-tab331" >
+                            <div class="row" >
+                                <div id="voteStakeHistory">
+                                <div class="col-lg-12 col-xl-12 mb-1"   v-for="log in producer.stakeLogs"> 
+                                    <div id="accordionWrap6" 
+                                    role="tablist" aria-multiselectable="true">
+
+                                  <div id="heading1" class="card-header card-header-fix borderdefaultHeader "><a data-toggle="collapse" data-parent="#accordionWrap1" href="#accordion1" aria-expanded="true" aria-controls="accordion1" class="card-title lead default colortheme"><div><span class="HeadVoteLog">#{{
+                                    log.block_num }}</span> 
+                                    <span class="SubHeadVoteLogH" :title="log.timestamp | date">{{ log.timestamp | fromNow }}</span></div></a></div>
+
+                                  <div id="accordion1" role="tabpanel"
+                                  
+                          
+                                  aria-labelledby="heading61" aria-expanded="true" class="card-collapse collapse show borderdefault bg-white"><div class="card-content"><div class="card-body"><!----> <div>
+                                    <span style="width:100px;">
+                                    <router-link :to="{ name: 'VoterDetail', params: { voter: log.voter }}">
+                                      <code class="highlight" > 
+                                        {{ log.voter }}
+                                      </code>
+                                    </router-link>
+                                  </span>
+
+                                    <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> <span class="text-default text-semibold ml-1"> {{ log.staked | numberWithCommas }} EOS</span> 
+                                  </div></div></div>
+                                  </div>
+                                </div>
+                                </div>
+
+                                <p>only provides the latest 10 stake/unstake logs</p>
+                                </div>
+                              </div>
+                          </div>
+
+                            
 
                          
 
@@ -940,13 +1003,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <div id="LogFilterDiv" class="col-md-12" v-if="isLogFilter()">
                     <div id="right-meta" style="    margin-top: 25px;">
                       <div id="vote-logs">
-                        <h3>Vote Logs <span v-if="logFilters.producer">for producer: </span>
+                        <h3>Vote Logs
                         </h3>
-                        <h4 style="color:#999" v-if="logFilters.producer"><strong>{{ logFilters.producer }}</strong> <span v-if="logFilters.voter">of : {{ logFilters.voter }}</span> (realtime)</h4>
-
                         <div style=" isMobile ? 'max-height:400px;overflow: hidden;' : 'max-height:400px;'" id="basic-accordion-drag">
-                          <div v-for="voteLog in voteLogs" class="vote-log" v-if="filterLog(voteLog)">
-
+                          <div v-for="voteLog in voteLogs" class="vote-log">
+                          <!-- {{ voteLog }} -->
+                          <template  v-if="voteLog">
                               <div :id="'accordionWrap'+voteLog.block_num" role="tablist" aria-multiselectable="true" >
                                 <div class="card collapse-icon accordion-icon-rotate mb-1">
                                   <div :id="'heading'+voteLog.block_num" class="card-header card-header-fix">
@@ -957,21 +1019,24 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                        aria-expanded="true">
                                     <div class="card-content">
                                       <div class="card-body" >
-
-
-                                        < <router-link :to="{ name: 'VoterDetail', params: { voter: voteLog.voter }}">{{ voteLog.voter }}</router-link> >
-                                        <span v-if="voteLog.voterData">Staked {{ (voteLog.voterData.voter_info.staked / 10000).toFixed(0) }} EOS</span> Vote for<br>
-                                        <router-link :to="{ name: 'ProducerDetail', params: { producer: producer }}" v-for="producer in voteLog.producers" class="producer-link">
-                                                  <span :class="'btn btn-sm w_voter' + [producer == logFilters.producer ? 'active' : '']">{{ producer }}
-                                                  </span>
-                                        </router-link>
-
+                                          <div>
+                                              <span style="width:100px;">
+                                               <router-link :to="{ name: 'VoterDetail', params: { voter: voteLog.voter }}">
+                                                  <code class="highlight" > 
+                                                    {{ voteLog.voter }}
+                                                  </code>
+                                                </router-link>
+                                              </span>
+                                              <span class="ml-1">{{ voteLog.action }} → </span>
+                                              <span class="text-default text-semibold ml-1"> {{ voteLog.staked | numberWithCommas }} EOS</span> 
+                                          </div>
                                       </div>
                                     </div>
                                   </div>
 
                                 </div>
                               </div>
+                            </template>
 
                           </div>
                         </div>
@@ -1181,16 +1246,23 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           <div id="accordion1" role="tabpanel"
                           
                   
-                          aria-labelledby="heading61" aria-expanded="true" class="card-collapse collapse show borderdefault bg-white"><div class="card-content"><div class="card-body"><!----> <div>
-                            <span style="width:100px;">
-                            <code class="highlight" > 
-                              {{ log.voter }}
-                            </code>
+                          aria-labelledby="heading61" aria-expanded="true" class="card-collapse collapse show borderdefault bg-white"><div class="card-content">
+                          
+                          <div class="card-body"><!----> 
+                          
+                          <div>
+                              <span style="width:100px;">
+                                  <code class="highlight" > 
+                                    {{ log.voter }}
+                                  </code>
+                              </span>
 
-                          </span>
+                              <span class="ml-1">{{ log.action }} → </span>
+                              <span class="text-default text-semibold ml-1"> {{ log.staked | numberWithCommas }} EOS</span> 
+                          </div>
 
-                            <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> <span class="text-default text-semibold ml-1"> {{ log.staked }} EOS</span> 
-                          </div></div></div>
+                          </div>
+                          </div>
                           </div>
                         </div>
                         </div>
@@ -2058,7 +2130,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
   <!-- VOTE TRACKER -->
 
-  <script src="js/common.js?v=101838"></script>
+  <script src="js/common.js?v=10221601"></script>
 
   <!-- BEGIN VENDOR JS-->
   <script src="app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
