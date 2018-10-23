@@ -365,9 +365,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                       </span> -->
 
-                                      <span v-if="producer.rankChange != 0">
-                                        <span :style="producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow">
-                                        {{ producer.rankChange }}
+                                      <span v-if="row.rankChange != 0">
+                                        <span :style="row.rankChange > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow">
+                                        {{ row.rankChange }}
                                       </span>
                               </span>
                                       
