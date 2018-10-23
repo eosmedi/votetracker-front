@@ -1582,18 +1582,18 @@ var app = new Vue({
                 }
             }, false)
         }
-        ScatterJS.plugins( new ScatterEOS() );
+        // ScatterJS.plugins( new ScatterEOS() );
 
         document.addEventListener('scatterLoaded', function(){
-            console.log('scatterLoaded', ScatterJS.scatter.identity)
-            self.scatter = ScatterJS.scatter;
-            self.identity = ScatterJS.scatter.identity;
+            console.log('scatterLoaded', window.scatter.identity)
+            self.scatter = window.scatter;
+            self.identity = self.scatter.identity;
         })
 
-        ScatterJS.scatter.connect('VoteTracker').then(function(connected){
+        window.scatter.connect('VoteTracker').then(function(connected){
             if(connected){
-                self.scatter = ScatterJS.scatter;
-                self.identity = ScatterJS.scatter.identity;
+                self.scatter = window.scatter;
+                self.identity = window.scatter.identity;
                 console.log('connected',  self.identity)
             }
         });
@@ -1616,7 +1616,7 @@ var app = new Vue({
                             self.identity.name = x.name+"@"+x.authority;
                         }
                     })
-                    self.eosClient = ScatterJS.scatter.eos(network, Eos, {
+                    self.eosClient = self.scatter.eos(network, Eos, {
                         broadcast: true,
                         sign: true,
                         chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
@@ -1637,40 +1637,45 @@ var app = new Vue({
         
         popupVote(){
 
-                var identity = this.identity;
-                console.log(identity);
-                var firstAccount = identity.accounts[0];
-                if(firstAccount){
+            if(this.aleardyVoted){
+                alert('already voted');
+                return;
+            }
 
-                }
-                var defData = {
-                    producers: this.newProducers.concat(this.votedProducers).sort(),
-                    proxy: '',
-                    voter: firstAccount.name
-                }
+            var identity = this.identity;
+            console.log(identity);
+            var firstAccount = identity.accounts[0];
+            if(firstAccount){
 
-                this.eosClient.transaction({
-                        actions: [
-                                {
-                                        account: 'eosio',
-                                        name: 'voteproducer',
-                                        authorization: [{
-                                                actor: firstAccount.name,
-                                                permission: firstAccount.authority
-                                        }],
-                                        data: defData
-                                }
-                        ]
-                }).then(function(data){
-                        console.log(data.transaction_id);
-                        alert('vote success');
-                }, function(error){
-                        alert('vote failed')
-                }).catch(function(error){
-                        error = JSON.parse(error);
-                        self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
-                        console.log("submmit error", error);
-                })
+            }
+            var defData = {
+                producers: this.newProducers.concat(this.votedProducers).sort(),
+                proxy: '',
+                voter: firstAccount.name
+            }
+
+            this.eosClient.transaction({
+                    actions: [
+                            {
+                                    account: 'eosio',
+                                    name: 'voteproducer',
+                                    authorization: [{
+                                            actor: firstAccount.name,
+                                            permission: firstAccount.authority
+                                    }],
+                                    data: defData
+                            }
+                    ]
+            }).then(function(data){
+                    console.log(data.transaction_id);
+                    alert('vote success');
+            }, function(error){
+                    alert('vote failed')
+            }).catch(function(error){
+                    error = JSON.parse(error);
+                    self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
+                    console.log("submmit error", error);
+            })
 
             console.log('popupSave')
         },
@@ -1729,7 +1734,7 @@ var app = new Vue({
                 }).then(function(){
                     console.log('Attach Identity');
                     console.log(self.scatter.identity);
-                    self.identity = ScatterJS.scatter.identity;
+                    self.identity = self.scatter.identity;
                     // this.setState({identity: ScatterJS.scatter.identity});
                 }).catch(function(error){
                     console.error(error);
@@ -1741,7 +1746,7 @@ var app = new Vue({
             console.log("signOut");
             this.scatter.forgetIdentity().then(function() {
                 console.log('Detach Identity');
-                self.identity = ScatterJS.scatter.identity;
+                self.identity = self.scatter.identity;
             }).catch(function(error){
                 console.error(error);
             });
