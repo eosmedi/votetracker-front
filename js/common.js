@@ -470,8 +470,8 @@ var ProducersList = {
                         var lastIndex = lastRank.index;
                         var diffIndex = lastIndex - nowIndex;
 
-                        var votesEos = (parseInt(lastRank.total_votes) / self.chainState.total_producer_vote_weight * 100).toFixed(3);
-                        var nowEos = (parseInt(producer.total_votes) / self.chainState.total_producer_vote_weight * 100).toFixed(3);
+                        var votesEos = (parseInt(lastRank.total_votes) / self.calculateVoteWeight() / 10000).toFixed(0);
+                        var nowEos = (parseInt(producer.total_votes) / self.calculateVoteWeight() / 10000).toFixed(0);
 
                         producer.lastRank = lastRank;
                         producer.votesDiff = nowEos - votesEos;

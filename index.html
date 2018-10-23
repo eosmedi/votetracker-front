@@ -365,10 +365,14 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                       </span> -->
 
-                                      <span v-if="row.rankChange != 0">
-                                        <span :style="row.rankChange > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow">
-                                        {{ row.rankChange }}
-                                      </span>
+                                      <span :style="row.votesDiff > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow" v-if="1">
+                                        {{ row.votesDiff | numberWithCommas }} EOS
+                                        <span v-if="row.rankChange != 0">
+                                            <span :style="row.rankChange > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow">
+                                            ({{ row.rankChange }})
+                                            </span>
+                                        </span>
+                                     </span>
                               </span>
                                       
                                       </p>
@@ -430,17 +434,17 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </td>
                 <td  align="right">{{ producer.rewards }} EOS</td>
                 <td  align="right">
-                  <span :style="producer.votesDiff > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow" v-if="0">
-                    {{ producer.votesDiff }} EOS
+                  <span :style="producer.votesDiff > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow" v-if="1">
+                    {{ producer.votesDiff | numberWithCommas }} EOS
                     <span v-if="producer.rankChange != 0">
                         <span :style="producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow">
                         ({{ producer.rankChange }})
                         </span>
                     </span>
-
-                    </span>
-                    <span v-if="producer.votes_loss && producer.votes_loss.diff" v-if="1">
-                      <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
+                 </span>
+                    <span v-if="producer.votes_loss && producer.votes_loss.diff && 0">
+                      <span :style="producer.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS
+                      </span>
                   </span>
                 </td>
                 <td>
@@ -946,7 +950,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                     </router-link>
                                   </span>
 
-                                    <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> <span class="text-default text-semibold ml-1"> {{ log.staked | numberWithCommas }} EOS</span> 
+                                    <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> <span class="text-default text-semibold ml-1"> {{ log.staked.toFixed(0) | numberWithCommas }} EOS</span> 
                                   </div></div></div>
                                   </div>
                                 </div>
