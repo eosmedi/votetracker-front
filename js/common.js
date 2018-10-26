@@ -1631,8 +1631,8 @@ var app = new Vue({
 
     methods: {
 
-        removeProducer(producer, index){
-			this.votedProducers.splice(index, 1)
+        removeProducer(producers, index){
+			producers.splice(index, 1)
         },
         
         popupVote(){

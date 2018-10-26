@@ -101,7 +101,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
         <div class="modal-body">
           <div class="alert alert-info alert-styled-left text-blue-800 content-group" v-if="aleardyVoted || !votedProducers.length || votedProducers.length == 30">
-                      <span v-if="votedProducers.length == 30">
+                      <span v-if="(votedProducers.length + newProducers.length) > 30">
               you need delete one from your voted producers, click one to remove
             </span>
               <span v-if="!votedProducers.length">
@@ -119,9 +119,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           </h6>
           <p class="display-block">
             <span v-if="accountLoading">loading data...</span>
-            <div class="btn-group" v-for="(votedProducer, index) in votedProducers">
+            <div class="btn-group mr-1 mt-1" v-for="(votedProducer, index) in votedProducers">
                 <button type="button" class="btn btn-secondary btn-labeled">{{ votedProducer }}  </button>
-                <button type="button" class="btn btn-danger"  @click="removeProducer(votedProducer, index)">X</button>
+                <button type="button" class="btn btn-danger"  @click="removeProducer(votedProducers, index)">X</button>
             </div>
           <span v-for="(votedProducer, index) in votedProducers" v-if="0">	
             <code @click="removeProducer(votedProducer, index)" title="click to remove">
@@ -135,7 +135,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             New Producers
           </h6>
           <p>
-            <button type="button" class="btn btn-secondary btn-labeled" v-for="producer in newProducers">{{ producer }}  </button>
+              <div class="btn-group mr-1 mt-1" v-for="(producer, index) in newProducers">
+                  <button type="button" class="btn btn-secondary btn-labeled">{{ producer }}  </button>
+                  <button type="button" class="btn btn-danger"  @click="removeProducer(newProducers, index)">X</button>
+              </div>
+            <!-- <button type="button" class="btn btn-secondary btn-labeled" v-for="producer in newProducers">{{ producer }}  </button> -->
           </p>
         </div>
 
@@ -2136,7 +2140,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
   <!-- VOTE TRACKER -->
 
-  <script src="js/common.js?v=10221601"></script>
+  <script src="js/common.js?v=102615"></script>
 
   <!-- BEGIN VENDOR JS-->
   <script src="app-assets/vendors/js/vendors.min.js" type="text/javascript"></script>
