@@ -194,9 +194,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
             <ul class="nav navbar-nav float-right">
               <li class="dropdown dropdown-notification nav-item">
-                  <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link">
+                  <!-- <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link">
                     <span style="color: red;">Telegram Bot</span>
-                  </a>                
+                  </a>                 -->
                   <button type="button" class="btn el-button--default" @click="connectScatter()"
                   style="
                   line-height: 0px;
@@ -324,14 +324,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
             
-            <div class="col-md-3 text-right" v-if="!isMobile">
-              <a  href="https://t.me/eosvotetracker_bot" class="mb-2" >
-                <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
-                <img src="images/vtb.png"/>
-              </a>
-            </div>
-
-            <div class="col-md-3 text-right" v-if="!isMobile">
+            <div class="col-6 text-right" v-if="!isMobile">
+                <a  href="https://t.me/eosvotetracker_bot" class="mb-2" >
+                  <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
+                  <img src="images/vtb.png"/>
+                </a>
               <a  href="#" class="mb-2" @click="voteUs">
                 <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
                 <img src="images/vote-us.jpg"/>
@@ -541,15 +538,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-3 text-right" v-if="!isMobile">
+         
+          <div class="col-6 text-right" v-if="!isMobile">
             <a  href="https://t.me/eosvotetracker_bot" class="mb-2">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
               <img src="images/vtb.png"/>
             </a>
-          </div>
-
-          <div class="col-md-3 text-right" v-if="!isMobile">
-            
             <a  href="#" class="mb-2" @click="voteUs">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
               <img src="images/vote-us.jpg"/>
@@ -744,14 +738,12 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
             </div>
           </div>
 
-          <div class="col-md-3 text-right" v-if="!isMobile">
-            <a  href="https://t.me/eosvotetracker_bot" class="mb-2">
-              <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
-              <img src="images/vtb.png"/>
-            </a>
-          </div>
 
-          <div class="col-md-3 text-right" v-if="!isMobile">
+          <div class="col-6 text-right" v-if="!isMobile">
+              <a  href="https://t.me/eosvotetracker_bot" class="mb-2">
+                <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div> -->
+                <img src="images/vtb.png"/>
+              </a>
             <a  href="#" class="mb-2" @click="voteUs">
               <!-- <div class="voteUs"><span class="vote1line">eosmedinodes</span><span class="vote2line">Vote Us</span></div>
                -->
