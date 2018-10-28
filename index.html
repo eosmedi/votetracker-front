@@ -194,8 +194,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
             <ul class="nav navbar-nav float-right">
               <li class="dropdown dropdown-notification nav-item">
-              
-                  <!-- <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link"><span style="color: red;">Telegram Bot</span></a>                 -->
+                  <a href="https://t.me/eosvotetracker_bot" target="_blank" rel="noopener" class="p-2 btn btn-link">
+                    <span style="color: red;">Telegram Bot</span>
+                  </a>                
                   <button type="button" class="btn el-button--default" @click="connectScatter()"
                   style="
                   line-height: 0px;
@@ -1074,8 +1075,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       <div class="table-responsive">
         <div class="content-header row">
           <div class="content-header-left col-md-8 col-12 mb-2">
-            <h3 class="content-header-title mb-0"  v-if="voter.info">Proxy Details</h3>
-            <h3 class="content-header-title mb-0"  v-if="!voter.info">Voter Details</h3>
+            <h3 class="content-header-title mb-0"  v-if="voter.voter_info && voter.voter_info.is_proxy">Proxy Details</h3>
+            <h3 class="content-header-title mb-0"  v-if="voter.voter_info && !voter.voter_info.is_proxy">Voter Details</h3>
             <div class="row breadcrumbs-top">
               <div class="breadcrumb-wrapper col-12">
                 <ol class="breadcrumb">
@@ -1104,7 +1105,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               <h4 class="card-title">
                 <span v-if="voter.info && voter.info.fullName">{{ voter.info.fullName }}</span> 
                 <span style="font-size:12px;font-weight: bold">({{ voter.account_name }})</span>
-                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes" v-if="voter.info">Proxy your votes</button>
+                <button class="el-button btn ml-2 pull-right btn-primary btn-sm el-button--button" @click="proxyMyVotes" v-if="voter.voter_info && voter.voter_info.is_proxy">Proxy your votes</button>
               </h4>
             </div>
 
