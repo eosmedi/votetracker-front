@@ -1217,10 +1217,25 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                             <div class="row">
                               <div class="col-md-12 proxyLineDetails">
-                                <span class="mr-1"><strong>Account Name: </strong> <span class="item-value">{{ voter.account_name }}</span></span>
-                                <span class="mr-1" v-if="voter.blance.length"><strong>Balance:</strong>  <span v-for="blanceItem in voter.blance" class="item-value">{{ blanceItem }}</span></span>
-                                <span class="mr-1"><strong>Staked EOS:</strong>  <span class="item-value">{{ numberWithCommas((voter.voter_info.staked / 10000).toFixed(0)) }} EOS</span></span>
-                                <span class="mr-1" v-if="voter.eth"><strong>ETH Address:</strong>
+                                <span class="mr-1">
+                                  <strong>Account Name: </strong> 
+                                  <span class="item-value">{{ voter.account_name }}</span>
+                                </span>
+                                <span class="mr-1" v-if="voter.blance.length">
+                                  <strong>Balance:</strong>  
+                                  <span v-for="blanceItem in voter.blance" class="item-value">{{ blanceItem }}</span>
+                                </span>
+                                <span class="mr-1">
+                                  <strong>Staked EOS:</strong>  
+                                  <span class="item-value">{{ numberWithCommas((voter.voter_info.staked / 10000).toFixed(0)) }} EOS</span>
+                                </span>
+
+                                <span class="mr-1" v-if="voter.voter_info && !voter.voter_info.is_proxy && voter.voter_info.proxy ">
+                                  <strong>Proxy:</strong>  
+                                  <span class="item-value">{{ voter.voter_info.proxy }}</span>
+                                </span>
+                                <span class="mr-1" v-if="voter.eth">
+                                  <strong>ETH Address:</strong>
                                   <span class="item-value"><a :href="'https://etherscan.io/address/' + voter.eth" target="_blank">{{ voter.eth }}</a></span>
                                 </span>
                               </div>
