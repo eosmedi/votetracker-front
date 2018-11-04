@@ -971,7 +971,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                     </router-link>
                                   </span>
 
-                                    <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> <span class="text-default text-semibold ml-1"> {{ log.staked.toFixed(0) | numberWithCommas }} EOS</span> 
+                                    <!----> <span class="ml-1">{{ log.action }} → </span> <!----> <!----> 
+                                    <span class="text-default text-semibold ml-1"> {{ log.staked.toFixed(0) | numberWithCommas }} EOS</span> 
+                                   
                                   </div></div></div>
                                   </div>
                                 </div>
@@ -1059,6 +1061,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                               </span>
                                               <span class="ml-1">{{ voteLog.action }} → </span>
                                               <span class="text-default text-semibold ml-1"> {{ voteLog.staked | numberWithCommas }} EOS</span> 
+                                              <span class="text-default text-semibold ml-1" v-if="voteLog.action == 'revote'">Votes weight change:{{ voteLog.weight_change }} %</span> 
                                           </div>
                                       </div>
                                     </div>

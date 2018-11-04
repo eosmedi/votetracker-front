@@ -47,6 +47,25 @@ function voteDecay(stake, lastTime){
 }
 
 
+function voteDecayDetal(stake, lastTime, time){
+    if(typeof lastTime == "string"){
+        lastTime = moment.utc(lastTime);
+    }
+
+    if(typeof time == "string"){
+        time = moment.utc(time);
+    }
+
+    var lastWeight = calculateVoteWeight(lastTime);
+    var lastVotesWeight = stake * lastWeight;
+    var nowWeight = calculateVoteWeight(time);
+    var nowVotesweight = stake * nowWeight;
+    var voteDecayDetal = (nowVotesweight - lastVotesWeight) / lastVotesWeight * 100;
+    console.log(nowVotesweight - lastVotesWeight, lastVotesWeight, lastWeight, nowWeight)
+    return parseFloat(voteDecayDetal.toFixed(2))
+}
+
+
 
 Vue.filter('fromNow', function (x) { 
     return moment.utc(x).utcOffset(moment().utcOffset()).fromNow();;
@@ -791,8 +810,12 @@ var ProducerDetail = {
                
                 var value =  row.info.voter_info.staked / 10000;
 
+                if(row.action && row.last_time){
+                    row.weight_change = voteDecayDetal(row.staked, row.last_time, row.timestamp);
+                }
+
                 voteLogs.push(Object.assign(row, {
-                    action: 'add',
+                    action: row.action ? row.action : 'add',
                     staked: (row.staked / 10000).toFixed(0),
                     unix: moment.utc(row.timestamp)
                 }));
