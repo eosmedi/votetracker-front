@@ -20,6 +20,33 @@ function getImgUrl(pet) {
 
 var OUR_PRODUCER = 'eosmedinodes';
 
+function calculateVoteWeight(date) {
+    if(typeof date == "string"){
+        date = moment.utc(date);
+    }
+    date = date || Date.now();
+    var timestamp_epoch = 946684800000;
+    var dates_ = (date / 1000) - (timestamp_epoch / 1000);
+    var weight_ = Math.ceil(dates_ / (86400 * 7)) / 52;
+    return Math.pow(2, weight_);
+}
+
+
+function voteDecay(stake, lastTime){
+
+    if(typeof lastTime == "string"){
+        lastTime = moment.utc(lastTime);
+    }
+    var lastWeight = calculateVoteWeight(lastTime);
+    var lastVotesWeight = stake * lastWeight;
+    var nowWeight = calculateVoteWeight();
+    var nowVotesweight = stake * nowWeight;
+    var voteDecay = (lastVotesWeight - nowVotesweight) / lastVotesWeight * 100;
+    console.log('now', nowVotesweight, 'last', lastVotesWeight);
+    return parseFloat(voteDecay.toFixed(2))
+}
+
+
 
 Vue.filter('fromNow', function (x) { 
     return moment.utc(x).utcOffset(moment().utcOffset()).fromNow();;
@@ -470,7 +497,7 @@ var ProducersList = {
                         var lastIndex = lastRank.index;
                         var diffIndex = lastIndex - nowIndex;
 
-                        var votesEos = (parseInt(lastRank.total_votes) / self.calculateVoteWeight() / 10000).toFixed(0);
+                        var votesEos = (parseInt(lastRank.total_votes) / self.calculateVoteWeight(lastRank.time) / 10000).toFixed(0);
                         var nowEos = (parseInt(producer.total_votes) / self.calculateVoteWeight() / 10000).toFixed(0);
 
                         producer.lastRank = lastRank;
@@ -510,12 +537,7 @@ var ProducersList = {
             }
             return u.toFixed(0);
         },
-        calculateVoteWeight: function() {
-            var timestamp_epoch = 946684800000;
-            var dates_ = (Date.now() / 1000) - (timestamp_epoch / 1000);
-            var weight_ = Math.ceil(dates_ / (86400 * 7)) / 52;
-            return Math.pow(2, weight_);
-        },
+        calculateVoteWeight: calculateVoteWeight,
         numberWithCommas: function(x) {
             x = x.toString();
             var pattern = /(-?\d+)(\d{3})/;
@@ -642,6 +664,7 @@ var ProducerDetail = {
     },
     methods: {
 
+        voteDecay: voteDecay,
         openChartTab: function(){
             console.log('openChartTab');
         },
@@ -807,12 +830,7 @@ var ProducerDetail = {
             this.removeChart = removeChart;
             this.addChart = addChart;
         },
-        calculateVoteWeight: function() {
-            var timestamp_epoch = 946684800000;
-            var dates_ = (Date.now() / 1000) - (timestamp_epoch / 1000);
-            var weight_ = Math.ceil(dates_ / (86400 * 7)) / 52;
-            return Math.pow(2, weight_);
-        },
+        calculateVoteWeight: calculateVoteWeight,
         numberWithCommas: function(x) {
             x = x.toString();
             var pattern = /(-?\d+)(\d{3})/;

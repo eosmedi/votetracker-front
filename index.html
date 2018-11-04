@@ -995,6 +995,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <th width="45%">Staked</th>
                                       <th width="5%">Voted Producers</th>
                                       <th width="5%"></th>
+                                      <th width="5%">Vote time</th>
+                                      <th width="5%">Votes Weight decay</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -1003,7 +1005,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <td align="right"> {{ numberWithCommas((voters.voter_info.staked / 10000 ).toFixed(0)) }} EOS </td>
                                       <td align="right"> <router-link :to="{ name: 'VoterDetail', params: { voter: voters.account_name }}">{{ voters.voter_info.producers.length }}</router-link> </td>
                                       <td><span style="font-size:10px;color:#0F5039;font-weight: bold;" v-if="voters.voter_info && voters.voter_info.is_proxy">( Proxy )</span></td>
-                                     </tr>
+                                      <td> {{ voters.last_vote_time | fromNow }}</td>
+                                      <td> {{ voteDecay((voters.voter_info.staked / 10000 ), voters.last_vote_time) }}%</td>
+                                    </tr>
                                     </tbody>
                                   </table>
                                   <page :current="currentPage" :allpage="totalPage" ref="page"></page>
