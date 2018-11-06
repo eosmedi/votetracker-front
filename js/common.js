@@ -659,6 +659,8 @@ var ProducerDetail = {
             removeChart: {},
             chainState: {},
             logFilters: null,
+            currentLogType: 'revote',
+            logTypes: [ { name: 'Revote', key: 'revote'}, { name: 'Add', key: 'add'}, { name: 'Remove', key: 'remove'}],
             voteLogs: [],
         }
     },

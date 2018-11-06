@@ -1038,7 +1038,13 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                         <h3>Vote Logs
                         </h3>
                         <div style=" isMobile ? 'max-height:400px;overflow: hidden;' : 'max-height:400px;'" id="basic-accordion-drag">
-                          <div v-for="voteLog in voteLogs" class="vote-log">
+                          <div class="btn-group btn-group-justified" v-if="voteLogs && voteLogs.length">
+                            <button class="btn btn-secondary "
+                            :class="{ active : currentLogType == logType.key }"
+                            @click="currentLogType = logType.key"
+                            v-for="logType in logTypes">{{ logType.name }}</button>
+                          </div>
+                          <div v-for="voteLog in voteLogs" class="vote-log" v-if="currentLogType == voteLog.action">
                           <!-- {{ voteLog }} -->
                           <template  v-if="voteLog">
                               <div :id="'accordionWrap'+voteLog.block_num" role="tablist" aria-multiselectable="true" >
@@ -1303,8 +1309,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           </div>
                         </div>
                         </div>
-
-                        <p>only provides the latest 10 stake/unstake logs</p>
+                        <p>only provides the latest 100 stake/unstake logs</p>
                         </div>
                       </div>
                     </div>
