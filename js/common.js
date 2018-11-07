@@ -20,8 +20,58 @@ function getImgUrl(pet) {
 
 var OUR_PRODUCER = 'eosmedinodes';
 
+function calculateVoteWeight(date) {
+    if(typeof date == "string"){
+        date = moment.utc(date);
+    }
+    date = date || Date.now();
+    var timestamp_epoch = 946684800000;
+    var dates_ = (date / 1000) - (timestamp_epoch / 1000);
+    var weight_ = Math.ceil(dates_ / (86400 * 7)) / 52;
+    return Math.pow(2, weight_);
+}
+
+
+function voteDecay(stake, lastTime){
+
+    if(typeof lastTime == "string"){
+        lastTime = moment.utc(lastTime);
+    }
+    var lastWeight = calculateVoteWeight(lastTime);
+    var lastVotesWeight = stake * lastWeight;
+    var nowWeight = calculateVoteWeight();
+    var nowVotesweight = stake * nowWeight;
+    var voteDecay = (lastVotesWeight - nowVotesweight) / lastVotesWeight * 100;
+    console.log('now', nowVotesweight, 'last', lastVotesWeight);
+    return parseFloat(voteDecay.toFixed(2))
+}
+
+
+function voteDecayDetal(stake, lastTime, time){
+    if(typeof lastTime == "string"){
+        lastTime = moment.utc(lastTime);
+    }
+
+    if(typeof time == "string"){
+        time = moment.utc(time);
+    }
+
+    var lastWeight = calculateVoteWeight(lastTime);
+    var lastVotesWeight = stake * lastWeight;
+    var nowWeight = calculateVoteWeight(time);
+    var nowVotesweight = stake * nowWeight;
+    var voteDecayDetal = (nowVotesweight - lastVotesWeight) / lastVotesWeight * 100;
+    console.log(nowVotesweight - lastVotesWeight, lastVotesWeight, lastWeight, nowWeight)
+    return parseFloat(voteDecayDetal.toFixed(2))
+}
+
+
 
 Vue.filter('fromNow', function (x) { 
+    if(typeof x == "number"){
+        console.log('fromNow', x);
+        return moment.unix(x).fromNow();;
+    }
     return moment.utc(x).utcOffset(moment().utcOffset()).fromNow();;
 })
 
@@ -78,6 +128,10 @@ Vue.filter('numberWithCommas', function (x) {
 
 
 Vue.filter('date', function (x) {
+    if(typeof x == "number"){
+        console.log('fromNow', x);
+        return moment.unix(x).format("llll");
+    }
     return moment.utc(x).utcOffset(moment().utcOffset()).format("llll");;
 })
 
@@ -213,7 +267,7 @@ Vue.component("treemap", {
 
 Vue.component("pie", {
     template: "#pie",
-    props: ["data", "name", "subname"],
+    props: ["data", "name", "subname", 'colors'],
     data: function () {
         console.log("page", this.current);
         return {
@@ -260,12 +314,13 @@ Vue.component("pie", {
                 },
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} EOS ({d}%)",
+                    formatter: "{a} <br/>{b} : {c} ({d}%)",
                     position: function(point, params, dom, rect, size){
                         // console.log(point, params, dom, rect, size);
                         return [params[0]-220,'10%'];
                     }
                 },
+                color: this.colors ? this.colors : [],
                 calculable : true,
                 series : [
                     {
@@ -302,6 +357,14 @@ var eosVenusAxiosInstance = axios.create();
 Vue.prototype.VENUS = eosVenusAxiosInstance;
 eosVenusAxiosInstance.defaults.params = {};
 eosVenusAxiosInstance.defaults.baseURL = "https://api.eosvenus.com"
+
+
+var ReferendumsAxiosInstance = axios.create();
+Vue.prototype.ReferendumAPI = ReferendumsAxiosInstance;
+ReferendumsAxiosInstance.defaults.params = {};
+ReferendumsAxiosInstance.defaults.baseURL = "http://localhost:8081"
+
+
 
 Vue.prototype.$echarts = echarts;
 
@@ -470,7 +533,7 @@ var ProducersList = {
                         var lastIndex = lastRank.index;
                         var diffIndex = lastIndex - nowIndex;
 
-                        var votesEos = (parseInt(lastRank.total_votes) / self.calculateVoteWeight() / 10000).toFixed(0);
+                        var votesEos = (parseInt(lastRank.total_votes) / self.calculateVoteWeight(lastRank.time) / 10000).toFixed(0);
                         var nowEos = (parseInt(producer.total_votes) / self.calculateVoteWeight() / 10000).toFixed(0);
 
                         producer.lastRank = lastRank;
@@ -510,12 +573,7 @@ var ProducersList = {
             }
             return u.toFixed(0);
         },
-        calculateVoteWeight: function() {
-            var timestamp_epoch = 946684800000;
-            var dates_ = (Date.now() / 1000) - (timestamp_epoch / 1000);
-            var weight_ = Math.ceil(dates_ / (86400 * 7)) / 52;
-            return Math.pow(2, weight_);
-        },
+        calculateVoteWeight: calculateVoteWeight,
         numberWithCommas: function(x) {
             x = x.toString();
             var pattern = /(-?\d+)(\d{3})/;
@@ -618,6 +676,8 @@ var ProducerDetail = {
             removeChart: {},
             chainState: {},
             logFilters: null,
+            currentLogType: 'revote',
+            logTypes: [ { name: 'Revote', key: 'revote'}, { name: 'Add', key: 'add'}, { name: 'Remove', key: 'remove'}],
             voteLogs: [],
         }
     },
@@ -642,6 +702,7 @@ var ProducerDetail = {
     },
     methods: {
 
+        voteDecay: voteDecay,
         openChartTab: function(){
             console.log('openChartTab');
         },
@@ -768,8 +829,12 @@ var ProducerDetail = {
                
                 var value =  row.info.voter_info.staked / 10000;
 
+                if(row.action && row.last_time){
+                    row.weight_change = voteDecayDetal(row.staked, row.last_time, row.timestamp);
+                }
+
                 voteLogs.push(Object.assign(row, {
-                    action: 'add',
+                    action: row.action ? row.action : 'add',
                     staked: (row.staked / 10000).toFixed(0),
                     unix: moment.utc(row.timestamp)
                 }));
@@ -807,12 +872,7 @@ var ProducerDetail = {
             this.removeChart = removeChart;
             this.addChart = addChart;
         },
-        calculateVoteWeight: function() {
-            var timestamp_epoch = 946684800000;
-            var dates_ = (Date.now() / 1000) - (timestamp_epoch / 1000);
-            var weight_ = Math.ceil(dates_ / (86400 * 7)) / 52;
-            return Math.pow(2, weight_);
-        },
+        calculateVoteWeight: calculateVoteWeight,
         numberWithCommas: function(x) {
             x = x.toString();
             var pattern = /(-?\d+)(\d{3})/;
@@ -1455,11 +1515,18 @@ var Referendum = {
             totalPage: 10,
             pageSize: 70,
             loading: true,
-            voters: []
+            voters: [],
+            proposes: [],
         }
     },
     mounted: function () {
-
+        var self = this;
+        console.log('Referendum');
+     
+        this.ReferendumAPI.get('/getProposes').then(function(res){
+            self.proposes = res.data;
+            console.log('getProposes', res.data);
+        })
     },
     watch: {
 
@@ -1467,6 +1534,71 @@ var Referendum = {
     methods: {
 
     }
+};
+
+
+var ReferendumDetail = {
+    template:"#ReferendumDetail",
+    components: {
+    },
+    data: function () {
+        return {
+            currentPage: 1,
+            totalPage: 10,
+            pageSize: 70,
+            loading: true,
+            voters: [],
+            propose: {},
+                source: "",
+            show: true,
+            html: false,
+            breaks: true,
+            linkify: false,
+            emoji: true,
+            typographer: true,
+            toc: false,
+            voteChart: {},
+        }
+    },
+    mounted: function () {
+        var self = this;
+        console.log('Referendum');
+        var params = this.$route.params;
+        console.log(this.$router);
+        // this.API.get("getProducer/" + params.producer 
+
+        this.ReferendumAPI.get('/getPropose/'+params.propose).then(function(res){
+            self.propose = res.data;
+            self.source =  self.propose.proposal_json.content;
+            var voteChart = {
+                name: "Votes Status",
+                total: 0,
+                colors: ['#FF4961', '#28D094'],
+                data: []
+            };
+
+            voteChart.data.push({ name: 'Against', value: self.propose.against });
+            voteChart.data.push({ name: 'Agree', value: self.propose.agree })
+
+            self.voteChart = voteChart;
+
+            console.log('getProposes', res.data);
+        })
+
+    },
+    watch: {
+
+    },
+    computed: {
+        compiledMarkdown: function () {
+          return marked(this.source, { sanitize: true })
+        }
+    },
+    methods: {
+        tocAllRight: function (tocHtmlStr) {
+            console.log("toc is parsed :", tocHtmlStr);
+        }
+}
 };
 
 
@@ -1507,6 +1639,10 @@ var routes = [
     {
         name: "Referendum",
         path: '/referendum', component: Referendum
+    },
+    {
+        name: "ReferendumDetail",
+        path: '/referendum/:propose', component: ReferendumDetail
     }
 ]
 
