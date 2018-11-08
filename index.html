@@ -2130,9 +2130,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </div>
               <div class="card-body pb-0">
                   <div class="card-block">
+                      <h2 class="mb-2 text-bold-700 text-truncate">
                       <router-link :to="{ name: 'ReferendumDetail', params: { propose: propose.proposal_name }}">
-                          <h2 class="mb-2 text-bold-700 text-truncate">{{ propose.title }} </h2>
+                         {{ propose.title }} 
                         </router-link>
+                      </h2>
                       <!-- <h6 class="card-subtitle text-muted">Support card subtitle</h6> -->
                     </div>
 
