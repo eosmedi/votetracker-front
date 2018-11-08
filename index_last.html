@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <head>
@@ -25,8 +26,7 @@
   <link rel="stylesheet" type="text/css" href="app-assets/vendors/css/tables/extensions/fixedHeader.dataTables.min.css">
   <!-- END VENDOR CSS-->
   <!-- BEGIN MODERN CSS-->
-  <!-- <link rel="stylesheet" type="text/css" href="app-assets/css/app.css"> -->
-  <link rel="stylesheet" type="text/css" href="app-assets/css/app.min.css">
+  <link rel="stylesheet" type="text/css" href="app-assets/css/app.css">
   <!-- END MODERN CSS-->
   <!-- BEGIN Page Level CSS-->
   <link rel="stylesheet" type="text/css" href="app-assets/css/core/menu/menu-types/vertical-compact-menu.css">
@@ -41,8 +41,6 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/vue-country-flag@1.0.1/css/flags/flags.min.css">
   
   <!-- END Custom CSS-->
-  <script src="https://unpkg.com/marked@0.3.6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue-markdown@2.2.4/dist/vue-markdown.js" integrity="sha256-HhXZDaVyo/b1Ttko4EnavB9JQEFkW24WfSrr3M4kZ3M=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
   <!-- <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-core.min.js"></script>
   <script src="https://cdn.scattercdn.com/file/scatter-cdn/js/latest/scatterjs-plugin-eosjs.min.js"></script> -->
@@ -1775,259 +1773,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
   </template>
 
-
-  <template id="ReferendumDetail" type="text/div">
-
-    <div class="table-responsive">
-      <div class="content-header row">
-        <div class="content-header-left col-md-8 col-12 mb-2">
-          <h3 class="content-header-title mb-0">Referendum</h3>
-          <div class="row breadcrumbs-top">
-            <div class="breadcrumb-wrapper col-12">
-              <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">Home
-                </li>
-                <li class="breadcrumb-item active"><a href="#">Referendum</a>
-                </li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      </div>
-
-   <div class="row">
-      <div class="col-md-12">
-
-            <router-link :to="{ name: 'Referendum'}"> 
-          <el-button type="button" class="btn mr-1 mb-1 btn-primary btn-sm">
-            << Back</el-button>
-        </router-link>
-      </div>
-  
-        <div class="col-md-12">
-      <div class="row">
-        
-            <div class="col-xl-8 col-lg-12">
-              <div id="detail">
-                <div class="row">
-                  <div class="col-sm-12">
-
-                      <div class="card">
-                          <div class="card-header" v-if="0">
-                              <div class="card-title-wrap bar-primary">
-                                  <h3>
-                                      <router-link :to="{ name: 'ReferendumDetail', params: { propose: propose.proposal_name }}">{{ propose.title }} 
-                                        </router-link>
-                                  </h3>
-                              </div>
-                          </div>
-                   
-                        <div class="card-content collpase show">
-                          <div class="card-body">
-                              <div class="card-block">
-                                  <router-link :to="{ name: 'ReferendumDetail', params: { propose: propose.proposal_name }}">
-                                      <h2 class="card-title">{{ propose.title }} </h2>
-                                    </router-link>
-
-                                    <div v-html="compiledMarkdown"></div>
-                                  <!-- <h6 class="card-subtitle text-muted">Support card subtitle</h6> -->
-                                </div>
-            
-                              <div class="row pb-1"  v-if="0">
-                                <div class="col-sm success">Agree: {{ propose.agree }}</div>
-                                <div class="col-sm text-right danger">Against: {{ propose.against }}</div>
-                              </div>
-                              <div class="progress mb-1" v-if="0" style="height: 1.4rem;background:#FF4961">
-                                  <div class="progress-bar bg-success" role="progressbar"
-                                   aria-valuenow="40" aria-valuemin="40" aria-valuemax="100" 
-                                   :style="'width:'+(propose.agree / propose.total * 100)+'%'">
-                                    {{ (propose.agree / propose.total * 100).toFixed(0)  }}%
-                                  </div>
-                              </div>
-                            <section id="bottom-border" v-if="0">
-                                <div class="col-xl-12 col-lg-12">
-                                        <ul class="nav nav-tabs nav-underline no-hover-bg">
-                                          <li class="nav-item">
-                                            <a class="nav-link active" id="base-tab31" data-toggle="tab" aria-controls="tab31"
-                                               href="#descReferendum" aria-expanded="true">Description</a>
-                                          </li>
-                                          <li class="nav-item">
-                                            <a class="nav-link" id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#discReferemdum"
-                                               aria-expanded="false">Discussion</a>
-                                          </li>
-                                        </ul>
-                                        <div class="tab-content px-1 pt-2">
-            
-                                          <!-- DESCRIPTION CONTENT -->
-                                          <div role="tabpanel" class="tab-pane active" id="descReferendum" aria-expanded="true" aria-labelledby="base-tab31">
-                                            {{ propose.proposal_json.content}}
-                                          </div>
-            
-                                          <!-- DISCUSSION CONTENT -->
-                                        
-            
-                                        </div>
-                                      </div>
-            
-            
-            
-                            </section>
-            
-                          </div>
-            
-                          <div class="card-footer">
-                            <div class="row">
-                              <div class="col-sm"><small class="text-muted">by {{ propose.proposer }}</small></div>
-                              <div class="col-sm-8 text-right">   
-                                <small class="text-muted">
-                                  Created At: <code class="highlighter-rouge">{{ propose.created_at | fromNow }}</code>  
-                                  Expires At: <code class="highlighter-rouge">{{ propose.expires_at | date }}</code> 
-                                </small>
-                              </div>
-                            </div>
-                           
-                              <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
-                            </div>
-            
-                        </div>
-                      </div>
-
-
-                      <div id="comment">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="tab-pane" id="discReferemdum" aria-labelledby="base-tab32">
-                                    <div class="mt-1 mb-2">
-                                      <form class="form">
-                                        <div class="form-body">
-                                          <div class="form-group">
-                                            <textarea id="projectinput8" rows="3" class="form-control" name="comment" placeholder="Join the discussion"></textarea>
-                                          </div>
-                                        </div>
-                                        <div>
-                                          <button type="submit" class="btn  btn-sm  btn-primary pr-2 mr-1 ">
-                                            <i class="la la-check-square-o font-small-3 "></i> Submit comment
-                                          </button>
-                                        </div>
-    
-                                      </form>
-                                    </div>
-    
-                                      <hr class="">
-    
-                                    <div class="w_msnDisc">
-                                      <div class="userRefdisc mb-1">nicknameEOS1</div>
-                                      <div class="dateRefdisc mb-1">15/10/20018</div>
-                                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-    
-                                      <!-- <div class="mb-1"><a href="#" class="replyDisc">Reply</a></div> -->
-                                      <!-- FORM REPLAY -->
-                                     <!-- <div>
-                                        <form class="form">
-                                          <div class="form-body">
-                                            <div class="form-group">
-    
-                                              <textarea id="projectinput8" rows="3" class="form-control" name="comment" placeholder="Join the discussion"></textarea>
-                                            </div>
-                                          </div>
-                                          <div>
-    
-                                            <button type="submit" class="btn  btn-sm  btn-primary pr-2 mr-1 ">
-                                              <i class="la la-check-square-o font-small-3 "></i> Send
-                                            </button>
-    
-                                            <button type="button" class="btn btn-sm btn-warning pr-2">
-                                              <i class="ft-x"></i> Cancel
-                                            </button>
-                                          </div>
-    
-                                        </form>
-                                      </div>-->
-                                      <!-- END FORM REPLAY -->
-    
-                                    </div>
-    
-                                    <hr class=""/>
-    
-    
-    
-    
-                                  </div>
-                            </div>
-                        </div>
-
-                      </div>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-
-            <div class="col-xl-4 col-lg-12">
-                <div class="card mb-4">
-                  <div class="card-header">
-                      <div class="card-title-wrap bar-primary">
-                          <div class="card-title">Summary</div>
-                      </div>
-                  </div>
-                  <div class="card-body">
-                      <div class="card-block">
-                          <div class="text-center">
-                              <!-- <span class="font-medium-2 text-uppercase">{{ propose.proposer }}</span> -->
-                              <!-- <p class="grey font-small-2">Ninja Developer</p> -->
-                          </div>
-                          <div class="text-center">
-                              <pie :data="voteChart.data" :name="voteChart.name" :colors="voteChart.colors" :subname="voteChart.subname"></pie>
-                          </div>
-                          <div class="row">
-    
-                              <div class="col-12 col-sm-6">
-                                  <ul class="no-list-style pl-0 text-center">
-                                      <li class="mb-2">
-                                          <span class="text-bold-500 danger">
-                                            <a>
-                                              <!-- <i class="icon-present font-small-3"></i>  -->
-                                              Against:
-                                            </a>
-                                          </span>
-                                          <span class="display-block overflow-hidden"> {{ propose.against }}</span>
-                                      </li>
-                                  </ul>
-                              </div>
-                              <div class="col-12 col-sm-6">
-                                  <ul class="no-list-style pl-0 text-center">                                    
-                                      <li class="mb-2">
-                                          <span class="text-bold-500 success">
-                                            <a>
-                                            <!-- <i class="ft-monitor font-small-3"></i>  -->
-                                            Agree:
-                                          </a>
-                                          </span>
-                                          <a class="display-block overflow-hidden"> {{ propose.agree }}</a>
-                                      </li>
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                </div>
-              </div>
-
-
-
-
-
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  
-  </template>
-
   <template id="Referendum" type="text/div">
 
 
@@ -2050,42 +1795,44 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
       </div>
 
       <div class="row">
-        <div class="col-8 col-sm-12">
-          <div class="card" v-if="1" v-for="propose in proposes">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">comming soon</div>
+            </div>
+          <div class="card" v-if="0">
+            <div class="card-header mb-0 pb-0">
 
-              <div class="card-header" v-if="0">
-                  <div class="card-title-wrap bar-primary">
-                      <h3>
-                          <router-link :to="{ name: 'ReferendumDetail', params: { propose: propose.proposal_name }}">{{ propose.title }} 
-                            </router-link>
-                      </h3>
-                  </div>
-              </div>
-       
-            <div class="card-content collpase show">
-              <div class="card-body pb-0">
-                  <div class="card-block">
-                      <router-link :to="{ name: 'ReferendumDetail', params: { propose: propose.proposal_name }}">
-                          <h4 class="card-title">{{ propose.title }} </h4>
-                        </router-link>
-                      <!-- <h6 class="card-subtitle text-muted">Support card subtitle</h6> -->
+                <div class="col-md-12">
+
+                  <div class="row">
+
+                    <div class="col-md-6">
+                      <span class="HeadRef">Dash Force September - December</span>
+                      <span class="byRef">by Mastermined</span>
+                      <div class="refvotes">
+                        <span class="detal-action minThumbs text-bold-500">(+12) <i class="la la-thumbs-o-up"></i></span>
+                        <span class="cancel-action minThumbs text-bold-500">(-15)<i class="la la-thumbs-o-down"></i></span>
+                        <span class=" minThumbs text-bold-500">(10)<i class="la la-circle"></i></span>
+                      </div>
                     </div>
 
-                  <div class="row pb-1">
-                    <div class="col-sm success">Agree: {{ propose.agree }}</div>
-                    <div class="col-sm text-right danger">Against: {{ propose.against }}</div>
+                    <div class="col-md-6 text-right">
+                      <span class="dateRef">Fri, 4 September, 2018 7:00 PM</span>
+                      <span class="monthlyRef">Monthly amout: <span class="resMRef">195 DASH</span></span>
+                    </div>
                   </div>
-                  <div class="progress mb-1" style="height: 1.4rem;background:#FF4961">
-                      <div class="progress-bar bg-success" role="progressbar"
-                       aria-valuenow="40" aria-valuemin="40" aria-valuemax="100" 
-                       :style="'width:'+(propose.agree / propose.total * 100)+'%'">
-                        {{ (propose.agree / propose.total * 100).toFixed(0)  }}%
-                      </div>
-                  </div>
-                      <!-- {{ propose.title }} -->
-                <section id="bottom-border" v-if="0">
-                    <div class="col-xl-12 col-lg-12">
 
+                </div>
+
+
+
+            </div>
+            <div class="card-content collpase show">
+              <div class="card-body">
+
+                <section id="bottom-border">
+
+                    <div class="col-xl-12 col-lg-12">
                             <ul class="nav nav-tabs nav-underline no-hover-bg">
                               <li class="nav-item">
                                 <a class="nav-link active" id="base-tab31" data-toggle="tab" aria-controls="tab31"
@@ -2100,8 +1847,21 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
                               <!-- DESCRIPTION CONTENT -->
                               <div role="tabpanel" class="tab-pane active" id="descReferendum" aria-expanded="true" aria-labelledby="base-tab31">
-                                {{ propose.proposal_json.content}}
+                                <h3> Title section </h3>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+
+
+                                <h3> Title section </h3>
+                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+
+                                <ul>
+                                  <li>first point</li>
+                                  <li>Second point</li>
+                                  <li>Third point</li>
+                                </ul>
+
                               </div>
+
 
                               <!-- DISCUSSION CONTENT -->
                               <div class="tab-pane" id="discReferemdum" aria-labelledby="base-tab32">
@@ -2243,21 +2003,6 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
               </div>
 
-              <div class="card-footer">
-                <div class="row">
-                  <div class="col-sm"><small class="text-muted">by {{ propose.proposer }}</small></div>
-                  <div class="col-sm text-right">   
-                    <small class="text-muted">
-                      Created At: <code class="highlighter-rouge">{{ propose.created_at | fromNow }}</code>  
-                      Expires At: <code class="highlighter-rouge">{{ propose.expires_at | date }}</code> 
-                    </small>
-                  </div>
-                </div>
-                  
-               
-                  <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
-                </div>
-
             </div>
           </div>
         </div>
@@ -2270,7 +2015,10 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
 
   <script type="text/x-template" id="SubmitProxyInfo">
+
+
     <div  class="col-md-12" style="padding:0px !important;">
+
       <router-link :to="{ name: 'ProxyList'}"> <el-button type="button" class="btn mr-1 mb-1 btn-primary btn-sm"><< Back to proxies list</el-button></router-link>
       <div class="card">
 

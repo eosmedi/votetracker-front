@@ -271,13 +271,34 @@ Vue.component("pie", {
     data: function () {
         console.log("page", this.current);
         return {
-            myChart: null
+            myChart: null,
+            viewHeight: 300,
+            viewWidth: 400
         }
     },
-
     mounted: function(){
-        console.log(this.$refs.chart);
-        this.myChart = this.$echarts.init(this.$refs.chart);
+        var self = this;
+        console.log('chart', this.$refs.chart.parentElement);
+        if(this.$refs.chart){
+            if(!isMobile){
+                var parent = this.$refs.chart.parentElement;
+                if(parent.offsetWidth > 0){
+                    this.viewWidth = parent.offsetWidth;
+                    this.viewHeight = parent.offsetWidth * 0.77;
+                    console.log('offsetWidth', parent.offsetWidth,  parent.offsetWidth * 0.77);
+                }
+            }
+
+        }   
+
+        if(isMobile){
+            this.viewWidth = window.innerWidth;
+            this.viewHeight = this.viewWidth * 0.77;
+
+        }
+
+        window.onresize = function(){
+        }
         this.renderChart();
     },
 
@@ -287,7 +308,11 @@ Vue.component("pie", {
         },
     },
     methods: {
+
         renderChart: function (index) {
+            this.myChart = this.$echarts.init(this.$refs.chart);
+
+            this.myChart.resize();
             var myChart = this.myChart;
             var formatUtil = echarts.format;
             console.log("data", this.data);
@@ -306,7 +331,8 @@ Vue.component("pie", {
                 })
             });
 
-            myChart.setOption({
+
+            var optinos = {
                 title : {
                     text: this.name,
                     subtext: this.subname,
@@ -320,7 +346,7 @@ Vue.component("pie", {
                         return [params[0]-220,'10%'];
                     }
                 },
-                color: this.colors ? this.colors : [],
+               
                 calculable : true,
                 series : [
                     {
@@ -341,7 +367,13 @@ Vue.component("pie", {
                         data: this.data
                     }
                 ]
-            });
+            }
+
+            if(this.colors && this.colors.length){
+                optinos.color = this.colors;
+            }
+
+            myChart.setOption(optinos);
         }
     }
 })
@@ -350,7 +382,6 @@ var axiosInstance = axios.create();
 Vue.prototype.API = axiosInstance;
 axiosInstance.defaults.params = {};
 axiosInstance.defaults.baseURL = "https://api.tallymeter.io/"
-
 
 
 var eosVenusAxiosInstance = axios.create();
@@ -362,9 +393,8 @@ eosVenusAxiosInstance.defaults.baseURL = "https://api.eosvenus.com"
 var ReferendumsAxiosInstance = axios.create();
 Vue.prototype.ReferendumAPI = ReferendumsAxiosInstance;
 ReferendumsAxiosInstance.defaults.params = {};
-ReferendumsAxiosInstance.defaults.baseURL = "http://localhost:8081"
-
-
+// ReferendumsAxiosInstance.defaults.baseURL = "http://localhost:8081"
+ReferendumsAxiosInstance.defaults.baseURL = "https://apireferendum.votetracker.io"
 
 Vue.prototype.$echarts = echarts;
 
@@ -1539,6 +1569,7 @@ var Referendum = {
 
 var ReferendumDetail = {
     template:"#ReferendumDetail",
+    props: ['eosClient', 'identity'],
     components: {
     },
     data: function () {
@@ -1558,6 +1589,8 @@ var ReferendumDetail = {
             typographer: true,
             toc: false,
             voteChart: {},
+            imVoted: false,
+            isImCreate: false
         }
     },
     mounted: function () {
@@ -1576,6 +1609,7 @@ var ReferendumDetail = {
                 colors: ['#FF4961', '#28D094'],
                 data: []
             };
+            
 
             voteChart.data.push({ name: 'Against', value: self.propose.against });
             voteChart.data.push({ name: 'Agree', value: self.propose.agree })
@@ -1585,9 +1619,32 @@ var ReferendumDetail = {
             console.log('getProposes', res.data);
         })
 
+
+        this.ReferendumAPI.get('/getVoters?proposal_name='+params.propose).then(function(res){
+            self.voters = res.data;
+            console.log(res.data);
+        })
     },
     watch: {
+        identity: function(){
+            var params = this.$route.params;
+            var identity = this.identity;
+            var self = this;
+            if(!identity) return;
+            var firstAccount = identity.accounts[0];
 
+            if(self.propose && firstAccount.name == self.propose.proposer){
+                self.isImCreate = true;
+            }
+
+            this.ReferendumAPI.get('/getVoters?proposal_name='+params.propose+'&voter='+firstAccount.name).then(function(res){
+                // if(res.data)self.imVoted = ;
+                if(res.data.length){
+                    self.imVoted = true;
+                }
+                console.log(res.data);
+            })
+        }
     },
     computed: {
         compiledMarkdown: function () {
@@ -1595,11 +1652,198 @@ var ReferendumDetail = {
         }
     },
     methods: {
-        tocAllRight: function (tocHtmlStr) {
-            console.log("toc is parsed :", tocHtmlStr);
+        unVoteRef: function(){
+            this._vote('unvote', 1);
+        },
+        voteRef: function(num){
+            this._vote('vote', num);
+        },
+        _vote: function(type, voteNum){
+            var self = this;
+            if(!this.eosClient){
+                alert('Please attach an account');
+                return;
+            }
+            var identity = this.identity;
+            var firstAccount = identity.accounts[0];
+            if(firstAccount){}
+            var ActionData = {
+                "voter": firstAccount.name,
+                "proposal_name": this.propose.proposal_name,
+                "vote": voteNum,
+                "vote_json": JSON.stringify({
+                }),
+            };
+
+            if(type == "unvote"){
+                var ActionData = {
+                    "voter": firstAccount.name,
+                    "proposal_name": this.propose.proposal_name
+                };
+            }
+
+            this.eosClient.transaction({
+                actions: [
+                    {
+                        account: 'eosforumrcpp',
+                        name: type,
+                        authorization: [{
+                            actor: firstAccount.name,
+                            permission: firstAccount.authority
+                        }],
+                        data: ActionData
+                    }
+                ]
+            }).then(function(data){
+                console.log(data.transaction_id);
+                alert('vote sucesse TX:'+data.transaction_id);
+            }, function(error){
+                alert('failed '+error);
+                self.dialogMessage = "proxy info submit failed.<br> <span style='color:red'> "+error.message+"</span>";
+                console.log("error", error)
+            }).catch(function(error){
+                alert('failed '+error);
+                error = JSON.parse(error);
+                self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
+                console.log("submmit error", error);
+            })
         }
-}
+    }
 };
+
+
+
+
+var Createpropose = {
+    template: '#Createpropose',
+    props: ['eosClient', 'identity'],
+    data: function () {
+        console.log("Createpropose");
+        return {
+            centerDialogVisible: false,
+            dialogTitle: "",
+            dialogMessage: "",
+            form: {
+                proposer: '',
+                proposal_name: '',
+                title: '',
+                type: '',
+                content: '',
+                expires_at: ''
+            }
+        }
+    },
+    mounted: function () {
+        var temp_propose = window.localStorage.getItem('temp_propose');
+        if(temp_propose){
+            try{
+                this.form = JSON.parse(temp_propose);
+            }catch(e){}
+        }
+        this.setProposer();
+    },
+    computed: {
+        compiledMarkdown: function () {
+          return marked(this.form.content, { sanitize: true })
+        }
+    },
+    watch: {
+        voter: function (newVal, oldVal) {
+        },
+        identity: function(){
+            this.setProposer();
+        },
+        eosClient: function (to, from) {
+
+            console.log("ready")
+        },
+        $route: function (to, from) {
+            this.getVoter();
+        },
+        form: {
+            handler: function(){
+                try{
+                    window.localStorage.setItem('temp_propose', JSON.stringify( this.form));
+                }catch(e){}
+                console.log('form change', this.form)
+            },
+            deep: true
+        }
+    },
+
+    methods: {
+        setProposer(){
+            var identity = this.identity;
+            var firstAccount = identity.accounts[0];
+            console.log('identity', firstAccount, firstAccount.name);
+            if(firstAccount){
+                this.form.proposer = firstAccount.name;
+            }
+        },
+        onSubmit() {
+            var self = this;
+            if(!this.eosClient){
+                alert('Please attach an account');
+                return;
+            }
+
+            this.dialogTitle = "Info";
+            this.centerDialogVisible = true;
+            var identity = this.identity;
+            console.log(identity);
+            var firstAccount = identity.accounts[0];
+            if(firstAccount){
+
+            }
+
+            console.log(this.form);
+            this.dialogMessage = "Scatter will pop up a window let u accept Signature request...";
+
+            var defData = {
+                "proposer": firstAccount.name,
+                "proposal_name": this.form.proposal_name,
+                "title": this.form.title,
+                expires_at: moment(this.form.expires_at).format('YYYY-MM-DDTHH:mm:ss'),
+                "proposal_json": JSON.stringify({
+                    content: this.form.content,
+                    type: this.form.type,
+                }),
+            };
+
+            // for(var k in this.form){
+            //     defData[k] = this.form[k];
+            // }
+
+            this.eosClient.transaction({
+                actions: [
+                    {
+                        account: 'eosforumrcpp',
+                        name: 'propose',
+                        authorization: [{
+                            actor: firstAccount.name,
+                            permission: firstAccount.authority
+                        }],
+                        data: defData
+                    }
+                ]
+            }).then(function(data){
+                console.log(data.transaction_id);
+                alert('sucesse TX:'+data.transaction_id);
+            }, function(error){
+                alert('failed '+error);
+                self.dialogMessage = "proxy info submit failed.<br> <span style='color:red'> "+error.message+"</span>";
+                console.log("error", error)
+            }).catch(function(error){
+                alert('failed '+error);
+                error = JSON.parse(error);
+                self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
+                console.log("submmit error", error);
+            })
+        }
+    }
+}
+
+
 
 
 var routes = [
@@ -1632,6 +1876,13 @@ var routes = [
         path: '/submit-proxy-info', component: SubmitProxyInfo,
         meta: { requireEosClient: true }
     },
+
+    {
+        name: "Createpropose",
+        path: '/create-propose', component: Createpropose,
+        meta: { requireEosClient: true }
+    },
+    
     {
         name: "History",
         path: '/history', component: History
@@ -1642,7 +1893,8 @@ var routes = [
     },
     {
         name: "ReferendumDetail",
-        path: '/referendum/:propose', component: ReferendumDetail
+        path: '/referendum/:propose', component: ReferendumDetail,
+        meta: { requireEosClient: true }
     }
 ]
 

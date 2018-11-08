@@ -755,3 +755,7 @@ td, th {
     white-space: nowrap;
     max-width: 100%;
 }
+
+.no-list-style li{
+    list-style: none;
+}
