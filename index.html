@@ -1906,13 +1906,21 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                               
                             <div class="row">
                               <div class="ol-12 col-sm"><small class="text-muted">by <span class="badge badge-secondary">{{ propose.proposer }}</span></small></div>
-                              <div class="ol-12 col-sm-8 text-right">   
-                                <small class="text-muted">
-                                  <span class="mr-1">
-                                    Created At: <span class="badge badge-secondary">{{ propose.created_at | fromNow }}</span>  
-                                  </span>
-                                  Expires At: <span class="badge badge-secondary">{{ propose.expires_at | date }}</span> 
-                                </small>
+                              <div class="ol-12 col-sm-8 ">   
+                                  <div class="row">
+                                      <div class="col-sm">
+                                          <small class="text-muted">
+                                              <span class="mr-1">
+                                                Created At: <span class="badge badge-secondary">{{ propose.created_at | fromNow }}</span>  
+                                              </span>
+                                            </small>
+                                      </div>
+                                      <div class="col-sm">
+                                          <small class="text-muted">
+                                              Expires At: <span class="badge badge-secondary">{{ propose.expires_at | date }}</span> 
+                                            </small>
+                                      </div>
+                                  </div>
                               </div>
                             </div>
                            
@@ -2013,7 +2021,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                               <i class="icon-dislike"></i> 
                                               Against:
                                           </span>
-                                          <span class="display-block overflow-hidden"> {{ propose.against }} 
+                                          <span class="display-block overflow-hidden"> {{ propose.against }} ({{ (propose.against_eos / 10000).toFixed(0) | numberWithCommas }} EOS)
 
                                             <span v-if="propose.against">({{ (propose.against / propose.total * 100).toFixed(0)  }}%)</span>
 
@@ -2030,7 +2038,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           </span>
                                           <a class="display-block overflow-hidden"> 
                                             {{ propose.agree }}
-                                            <span v-if="propose.against">({{ (propose.agree / propose.total * 100).toFixed(0)  }}%)
+                                            ({{ (propose.agree_eos / 10000).toFixed(0) | numberWithCommas }} EOS)
+                                            <span v-if="propose.agree">({{ (propose.agree / propose.total * 100).toFixed(0)  }}%)
                                               </span>
                                             </a>
                                       </li>
@@ -2159,11 +2168,11 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                   <div class="row pb-1">
                     <div class="col-sm success">
                         <i class="icon-like"></i>
-                        Agree: {{ propose.agree }}
+                        Agree: {{ propose.agree }} ({{ (propose.agree_eos / 10000).toFixed(0) | numberWithCommas }} EOS)
                     </div>
                     <div class="col-sm text-right danger">
                         <i class="icon-dislike"></i>
-                        Against: {{ propose.against }}
+                        Against: {{ propose.against }} ({{ (propose.against_eos / 10000).toFixed(0) | numberWithCommas }} EOS)
                     </div>
                   </div>
                   <div class="progress mb-1" style="height: 1.4rem;background:#FF4961" v-if="0">
@@ -2182,13 +2191,22 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
               
                 <div class="row">
                   <div class="col-12 col-sm"><small class="text-muted">by <span  class="badge badge-secondary">{{ propose.proposer }}</span></small></div>
-                  <div class="col-12 col-sm text-right">   
-                    <small class="text-muted">
-                      <span class="mr-1">
-                        Created At: <span class="badge badge-secondary">{{ propose.created_at | fromNow }}</span>  
-                      </span>
-                      Expires At: <span class="badge badge-secondary">{{ propose.expires_at | date }}</span> 
-                    </small>
+                  <div class="col-12 col-sm ">   
+
+                      <div class="row">
+                        <div class="col-sm">
+                            <small class="text-muted">
+                                <span class="mr-1">
+                                  Created At: <span class="badge badge-secondary">{{ propose.created_at | fromNow }}</span>  
+                                </span>
+                              </small>
+                        </div>
+                        <div class="col-sm">
+                            <small class="text-muted">
+                                Expires At: <span class="badge badge-secondary">{{ propose.expires_at | date }}</span> 
+                              </small>
+                        </div>
+                    </div>
                   </div>
                 </div>
                   
