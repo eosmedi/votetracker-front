@@ -1931,21 +1931,24 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                       </div>
 
 
-                      <div id="comment" v-if="0">
+                      <div id="comment" v-if="1">
                         <div class="card">
                             <div class="card-body">
                                 <div class="tab-pane" id="discReferemdum" aria-labelledby="base-tab32">
                                     <div class="mt-1 mb-2">
-                                      <form class="form">
+                                      <form class="form" v-on:submit.prevent="sendPost">
                                         <div class="form-body">
                                           <div class="form-group">
-                                            <textarea id="projectinput8" rows="3" class="form-control" name="comment" placeholder="Join the discussion"></textarea>
+                                            <textarea id="projectinput8" rows="3" class="form-control" v-model="comment" placeholder="discussion"></textarea>
                                           </div>
                                         </div>
                                         <div>
-                                          <button type="submit" class="btn  btn-sm  btn-primary pr-2 mr-1 ">
+                                          <!-- <button type="submit" class="btn  btn-sm  btn-primary pr-2 mr-1 ">
                                             <i class="la la-check-square-o font-small-3 "></i> Submit comment
-                                          </button>
+                                          </button> -->
+                                          <el-button  type="primary" class="btn btn-primary btn-sm pl-3 pr-3" @click="sendPost">
+                                              <i class="la la-check-square-o font-small-3 "></i> Submit comment
+                                            </el-button>
                                         </div>
     
                                       </form>

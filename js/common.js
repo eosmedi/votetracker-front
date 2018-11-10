@@ -1580,7 +1580,7 @@ var ReferendumDetail = {
             loading: true,
             voters: [],
             propose: {},
-                source: "",
+            source: "",
             show: true,
             html: false,
             breaks: true,
@@ -1589,6 +1589,7 @@ var ReferendumDetail = {
             typographer: true,
             toc: false,
             voteChart: {},
+            comment: '',
             imVoted: false,
             isImCreate: false
         }
@@ -1657,6 +1658,55 @@ var ReferendumDetail = {
         },
         voteRef: function(num){
             this._vote('vote', num);
+        },
+        sendPost: function(){
+            console.log(1);
+
+            var self = this;
+            if(!this.eosClient){
+                alert('Please attach an account');
+                return;
+            }
+            
+            var identity = this.identity;
+            var firstAccount = identity.accounts[0];
+            if(firstAccount){}
+            var ActionData = {
+                "poster": firstAccount.name,
+                "post_uuid": this.propose.proposal_name+(Math.floor(Math.random() * 100000)),
+                "content": this.comment,
+                "reply_to_poster": this.propose.proposer,
+                "reply_to_post_uuid": this.propose.proposal_name,
+                "certify": 1,
+                "json_metadata": JSON.stringify({
+                }),
+            };
+
+            this.eosClient.transaction({
+                actions: [
+                    {
+                        account: 'eosforumrcpp',
+                        name: 'post',
+                        authorization: [{
+                            actor: firstAccount.name,
+                            permission: firstAccount.authority
+                        }],
+                        data: ActionData
+                    }
+                ]
+            }).then(function(data){
+                console.log(data.transaction_id);
+                alert('comment sucesse TX:'+data.transaction_id);
+            }, function(error){
+                alert('failed '+error);
+                self.dialogMessage = "proxy info submit failed.<br> <span style='color:red'> "+error.message+"</span>";
+                console.log("error", error)
+            }).catch(function(error){
+                alert('failed '+error);
+                error = JSON.parse(error);
+                self.dialogMessage = "proxy info submit failed. <br> <span style='color:red'>"+error.error.details[0].message.split(":")[1]+"</span>";
+                console.log("submmit error", error);
+            })
         },
         _vote: function(type, voteNum){
             var self = this;
