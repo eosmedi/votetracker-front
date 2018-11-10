@@ -1547,6 +1547,7 @@ var Referendum = {
             loading: true,
             voters: [],
             proposes: [],
+            comments: []
         }
     },
     mounted: function () {
@@ -1556,6 +1557,11 @@ var Referendum = {
         this.ReferendumAPI.get('/getProposes').then(function(res){
             self.proposes = res.data;
             console.log('getProposes', res.data);
+        })
+
+        this.ReferendumAPI.get('/getComments').then(function(res){
+            self.comments = res.data;
+            console.log(res.data);
         })
     },
     watch: {
@@ -1591,7 +1597,8 @@ var ReferendumDetail = {
             voteChart: {},
             comment: '',
             imVoted: false,
-            isImCreate: false
+            isImCreate: false,
+            comments: []
         }
     },
     mounted: function () {
@@ -1623,6 +1630,11 @@ var ReferendumDetail = {
 
         this.ReferendumAPI.get('/getVoters?proposal_name='+params.propose).then(function(res){
             self.voters = res.data;
+            console.log(res.data);
+        })
+
+        this.ReferendumAPI.get('/getComments?proposal_name='+params.propose).then(function(res){
+            self.comments = res.data;
             console.log(res.data);
         })
     },

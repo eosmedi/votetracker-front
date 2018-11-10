@@ -1953,13 +1953,15 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
     
                                       </form>
                                     </div>
-    
+
+                                    <template v-for="comment in comments">
+
                                       <hr class="">
     
                                     <div class="w_msnDisc">
-                                      <div class="userRefdisc mb-1">nicknameEOS1</div>
-                                      <div class="dateRefdisc mb-1">15/10/20018</div>
-                                      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                                      <div class="userRefdisc mb-1">{{ comment.poster }}</div>
+                                      <div class="dateRefdisc mb-1" title="comment.timestamp | date">{{ comment.timestamp | fromNow }}</div>
+                                      <p>{{ comment.content }}</p>
     
                                       <!-- <div class="mb-1"><a href="#" class="replyDisc">Reply</a></div> -->
                                       <!-- FORM REPLAY -->
@@ -1987,6 +1989,9 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       <!-- END FORM REPLAY -->
                                     </div>
                                     <hr class=""/>
+
+                                  </template>
+    
     
                                   </div>
                             </div>
@@ -2122,7 +2127,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
      
 
       <div class="row">
-        <div class="col-xl-8 col-lg-12">
+        <div class="col-xl-9 col-lg-12">
 
             <div class="alert alert-secondary">
                 <p class="text-primary mb-0">We provide live data api for referendum, check details <a  href="https://github.com/eosmedi/eos-referendum-data" target="_blank">here</a>
@@ -2219,6 +2224,31 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
             </div>
           </div>
+        </div>
+
+        <div class="col-xl-3 col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-primary">
+                        <div class="card-title">Latest Comments</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-block">
+                        
+                        <ul class="list-group">
+                            <li class="list-group-item " v-for="comment in comments">
+                              <router-link :to="{ name: 'ReferendumDetail', params: { propose: comment.proposal_name }}">
+                                  <span class="badge badge-secondary"> {{ comment.poster }}</span>
+                                  <span class=" mr-1"> : {{ comment.content }}</span>
+                                   At
+                                 {{ comment.timestamp | fromNow }}
+                              </router-link>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+              </div>
         </div>
       </div>
 
