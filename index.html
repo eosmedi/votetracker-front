@@ -238,7 +238,17 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
           <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'History'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/history.png" width="30"/></span>History</span></router-link> </a>
 
           </li>
-          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'Referendum'}"><span class="menu-title" data-i18n="nav.dash.main"><span class="text-center full-width" style="display:block;"><img   src="images/menu/referendums.png" width="30"/></span>Referendum</span></router-link> </a>
+          <li class=" nav-item"><router-link class="btn" style="text-decoration: none;" :to="{ name: 'Referendum'}">
+            <span class="menu-title" data-i18n="nav.dash.main">
+              <span class="text-center full-width" style="display:block;">
+                <img   src="images/menu/referendums.png" width="30"/>
+              
+              </span>
+              Referendum
+              <span class="text-center subTmenu badge badge-danger">Beta</span>
+              
+              </span></router-link> 
+              </a>
 
           </li>
 
@@ -1895,8 +1905,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                           <div class="card-footer">
                               
                             <div class="row">
-                              <div class="col-sm"><small class="text-muted">by <span class="badge badge-secondary">{{ propose.proposer }}</span></small></div>
-                              <div class="col-sm-8 text-right">   
+                              <div class="ol-12 col-sm"><small class="text-muted">by <span class="badge badge-secondary">{{ propose.proposer }}</span></small></div>
+                              <div class="ol-12 col-sm-8 text-right">   
                                 <small class="text-muted">
                                   <span class="mr-1">
                                     Created At: <span class="badge badge-secondary">{{ propose.created_at | fromNow }}</span>  
@@ -2097,8 +2107,16 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
      
 
+     
+
       <div class="row">
         <div class="col-xl-8 col-lg-12">
+
+            <div class="alert alert-secondary">
+                <p class="text-primary mb-0">We provide live data api for referendum, check details <a  href="https://github.com/eosmedi/eos-referendum-data" target="_blank">here</a>
+              </p>
+            </div>
+
           <div class="card" v-if="1" v-for="propose in proposes">
               <div class="card-header" v-if="0">
                   <div class="card-title-wrap bar-primary">
@@ -2163,8 +2181,8 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
 
               
                 <div class="row">
-                  <div class="col-sm"><small class="text-muted">by <span  class="badge badge-secondary">{{ propose.proposer }}</span></small></div>
-                  <div class="col-sm text-right">   
+                  <div class="col-12 col-sm"><small class="text-muted">by <span  class="badge badge-secondary">{{ propose.proposer }}</span></small></div>
+                  <div class="col-12 col-sm text-right">   
                     <small class="text-muted">
                       <span class="mr-1">
                         Created At: <span class="badge badge-secondary">{{ propose.created_at | fromNow }}</span>  
