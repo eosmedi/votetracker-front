@@ -477,7 +477,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                     <!-- <img :src="getImgUrl(producer.org_location.country.toLowerCase())" width="25"> -->
                     <!-- <span v-if="producer.org_location" :class="'flag normal flag-'+producer.org_location.country.toLowerCase()" style="transform: scale(calc(32 / 64));    vertical-align: middle;"></span>
                      -->
-                     <span v-if="producer.org_location" :class="'flag-icon flag-icon-'+producer.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
+                     <span v-if="producer.org_location && producer.org_location.country" :class="'flag-icon flag-icon-'+producer.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
                     <span v-if="producer.org_location && !toSmall">{{ countryCodeISO[producer.org_location.country] }}</span>
                 </td>
                 <!-- <td align="center" width="25"><a :href="producer.url" target="_blank" border="0"><img src="images/www.png" width="20"/></a></td> -->
