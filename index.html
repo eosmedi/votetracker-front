@@ -403,7 +403,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                       
                                       </p>
                                       <p>Location: 
-                                          <span v-if="row.org_location" :class="'flag-icon flag-icon-'+row.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
+                                          <span v-if="row.org_location && row.org_location.country" :class="'flag-icon flag-icon-'+row.org_location.country.toLowerCase()" style="font-size: 20px; vertical-align: middle;margin-right:2px"></span>
                                           <span v-if=" row.org_location && row.org_location.country">{{ countryCodeISO[row.org_location.country] }}</span>
                                     
                                     </p>
