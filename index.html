@@ -391,7 +391,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                           <span :style="row.votes_loss.diff > 0 ? 'color:green' : 'color:red'">{{ (row.votes_loss.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                       </span> -->
 
-                                      <span :style="row.votesDiff > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow" v-if="1">
+                                      <span v-if="row.lastRank" :style="row.votesDiff > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow" v-if="1">
                                         {{ row.votesDiff | numberWithCommas }} EOS
                                         <span v-if="row.rankChange != 0">
                                             <span :style="row.rankChange > 0 ? 'color:green' : 'color:red'" :title="row.lastRank.time | fromNow">
@@ -460,7 +460,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                 </td>
                 <td  align="right">{{ producer.rewards }} EOS</td>
                 <td  align="right">
-                  <span :style="producer.votesDiff > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow" v-if="1">
+                  <span v-if="producer.lastRank" :style="producer.votesDiff > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow" v-if="1">
                     {{ producer.votesDiff | numberWithCommas }} EOS
                     <span v-if="producer.rankChange != 0">
                         <span :style="producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.lastRank.time | fromNow">
@@ -897,7 +897,7 @@ data-open="click" data-menu="vertical-compact-menu" data-col="2-columns">
                                                         <!-- <span class="item-value">
                                                               <span :style="producer.total.diff > 0 ? 'color:green' : 'color:red'">{{ (producer.total.diff).toFixed(0) | numberWithCommas }} EOS</span>
                                                       </span> -->
-                                          <span v-if="producer.producer.rankChange != 0">
+                                          <span v-if="producer.producer.lastRank && producer.producer.rankChange != 0">
                                             <span :style="producer.producer.rankChange > 0 ? 'color:green' : 'color:red'" :title="producer.producer.lastRank.time | fromNow">
                                             {{ producer.producer.rankChange }}
                                           </span>
